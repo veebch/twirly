@@ -122,6 +122,8 @@ class MotorDriver():
         mPin = self.MotorPin.index(motor)
         self.pwm.setServoPulse(self.MotorPin[mPin+1], 0)
 
+pin = machine.Pin(0, machine.Pin.OUT)
+pin.value(1)
 p = Pin(16, Pin.IN)
 buttons = {
     0x04:"ccw",
@@ -141,7 +143,7 @@ def cb(data, addr, ctrl):
         previous = buttons[data]
     print(previous)
         
-def mainloop():
+def mainloop():    
     previous = "untouched" 
     ir = NEC_16(p, cb)  # Instantiate receiver
     ir.error_function(print_error)  # Show debug information
@@ -154,5 +156,6 @@ def mainloop():
         
 # Main Logic
 mainloop()
+
 
 
