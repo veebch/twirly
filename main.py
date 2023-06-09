@@ -6,7 +6,7 @@ import math
 import gc
 import sys
 import _thread
-from machine import Pin, freq, I2C, SPI
+from machine import Pin, freq, I2C, SPI,reset
 from ir_rx.print_error import print_error  # Optional print of error codes
 from ir_rx.nec import NEC_16
 from rp2 import PIO, StateMachine, asm_pio
@@ -138,17 +138,17 @@ class MotorDriver():
         self.pwm.setServoPulse(self.MotorPin[mPin+1], 0)
         
 def doaspin(direction):
+    global speed
     m = MotorDriver()
     offset=.1
     print('offset:',float(offset))
-    speed=100
     runfor=offset/3
-    if direction=='ccw':
-        print("motor A CCW, speed ",speed,"%, Run for ",offset,"S, then stop")
-        m.MotorRun('MA', 'forward', speed,runfor )
-    elif direction=='cw':
-        print("motor A CW, speed ",speed,"%, Run for ",offset,"S, then stop")
-        m.MotorRun('MA', 'backward', speed,runfor)
+    if direction=='speed up':
+        speed = speed+5
+        speed = min (100, speed)
+    elif direction=='speed down':
+        speed = speed-5
+        speed = max(30, speed)
     elif direction=='hold cw':
         print("motor A CW, speed ",speed,"%")
         m.MotorHold('MA', 'forward', speed )
@@ -158,16 +158,17 @@ def doaspin(direction):
     elif direction == 'stop':
         m.MotorStop('MA')
     elif direction == 'reset':
-        machine.reset()
-    return
+        reset()
+    print(speed)
+    return 
 
 pin = machine.Pin(0, machine.Pin.OUT)
 pin.value(1)
 p = Pin(16, Pin.IN)
 buttons = {
-    0x04:"ccw",
+    0x04:"speed down",
     0x05:"stop",
-    0x06:"cw",
+    0x06:"speed up",
     0x1a:"hold ccw",
     0x1b:"hold cw",
     0x12:"reset"}
@@ -194,7 +195,7 @@ def mainloop():
         ir.close()
         
 # Main Logic
-
+speed=100
 mainloop()
 
 
