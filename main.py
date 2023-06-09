@@ -5,10 +5,12 @@ import time
 import math
 import gc
 import sys
+import _thread
 from machine import Pin, freq, I2C, SPI
 from ir_rx.print_error import print_error  # Optional print of error codes
 from ir_rx.nec import NEC_16
 from rp2 import PIO, StateMachine, asm_pio
+
 
 
 class PCA9685:
@@ -117,10 +119,47 @@ class MotorDriver():
         self.pwm.setServoPulse(self.MotorPin[mPin+1], 0)
         self.pwm.setLevel(self.MotorPin[mPin+2], 0)
         self.pwm.setLevel(self.MotorPin[mPin+3], 0)
+    
+    def MotorHold(self, motor, mdir, speed):
+        mPin = self.MotorPin.index(motor)
+        mDir = self.MotorDir.index(mdir)
+        
+        if (self.debug):
+            print("set PWM PIN %d, speed %d" %(self.MotorPin[mPin+1], speed))
+            print("set pin A %d , dir %d" %(self.MotorPin[mPin+2], self.MotorDir[mDir+1]))
+            print("set pin b %d , dir %d" %(self.MotorPin[mPin+3], self.MotorDir[mDir+2]))
+
+        self.pwm.setServoPulse(self.MotorPin[mPin+1], speed)        
+        self.pwm.setLevel(self.MotorPin[mPin+2], self.MotorDir[mDir+1])
+        self.pwm.setLevel(self.MotorPin[mPin+3], self.MotorDir[mDir+2])
 
     def MotorStop(self, motor):
         mPin = self.MotorPin.index(motor)
         self.pwm.setServoPulse(self.MotorPin[mPin+1], 0)
+        
+def doaspin(direction):
+    m = MotorDriver()
+    offset=.1
+    print('offset:',float(offset))
+    speed=100
+    runfor=offset/3
+    if direction=='ccw':
+        print("motor A CCW, speed ",speed,"%, Run for ",offset,"S, then stop")
+        m.MotorRun('MA', 'forward', speed,runfor )
+    elif direction=='cw':
+        print("motor A CW, speed ",speed,"%, Run for ",offset,"S, then stop")
+        m.MotorRun('MA', 'backward', speed,runfor)
+    elif direction=='hold cw':
+        print("motor A CW, speed ",speed,"%")
+        m.MotorHold('MA', 'forward', speed )
+    elif direction=='hold ccw':
+        print("motor A hold CCW, speed ",speed,"%")
+        m.MotorHold('MA', 'backward', speed )
+    elif direction == 'stop':
+        m.MotorStop('MA')
+    elif direction == 'reset':
+        machine.reset()
+    return
 
 pin = machine.Pin(0, machine.Pin.OUT)
 pin.value(1)
@@ -141,9 +180,9 @@ def cb(data, addr, ctrl):
         pass
     else:
         previous = buttons[data]
-    print(previous)
+    _thread.start_new_thread(doaspin,(previous,))
         
-def mainloop():    
+def mainloop():
     previous = "untouched" 
     ir = NEC_16(p, cb)  # Instantiate receiver
     ir.error_function(print_error)  # Show debug information
@@ -155,6 +194,7 @@ def mainloop():
         ir.close()
         
 # Main Logic
+
 mainloop()
 
 
