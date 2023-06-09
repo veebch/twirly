@@ -5,4 +5,4 @@
 
 # Twirly
 
-A IR remote-controlled turntable. Use cases are moving stuff that you can't/ are too lazy to get to. It's also useful if you need a constant speed movement.
+A IR remote-controlled turntable. Use cases are moving stuff that you (can't/ are too lazy to) get to. It's also useful if you need a constant speed movement.
