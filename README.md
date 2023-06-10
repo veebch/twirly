@@ -20,4 +20,4 @@ A IR remote-controlled turntable. Useful for are moving stuff that you (can't/ a
  
 # Acknowledgements
 
-IR code based on Peter Hinch's work.
+IR code based on some of [Peter Hinch's work](https://github.com/peterhinch/micropython_ir).
