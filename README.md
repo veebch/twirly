@@ -17,7 +17,13 @@ A IR remote-controlled turntable. Useful for are moving stuff that you (can't/ a
 - Gears and Case
 
 *The model of remote used differed from this, most likely the codes need to be changed, depending on the remote.
- 
+
+# Assembly
+
+
+# Video  
+
+
 # Acknowledgements
 
 IR code based on some of [Peter Hinch's work](https://github.com/peterhinch/micropython_ir).
