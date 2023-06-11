@@ -5,7 +5,9 @@
 
 # Twirly
 
-A IR remote-controlled turntable. Useful for are moving stuff that you (can't/ are too lazy to) get to. It's also useful if you need a constant speed rotation (eg videos like [this](https://www.youtube.com/watch?v=VR0v6CCrpZc)). You can pick up relatively cheap ones (similar to the cost of this DIY version) that do the same thing, but building one is more interesting. The parts list below is just what we used, variations based on what you have lying around/ what's available should be easy to impliment. 
+A IR remote-controlled turntable. Useful for are moving stuff that you (can't/ are too lazy to) get to. It's also useful if you need a constant speed rotation (eg videos like [this](https://www.youtube.com/watch?v=VR0v6CCrpZc)). You can pick up relatively cheap ones (similar to the cost of this DIY version) that do the same thing, but building one is more interesting. 
+
+The parts list below is just what we used, variations based on what you have lying around/ what's available should be easy to impliment. 
 
 # Hardware
 
