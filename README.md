@@ -30,6 +30,8 @@ Then
 - Connect the motor to outputs A1 and A2 on the driver board.
 - Connect the IR sensor, using GPIO 0 for VCC, and GPIO 16 for S (signal).
 
+That's pretty much it. You can test that the components are working and then assemble them in an enclosure.
+
 # Video  
 
 
