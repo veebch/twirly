@@ -9,12 +9,21 @@ A IR remote-controlled turntable. Useful for are moving stuff that you (can't/ a
 
 # Hardware
 
-- IR receiver
-- Remote Control
+- [IR receiver and Remote Control](https://www.amazon.de/-/en/DollaTek-Infrared-Wireless-Control-Arduino/dp/B07DJ58XGC/ref=sr_1_4?crid=183Q0LV5BC1G2&keywords=ir+remote+dollatek&qid=1686419607&sprefix=ir+remote+dollatek%2Caps%2C91&sr=8-4)*
+- DC Motor (12V)
+- Power Supply
 - Raspberry Pi Pico
 - [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 - Gears and Case
 
+*The model of remote used differed from this, most likely the codes need to be changed, depending on the remote.
+
+# Assembly
+
+
+# Video  
+
+
 # Acknowledgements
 
-IR code based on Peter Hinch's work.
+IR code based on some of [Peter Hinch's work](https://github.com/peterhinch/micropython_ir).
