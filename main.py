@@ -141,8 +141,7 @@ class MotorDriver():
         mPin = self.MotorPin.index(motor)
         slowdown = [speed * (1 - x  / self.rampsteps)  for x in range(self.rampsteps+1)]
         for vel in slowdown:
-            self.pwm.setServoPulse(self.MotorPin[mPin+1], vel)
-            print("stopping",vel)
+            self.pwm.setServoPulse(self.MotorPin[mPin+1], vel) 
             time.sleep(self.ramptime/self.rampsteps)
         
 def doaspin(direction):
@@ -171,8 +170,9 @@ def doaspin(direction):
         m.MotorHold('MA', 'backward', speed)
         moving = True
     elif direction == 'stop':
-        m.MotorStop('MA',speed)
-        moving = False
+        if moving is True:
+            m.MotorStop('MA',speed)
+            moving = False
     elif direction == 'reset':
         reset()
     print(speed,"%", direction)
