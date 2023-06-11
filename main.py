@@ -98,6 +98,8 @@ class MotorDriver():
         self.pwm.setPWMFreq(60)       
         self.MotorPin = ['MA', 0,1,2, 'MB',3,4,5, 'MC',6,7,8, 'MD',9,10,11]
         self.MotorDir = ['forward', 0,1, 'backward',1,0]
+        self.ramptime = 2
+        self.rampsteps = 10
 
     def MotorRun(self, motor, mdir, speed, runtime):
         if speed > 100:
@@ -128,14 +130,20 @@ class MotorDriver():
             print("set PWM PIN %d, speed %d" %(self.MotorPin[mPin+1], speed))
             print("set pin A %d , dir %d" %(self.MotorPin[mPin+2], self.MotorDir[mDir+1]))
             print("set pin b %d , dir %d" %(self.MotorPin[mPin+3], self.MotorDir[mDir+2]))
-
-        self.pwm.setServoPulse(self.MotorPin[mPin+1], speed)        
-        self.pwm.setLevel(self.MotorPin[mPin+2], self.MotorDir[mDir+1])
-        self.pwm.setLevel(self.MotorPin[mPin+3], self.MotorDir[mDir+2])
         
-    def MotorStop(self, motor):
+        for vel in [ x * speed / self.rampsteps for x in range(self.rampsteps+1)]:
+            self.pwm.setServoPulse(self.MotorPin[mPin+1], vel)        
+            self.pwm.setLevel(self.MotorPin[mPin+2], self.MotorDir[mDir+1])
+            self.pwm.setLevel(self.MotorPin[mPin+3], self.MotorDir[mDir+2])
+            time.sleep(self.ramptime/self.rampsteps)
+        
+    def MotorStop(self, motor, speed):
         mPin = self.MotorPin.index(motor)
-        self.pwm.setServoPulse(self.MotorPin[mPin+1], 0)
+        slowdown = [speed * (1 - x  / self.rampsteps)  for x in range(self.rampsteps+1)]
+        for vel in slowdown:
+            self.pwm.setServoPulse(self.MotorPin[mPin+1], vel)
+            print("stopping",vel)
+            time.sleep(self.ramptime/self.rampsteps)
         
 def doaspin(direction):
     global speed
@@ -143,30 +151,23 @@ def doaspin(direction):
     offset=.1
     print('offset:',float(offset))
     runfor=offset/3
-    speedfloor = 20
-    rampsteps = 5
     if direction=='speed up':
         speed = speed+5
         speed = min (100, speed)
     elif direction=='speed down':
         speed = speed-5
-        speed = max(speedfloor, speed)
-    elif direction=='hold cw':
-        for vel in [speedfloor + x * (speed - speedfloor) / rampsteps for x in range(rampsteps+1)]:
-            print("motor A CW, speed ",vel,"%")
-            m.MotorHold('MA', 'forward', vel )
-            time.sleep(.3)
+        speed = max(0, speed)
+    elif direction=='hold cw':    
+        print("motor A CW, speed ",speed,"%")
+        m.MotorHold('MA', 'forward', speed)
     elif direction=='hold ccw':
-        m.MotorHold('MA', 'backward', speed )
-        for vel in [speedfloor + x * (speed - speedfloor) / rampsteps for x in range(rampsteps+1)]:
-            print("motor A CCW, speed ",vel,"%")
-            m.MotorHold('MA', 'backward', vel )
-            time.sleep(.3)
+        print("motor A CCW, speed ",speed,"%")
+        m.MotorHold('MA', 'backward', speed)
     elif direction == 'stop':
-        m.MotorStop('MA')
+        m.MotorStop('MA',speed)
     elif direction == 'reset':
         reset()
-    print(speed)
+    print(speed,"%", direction)
     return 
 
 pin = machine.Pin(0, machine.Pin.OUT)
