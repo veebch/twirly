@@ -22,7 +22,13 @@ The parts list below is just what we used, variations based on what you have lyi
 *The model of infrared remote control used differed from this, most likely the codes need to be changed, depending on the remote.
 
 # Assembly
+Clone this repository, install ampy, and copy the required files to the pico.
 
+Then
+- Mount the pico to the DC motor driver board. 
+- Connect the power to the driver board (this also powers the pico).
+- Connect the motor to outputs A1 and A2 on the driver board.
+- Connect the IR sensor, using GPIO 0 for VCC, and GPIO 16 for S (signal).
 
 # Video  
 
