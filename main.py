@@ -52,7 +52,7 @@ class PCA9685:
     
     def setPWMFreq(self, freq):
         "Sets the PWM frequency"
-        prescaleval = 25000000.0    # 25MHz
+        prescaleval = 12500000.0    # 12.5MHz
         prescaleval /= 4096.0       # 12-bit
         prescaleval /= float(freq)
         prescaleval -= 1.0
@@ -95,7 +95,7 @@ class MotorDriver():
     def __init__(self, debug=False):
         self.debug = debug
         self.pwm = PCA9685()
-        self.pwm.setPWMFreq(50)       
+        self.pwm.setPWMFreq(60)       
         self.MotorPin = ['MA', 0,1,2, 'MB',3,4,5, 'MC',6,7,8, 'MD',9,10,11]
         self.MotorDir = ['forward', 0,1, 'backward',1,0]
 
@@ -132,7 +132,7 @@ class MotorDriver():
         self.pwm.setServoPulse(self.MotorPin[mPin+1], speed)        
         self.pwm.setLevel(self.MotorPin[mPin+2], self.MotorDir[mDir+1])
         self.pwm.setLevel(self.MotorPin[mPin+3], self.MotorDir[mDir+2])
-
+        
     def MotorStop(self, motor):
         mPin = self.MotorPin.index(motor)
         self.pwm.setServoPulse(self.MotorPin[mPin+1], 0)
@@ -143,18 +143,25 @@ def doaspin(direction):
     offset=.1
     print('offset:',float(offset))
     runfor=offset/3
+    speedfloor = 20
+    rampsteps = 5
     if direction=='speed up':
         speed = speed+5
         speed = min (100, speed)
     elif direction=='speed down':
         speed = speed-5
-        speed = max(30, speed)
+        speed = max(speedfloor, speed)
     elif direction=='hold cw':
-        print("motor A CW, speed ",speed,"%")
-        m.MotorHold('MA', 'forward', speed )
+        for vel in [speedfloor + x * (speed - speedfloor) / rampsteps for x in range(rampsteps+1)]:
+            print("motor A CW, speed ",vel,"%")
+            m.MotorHold('MA', 'forward', vel )
+            time.sleep(.3)
     elif direction=='hold ccw':
-        print("motor A hold CCW, speed ",speed,"%")
         m.MotorHold('MA', 'backward', speed )
+        for vel in [speedfloor + x * (speed - speedfloor) / rampsteps for x in range(rampsteps+1)]:
+            print("motor A CCW, speed ",vel,"%")
+            m.MotorHold('MA', 'backward', vel )
+            time.sleep(.3)
     elif direction == 'stop':
         m.MotorStop('MA')
     elif direction == 'reset':
@@ -182,6 +189,7 @@ def cb(data, addr, ctrl):
     else:
         previous = buttons[data]
     _thread.start_new_thread(doaspin,(previous,))
+    time.sleep(.1)
         
 def mainloop():
     previous = "untouched" 
@@ -189,8 +197,7 @@ def mainloop():
     ir.error_function(print_error)  # Show debug information
     try:
         while True:
-            time.sleep(5)
-            gc.collect()
+            time.sleep(1)
     except KeyboardInterrupt:
         ir.close()
         
