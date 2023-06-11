@@ -15,7 +15,7 @@ A IR remote-controlled turntable. Useful for are moving stuff that you (can't/ a
 - 12V Power Supply
 - Raspberry Pi Pico
 - [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
-- Gears and Case
+- [Gears and Case]([(3d/))
 
 *The model of remote used differed from this, most likely the codes need to be changed, depending on the remote.
 
