@@ -98,8 +98,8 @@ class MotorDriver():
         self.pwm.setPWMFreq(60)       
         self.MotorPin = ['MA', 0,1,2, 'MB',3,4,5, 'MC',6,7,8, 'MD',9,10,11]
         self.MotorDir = ['forward', 0,1, 'backward',1,0]
-        self.ramptime = 2
-        self.rampsteps = 10
+        self.ramptime = 2 # Number of seconds for ramping
+        self.rampsteps = 10 # Number of ramping steps
 
     def MotorRun(self, motor, mdir, speed, runtime):
         if speed > 100:
@@ -147,6 +147,7 @@ class MotorDriver():
         
 def doaspin(direction):
     global speed
+    global moving
     m = MotorDriver()
     offset=.1
     print('offset:',float(offset))
@@ -157,14 +158,21 @@ def doaspin(direction):
     elif direction=='speed down':
         speed = speed-5
         speed = max(0, speed)
-    elif direction=='hold cw':    
+    elif direction=='hold cw':
+        if moving is True:
+           m.MotorStop('MA',speed) 
         print("motor A CW, speed ",speed,"%")
         m.MotorHold('MA', 'forward', speed)
+        moving = True
     elif direction=='hold ccw':
+        if moving is True:
+           m.MotorStop('MA',speed) 
         print("motor A CCW, speed ",speed,"%")
         m.MotorHold('MA', 'backward', speed)
+        moving = True
     elif direction == 'stop':
         m.MotorStop('MA',speed)
+        moving = False
     elif direction == 'reset':
         reset()
     print(speed,"%", direction)
@@ -204,6 +212,7 @@ def mainloop():
         
 # Main Logic
 speed=100
+moving=False
 mainloop()
 
 
