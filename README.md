@@ -11,7 +11,8 @@ A IR remote-controlled turntable. Useful for are moving stuff that you (can't/ a
 
 - [IR receiver and Remote Control](https://www.amazon.de/-/en/DollaTek-Infrared-Wireless-Control-Arduino/dp/B07DJ58XGC/ref=sr_1_4?crid=183Q0LV5BC1G2&keywords=ir+remote+dollatek&qid=1686419607&sprefix=ir+remote+dollatek%2Caps%2C91&sr=8-4)*
 - DC Motor (12V)
-- Power Supply
+- DC driver module ([Waveshare one used here](https://www.waveshare.com/pico-motor-driver.htm)) 
+- Power Supply]
 - Raspberry Pi Pico
 - [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 - Gears and Case
