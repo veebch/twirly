@@ -19,14 +19,22 @@ The parts list below is just what we used, variations based on what you have lyi
 - [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 - [Gears and Case](3d/)
 
-*The model of remote used differed from this, most likely the codes need to be changed, depending on the remote.
+*The model of infrared remote control we used differed from this, most likely the codes need to be changed, depending on the remote.
 
 # Assembly
+Clone this repository, install ampy, and copy the required files to the pico.
 
+Then
+- Mount the pico to the DC motor driver board. 
+- Connect the power to the driver board (this also powers the pico).
+- Connect the motor to outputs A1 and A2 on the driver board.
+- Connect the IR sensor, using GPIO 0 for VCC, and GPIO 16 for S (signal).
+
+That's pretty much it. You can test that the components are working and then connect the gears to the bearing and assemble them in an enclosure. This is the bit where you can get creative. There are some files that you might find useful in the [3d directory](3d/).
 
 # Video  
 
 
 # Acknowledgements
 
-IR code based on some of [Peter Hinch's work](https://github.com/peterhinch/micropython_ir).
+IR code based on some of [Peter Hinch's work](https://github.com/peterhinch/micropython_ir). If you want to adapt the code for a different remote, his repository has all the instructions on how to do so.
