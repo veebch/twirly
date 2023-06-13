@@ -19,7 +19,7 @@ The parts list below is just what we used, variations based on what you have lyi
 - [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 - [Gears and Case](3d/)
 
-*The model of infrared remote control we used differed from this, most likely the codes need to be changed, depending on the remote.
+*The model of infrared remote control we used differed slightly from this, most likely the codes need to be changed, depending on the remote.
 
 # Assembly
 Clone this repository, install ampy, and copy the required files to the pico.
