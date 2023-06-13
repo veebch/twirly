@@ -5,7 +5,7 @@
 
 # Twirly
 
-A Infrared (IR) remote-controlled turntable. Useful for rotating stuff that you (can't/ are too lazy to) get to. You can pick up relatively cheap turntables (similar to the cost of this DIY version) that do the same thing, but building one is more interesting. 
+A Infrared (IR) remote-controlled turntable. Useful for rotating stuff that you (can't/ are too lazy to) get to. You can pick up relatively cheap turntables (similar to the cost of this DIY version) that do the same thing, but building one is more interesting/ flexible. 
 
 There is ramping (gradually speeding up and slowing down) to avoid the side-effects of a sudden stop/start.
 
