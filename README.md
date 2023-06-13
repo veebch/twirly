@@ -5,21 +5,23 @@
 
 # Twirly
 
-A Infrared (IR) remote-controlled turntable. Useful for rotating stuff that you (can't/ are too lazy to) get to. You can pick up relatively cheap turntables (similar to the cost of this DIY version) that do the same thing, but building one is more interesting. 
+A Infrared (IR) remote-controlled turntable. Useful for rotating stuff that you (can't/ are too lazy to) get to. You can pick up relatively cheap turntables (similar to the cost of this DIY version) that do the same thing, but building one is more interesting/ flexible. 
+
+There is ramping (gradually speeding up and slowing down) to avoid the side-effects of a sudden stop/start.
 
 The parts list below is just what we used, variations based on what you have lying around/ what's available should be easy to implement. 
 
 # Hardware
 
 - [IR receiver and Remote Control](https://www.amazon.de/-/en/DollaTek-Infrared-Wireless-Control-Arduino/dp/B07DJ58XGC/ref=sr_1_4?crid=183Q0LV5BC1G2&keywords=ir+remote+dollatek&qid=1686419607&sprefix=ir+remote+dollatek%2Caps%2C91&sr=8-4)*
-- DC Motor (12V)
-- DC driver module ([Waveshare one used here](https://www.waveshare.com/pico-motor-driver.htm)) 
-- 12V Power Supply
+- [DC Motor (12V)](https://www.amazon.de/gp/product/B0824V7YGT)
+- [DC driver module](https://www.waveshare.com/pico-motor-driver.htm)
+- 12V DC Power Supply
 - Raspberry Pi Pico
 - [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 - [Gears and Case](3d/)
 
-*The model of infrared remote control we used differed from this, most likely the codes need to be changed, depending on the remote.
+*The model of infrared remote control we used differed slightly from this, most likely the codes need to be changed, depending on the remote.
 
 # Assembly
 Clone this repository, install ampy, and copy the required files to the pico.
