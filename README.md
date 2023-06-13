@@ -29,7 +29,7 @@ Clone this repository, install ampy, and copy the required files to the pico.
 Then
 - Mount the pico to the DC motor driver board. 
 - Connect the power to the driver board (this also powers the pico).
-- Connect the motor to outputs A1 and A2 on the driver board.
+- Connect the motor to outputs **A1** and **A2** on the driver board.
 - Connect the IR sensor, using **GPIO 0** for **VCC**, and **GPIO 16** for **S** (signal).
 
 That's pretty much it. You can test that the components are working and then connect the gears to the bearing and assemble them in an enclosure. This is the bit where you can get creative. There are some files that you might find useful in the [3d directory](3d/).
