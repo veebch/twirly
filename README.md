@@ -13,7 +13,7 @@ The parts list below is just what we used, variations based on what you have lyi
 
 - [IR receiver and Remote Control](https://www.amazon.de/-/en/DollaTek-Infrared-Wireless-Control-Arduino/dp/B07DJ58XGC/ref=sr_1_4?crid=183Q0LV5BC1G2&keywords=ir+remote+dollatek&qid=1686419607&sprefix=ir+remote+dollatek%2Caps%2C91&sr=8-4)*
 - [DC Motor (12V)](https://www.amazon.de/gp/product/B0824V7YGT)
-- DC driver module ([Waveshare one used here](https://www.waveshare.com/pico-motor-driver.htm)) 
+- [DC driver module](https://www.waveshare.com/pico-motor-driver.htm)) 
 - 12V Power Supply
 - Raspberry Pi Pico
 - [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
