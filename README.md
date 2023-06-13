@@ -39,4 +39,4 @@ That's pretty much it. You can test that the components are working and then con
 
 # Acknowledgements
 
-IR code based on some of [Peter Hinch's work](https://github.com/peterhinch/micropython_ir). If you want to adapt the code for a different remote, his repository has all the instructions on how to do so.
+IR code based on some of [Peter Hinch's work](https://github.com/peterhinch/micropython_ir). If you want to adapt the code to use a different remote, his repository has all the instructions on how to do so.
