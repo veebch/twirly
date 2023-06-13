@@ -7,7 +7,7 @@
 
 A Infrared (IR) remote-controlled turntable. Useful for rotating stuff that you (can't/ are too lazy to) get to. You can pick up relatively cheap turntables (similar to the cost of this DIY version) that do the same thing, but building one is more interesting. 
 
-The parts list below is just what we used, variations based on what you have lying around/ what's available should be easy to impliment. 
+The parts list below is just what we used, variations based on what you have lying around/ what's available should be easy to implement. 
 
 # Hardware
 
