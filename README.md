@@ -13,8 +13,7 @@ The parts list below is just what we used, variations based on what you have lyi
 
 # Hardware
 
-- [IR receiver](https://www.amazon.de/-/en/dp/B089QKGRTL?psc=1&ref=ppx_yo2ov_dt_b_product_details)
-- [Remote Control](https://www.amazon.de/-/en/Replacement-Remote-Control-Compatible-Original-silver/dp/B0BY4QXXZB/ref=sr_1_2?crid=25LNVSW6C6AJ4&keywords=apple+tv+silver+remote&qid=1688308523&sprefix=apple+tv+silver+remote%2Caps%2C111&sr=8-2)
+- [IR receiver and Remote Control](https://www.amazon.de/-/en/Replacement-Remote-Control-Compatible-Original-silver/dp/B0BY4QXXZB/ref=sr_1_2?crid=25LNVSW6C6AJ4&keywords=apple+tv+silver+remote&qid=1688308523&sprefix=apple+tv+silver+remote%2Caps%2C111&sr=8-2](https://www.amazon.de/-/en/DollaTek-Infrared-Wireless-Control-Arduino/dp/B07DJ58XGC/ref=sr_1_3?crid=7F1ZN18YPDED&keywords=IR+remote&qid=1688309336&s=ce-de&sprefix=ir+remote%2Celectronics%2C103&sr=1-3)
 - [DC Motor (12V)](https://www.amazon.de/gp/product/B0824V7YGT)
 - [DC driver module](https://www.waveshare.com/pico-motor-driver.htm)
 - 12V DC Power Supply
