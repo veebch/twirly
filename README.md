@@ -13,15 +13,14 @@ The parts list below is just what we used, variations based on what you have lyi
 
 # Hardware
 
-- [IR receiver and Remote Control](https://www.amazon.de/-/en/DollaTek-Infrared-Wireless-Control-Arduino/dp/B07DJ58XGC/ref=sr_1_4?crid=183Q0LV5BC1G2&keywords=ir+remote+dollatek&qid=1686419607&sprefix=ir+remote+dollatek%2Caps%2C91&sr=8-4)*
+- [IR receiver](https://www.amazon.de/-/en/dp/B089QKGRTL?psc=1&ref=ppx_yo2ov_dt_b_product_details)
+- [Remote Control](https://www.amazon.de/-/en/Replacement-Remote-Control-Compatible-Original-silver/dp/B0BY4QXXZB/ref=sr_1_2?crid=25LNVSW6C6AJ4&keywords=apple+tv+silver+remote&qid=1688308523&sprefix=apple+tv+silver+remote%2Caps%2C111&sr=8-2)
 - [DC Motor (12V)](https://www.amazon.de/gp/product/B0824V7YGT)
 - [DC driver module](https://www.waveshare.com/pico-motor-driver.htm)
 - 12V DC Power Supply
 - Raspberry Pi Pico
 - [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 - [Gears and Case](3d/)
-
-*The model of infrared remote control we used differed slightly from this, most likely the codes need to be changed, depending on the remote.
 
 # Assembly
 Clone this repository, install ampy, and copy the required files to the pico.
