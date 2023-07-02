@@ -17,7 +17,7 @@ The parts list below is just what we used, variations based on what you have lyi
 - [DC Motor (12V)](https://www.amazon.de/gp/product/B0824V7YGT)
 - [DC driver module](https://www.waveshare.com/pico-motor-driver.htm)
 - 12V DC Power Supply
-- Raspberry Pi Pico
+- Raspberry Pi Pico (No need for a W unless you plan to use WiFi)
 - [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 - [Gears and Case](3d/)
 
