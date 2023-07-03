@@ -99,7 +99,7 @@ class MotorDriver():
         self.MotorPin = ['MA', 0,1,2, 'MB',3,4,5, 'MC',6,7,8, 'MD',9,10,11]
         self.MotorDir = ['forward', 0,1, 'backward',1,0]
         self.ramptime = 2 # Number of seconds for ramping
-        self.rampsteps = 10 # Number of ramping steps
+        self.rampsteps = 10 # Number of ramping    
 
     def MotorRun(self, motor, mdir, speed, runtime):
         if speed > 100:
@@ -152,30 +152,38 @@ def doaspin(direction):
     print('offset:',float(offset))
     runfor=offset/3
     if direction=='speed up':
-        speed = speed+5
-        speed = min (100, speed)
+        if moving==0:
+            # If the motor isn't moving, the speed buttons do micro adjustmnets
+            m.MotorRun('MA','forward',100,.1)
+        else:
+            speed = speed+5
+            speed = min (100, speed)
     elif direction=='speed down':
-        speed = speed-5
-        speed = max(0, speed)
+        if moving==0:
+            m.MotorRun('MA','backward',100,.1)
+        else:
+            speed = speed-5
+            speed = max(0, speed)
     elif direction=='hold cw':
-        if moving is True:
+        if moving == -1:
            m.MotorStop('MA',speed) 
-        print("motor A CW, speed ",speed,"%")
-        m.MotorHold('MA', 'forward', speed)
-        moving = True
+        if moving !=1:
+            print("motor A CW, speed ",speed,"%")
+            m.MotorHold('MA', 'forward', speed)
+            moving = 1
     elif direction=='hold ccw':
-        if moving is True:
+        if moving == 1:
            m.MotorStop('MA',speed) 
-        print("motor A CCW, speed ",speed,"%")
-        m.MotorHold('MA', 'backward', speed)
-        moving = True
+        if moving !=-1:
+            print("motor A CCW, speed ",speed,"%")
+            m.MotorHold('MA', 'backward', speed)
+            moving = -1
     elif direction == 'stop':
-        if moving is True:
+        if moving != 0:
             m.MotorStop('MA',speed)
-            moving = False
+            moving = 0
     elif direction == 'reset':
         reset()
-    print(speed,"%", direction)
     return 
 
 pin = machine.Pin(0, machine.Pin.OUT)
@@ -212,7 +220,7 @@ def mainloop():
         
 # Main Logic
 speed=100
-moving=False
+moving=0
 mainloop()
 
 
