@@ -52,7 +52,7 @@ Now, using the port path (in our case `/dev/ttyACM0`) copy the contents to the r
 
 ```
 ampy -p /dev/ttyACM0 put main.py 
-ampy -p /dev/ttyACM0 put ir_rc
+ampy -p /dev/ttyACM0 put ir_rx
 ```
 (*NB. make sure you are using the right port name, as shown in the port listing command above*)
 
