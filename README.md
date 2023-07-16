@@ -60,6 +60,7 @@ Done! All the required files should now be on the Pico. Whenever you sconnect to
 
 # Video  
 
+A quick overview of the build and a demo of it in action.
 
 # Acknowledgements
 
