@@ -32,9 +32,35 @@ Then
 
 That's pretty much it. You can test that the components are working and then connect the gears to the bearing and assemble them in an enclosure. This is the bit where you can get creative. There are some files that you might find useful in the [3d directory](3d/).
 
+## Installing
+
+Download a `uf2` image and install it on the Pico W according to the [instructions](https://www.raspberrypi.com/documentation/microcontrollers/micropython.html#drag-and-drop-micropython) on the Raspberry Pi website.
+
+Clone this repository to your computer using the commands (from a terminal):
+
+```
+cd ~
+git clone https://github.com/veebch/twirly.git
+cd twirly
+```
+
+Check the port of the pico with the port listing command:
+```
+python -m serial.tools.list_ports
+```
+Now, using the port path (in our case `/dev/ttyACM0`) copy the contents to the repository by installing [ampy](https://pypi.org/project/adafruit-ampy/) and using  and the commands:
+
+```
+ampy -p /dev/ttyACM0 put main.py 
+ampy -p /dev/ttyACM0 put ir_rc
+```
+(*NB. make sure you are using the right port name, as shown in the port listing command above*)
+
+Done! All the required files should now be on the Pico. Whenever you sconnect to USB power the script will autorun.
+
 # Video  
 
 
 # Acknowledgements
 
-IR code based on some of [Peter Hinch's work](https://github.com/peterhinch/micropython_ir). If you want to adapt the code to use a different remote, his repository has all the instructions on how to do so.
+IR code based on some of [Peter Hinch's work](https://github.com/peterhinch/micropython_ir). If you want to adapt the code to use a different remote, the testing file in the `ir_tx` should help.
