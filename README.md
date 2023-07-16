@@ -21,7 +21,7 @@ The parts list below is just what we used, variations based on what you have lyi
 - [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 - [Gears and Case](3d/)
 
-# Assembly
+## Assembly
 Clone this repository, install ampy, and copy the required files to the pico.
 
 Then
@@ -32,7 +32,7 @@ Then
 
 That's pretty much it. You can test that the components are working and then connect the gears to the bearing and assemble them in an enclosure. This is the bit where you can get creative. There are some files that you might find useful in the [3d directory](3d/).
 
-## Installing
+# Firmware
 
 Download a `uf2` image and install it on the Pico W according to the [instructions](https://www.raspberrypi.com/documentation/microcontrollers/micropython.html#drag-and-drop-micropython) on the Raspberry Pi website.
 
