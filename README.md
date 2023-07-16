@@ -56,7 +56,7 @@ ampy -p /dev/ttyACM0 put ir_rx
 ```
 (*NB. make sure you are using the right port name, as shown in the port listing command above*)
 
-Done! All the required files should now be on the Pico. Whenever you sconnect to USB power the script will autorun.
+Done! All the required files should now be on the Pico. Whenever you connect to power the script will autorun.
 
 # Video  
 
