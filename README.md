@@ -22,7 +22,7 @@ There is ramping (gradually speeding up and slowing down) to avoid the side-effe
 Total cost of materials ~ 35 USD.
 
 ## Assembly
-Clone this repository, install ampy, and copy the required files to the pico.
+Clone this repository, install [ampy](https://github.com/scientifichackers/ampy), and copy the required files to the pico.
 
 Then
 
