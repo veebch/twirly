@@ -19,6 +19,7 @@ There is speed ramping (gradually speeding up and slowing down) to avoid the sid
 - [3d printed gears and case](3d/)
 
 Total cost of materials: ~ 35 USD
+
 Build time: <3 hours (not including 3d printing time)
 
 ## Assembly
