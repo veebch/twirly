@@ -22,9 +22,6 @@ There is speed ramping (gradually speeding up and slowing down) to avoid the sid
 Total cost of materials ~ 35 USD.
 
 ## Assembly
-Clone this repository, install [ampy](https://github.com/scientifichackers/ampy), and copy the required files to the pico.
-
-Then
 
 - Connect the 12V power to **VCC** and **GND** on the driver board.
 - Connect the motor to outputs **A-1A** and **A-1B** on the driver board.
@@ -33,6 +30,7 @@ Then
 That's pretty much it. You can test that the components are working and then connect the gears to the bearing and assemble them in an enclosure. This is the bit where you can get creative. There are some files that you might find useful in the [3d directory](3d/).
 
 # Firmware
+
 
 Download a `uf2` image and install it on the Pico W according to the [instructions](https://www.raspberrypi.com/documentation/microcontrollers/micropython.html#drag-and-drop-micropython) on the Raspberry Pi website.
 
