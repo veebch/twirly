@@ -9,8 +9,6 @@ A Infrared (IR) remote-controlled turntable. Useful for rotating stuff that you 
 
 There is ramping (gradually speeding up and slowing down) to avoid the side-effects of a sudden stop/start (things falling over etc).
 
-The parts list below is just what we used, variations based on what you have lying around/ what's available should be easy to implement. 
-
 # Hardware
 
 - [IR receiver and Remote Control](https://www.amazon.de/-/en/DollaTek-Infrared-Wireless-Control-Arduino/dp/B07DJ58XGC)
