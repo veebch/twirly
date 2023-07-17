@@ -5,7 +5,7 @@
 
 # Twirly
 
-A Infrared (IR) remote-controlled turntable. Useful for rotating stuff that you (can't/ are too lazy to) get to. You can pick up relatively cheap turntables (slightly more expensive than this DIY version) that do the same thing, but building one is more interesting/ flexible. For example, if you need to make a high-weight version, this should be a good start.
+A Infrared (IR) remote-controlled turntable. Useful for rotating stuff that you (can't/ are too lazy to) get to. You can pick up relatively cheap turntables (slightly more expensive than this DIY version) that do the same thing, but building one is more interesting/ flexible. For example, if you need to make a high-weight version, this should be a good start and a much cheaper option.
 
 There is ramping (gradually speeding up and slowing down) to avoid the side-effects of a sudden stop/start (things falling over etc).
 
@@ -20,6 +20,8 @@ The parts list below is just what we used, variations based on what you have lyi
 - Raspberry Pi Pico (No need for a W unless you plan to use WiFi)
 - [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 - [Gears and Case](3d/)
+
+Total cost about 35 dollars.
 
 ## Assembly
 Clone this repository, install ampy, and copy the required files to the pico.
