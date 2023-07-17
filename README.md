@@ -5,29 +5,29 @@
 
 # Twirly
 
-A Infrared (IR) remote-controlled turntable. Useful for rotating stuff that you (can't/ are too lazy to) get to. You can pick up relatively cheap turntables (similar to the cost of this DIY version) that do the same thing, but building one is more interesting/ flexible. For example, if you need to make a high-weight version, this should be a good start.
+A Infrared (IR) remote-controlled turntable. Useful for rotating stuff that you (can't/ are too lazy to) get to. You can pick up relatively cheap turntables (slightly more expensive than this DIY version) that do the same thing, but building one is more interesting/ flexible. For example, if you need to make a high-weight version, this should be a good start, as well as a much cheaper option than that kind of turntable.
 
 There is ramping (gradually speeding up and slowing down) to avoid the side-effects of a sudden stop/start (things falling over etc).
-
-The parts list below is just what we used, variations based on what you have lying around/ what's available should be easy to implement. 
 
 # Hardware
 
 - [IR receiver and Remote Control](https://www.amazon.de/-/en/DollaTek-Infrared-Wireless-Control-Arduino/dp/B07DJ58XGC)
 - [DC Motor (12V)](https://www.amazon.de/gp/product/B0824V7YGT)
-- [DC driver module](https://www.waveshare.com/pico-motor-driver.htm)
+- [L9110S DC driver module](https://de.aliexpress.com/item/32273623980.html?spm=a2g0o.order_list.order_list_main.71.34de5c5fbnyqkO&gatewayAdapt=glo2deu)
 - 12V DC Power Supply
 - Raspberry Pi Pico (No need for a W unless you plan to use WiFi)
 - [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 - [Gears and Case](3d/)
 
+Total cost of materials ~ 35 USD.
+
 ## Assembly
 Clone this repository, install ampy, and copy the required files to the pico.
 
 Then
-- Mount the pico to the DC motor driver board. 
-- Connect the power to the driver board (this also powers the pico).
-- Connect the motor to outputs **A1** and **A2** on the driver board.
+
+- Connect the 12V power to **VCC** and **GND** on the driver board.
+- Connect the motor to outputs **A-1A** and **A-1B** on the driver board.
 - Connect the IR sensor, using **GPIO 0** for **VCC**, and **GPIO 16** for **S** (signal).
 
 That's pretty much it. You can test that the components are working and then connect the gears to the bearing and assemble them in an enclosure. This is the bit where you can get creative. There are some files that you might find useful in the [3d directory](3d/).
@@ -56,7 +56,7 @@ ampy -p /dev/ttyACM0 put ir_rx
 ```
 (*NB. make sure you are using the right port name, as shown in the port listing command above*)
 
-Done! All the required files should now be on the Pico. Whenever you sconnect to USB power the script will autorun.
+Done! All the required files should now be on the Pico. Whenever you connect to power the script will autorun.
 
 # Video  
 
