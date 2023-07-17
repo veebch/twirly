@@ -22,7 +22,7 @@ Total cost of materials ~ 35 USD.
 
 ## Assembly
 
-- Connect the 12V power to **VCC** and **GND** on the driver board.
+- Connect a power source to **VCC** and **GND** on the driver board.
 - Connect the motor to outputs **A-1A** and **A-1B** on the driver board.
 - Connect the IR sensor, using **GPIO 0** for **VCC**, and **GPIO 16** for **S** (signal).
 
