@@ -16,7 +16,7 @@ There is speed ramping (gradually speeding up and slowing down) to avoid the sid
 - [L9110S DC driver module](https://de.aliexpress.com/item/32273623980.html?spm=a2g0o.order_list.order_list_main.71.34de5c5fbnyqkO&gatewayAdapt=glo2deu)
 - Raspberry Pi Pico (No need for a Pico **W**)
 - [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
-- [Gears and Case](3d/)
+- [3d printed gears and case](3d/)
 
 Total cost of materials ~ 35 USD.
 
