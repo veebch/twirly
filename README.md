@@ -19,7 +19,7 @@ There is ramping (gradually speeding up and slowing down) to avoid the side-effe
 - [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 - [Gears and Case](3d/)
 
-Total cost about 35 dollars.
+Total ~ 35 USD.
 
 ## Assembly
 Clone this repository, install ampy, and copy the required files to the pico.
