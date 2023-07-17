@@ -14,7 +14,7 @@ There is speed ramping (gradually speeding up and slowing down) to avoid the sid
 - [IR receiver and Remote Control](https://www.amazon.de/-/en/DollaTek-Infrared-Wireless-Control-Arduino/dp/B07DJ58XGC)
 - [DC Motor](https://www.amazon.de/gp/product/B0824V7YGT)
 - [L9110S DC driver module](https://de.aliexpress.com/item/32273623980.html?spm=a2g0o.order_list.order_list_main.71.34de5c5fbnyqkO&gatewayAdapt=glo2deu)
-- Raspberry Pi Pico (No need for a Pico **W**)
+- [Raspberry Pi Pico](https://www.pi-shop.ch/raspberry-pi-pico) (No need for a Pico **W**)
 - [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 - [3d printed gears and case](3d/)
 
