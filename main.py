@@ -14,6 +14,7 @@ A_1A = machine.PWM(Pin(A_1A_pin))
 A_1B = machine.PWM(Pin(A_1B_pin))
   
 # Remote control stuff
+# If you're using a different one (you probably are) use the test.py file in the ir_rx directory to get the values for your remote
 
 # Set Power Pin
 pin = machine.Pin(0, machine.Pin.OUT)
