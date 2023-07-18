@@ -75,8 +75,9 @@ def doaspin(command):
     if command == 'speed up':
         if moving == 0:
             # If the motor isn't moving, the speed buttons do small adjustments
-            pass
-            # nudge cw
+            IN_C.duty_u16(65025)
+            time.sleep(.05)
+            IN_C.duty_u16(0)
         else:
             speed += 5
             speed = min(100, speed)
@@ -84,7 +85,9 @@ def doaspin(command):
     elif command == 'speed down':
         if moving == 0:
             # nudge ccw
-            pass
+            IN_D.duty_u16(65025)
+            time.sleep(.05)
+            IN_D.duty_u16(0)
         else:
             speed -= 5
             speed = max(0, speed)
