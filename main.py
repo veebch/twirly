@@ -25,7 +25,7 @@ BUTTONS = {
     0x06: "speed up",
     0x1a: "hold ccw",
     0x1b: "hold cw",
-    0x12: "reset"
+    0x12: "timelapse"
 }
 
 irpower = machine.Pin(0, machine.Pin.OUT)
@@ -66,6 +66,27 @@ def rampup(speed, moving):
             IN_C.duty_u16(0)
             IN_D.duty_u16(int((sp/100)*65025))
         time.sleep(.1)
+        
+def lapsespin():
+    print("full spin")
+    startspeed = 15
+    maxspeed = 100
+    delay = .5
+    spinfor = .0158
+    for i in range(128):
+        start = time.ticks_ms()					# Make a note of start time 
+        speedramp = .04*(-i)*(i-128)			# Hooray for maths (simple quadriatic with zeros at 0 and 128)
+        speed = min (maxspeed, speedramp)
+        print(i, speed)
+        # Ramp up speed
+        for j in range (15, speed, 5):
+            IN_D.duty_u16(int(((j+5)/100)*65025))
+            time.sleep(spinfor)
+        IN_D.duty_u16(0)
+        time.sleep(delay-(time.ticks_diff(time.ticks_ms(),start)/1000)) # to make each iteration 'delay' seconds
+        
+        
+        
 
 
 def doaspin(command):
@@ -111,8 +132,8 @@ def doaspin(command):
     elif command == 'stop':
         stopmotor(speed, moving)
         moving = 0
-    elif command == 'reset':
-        machine.reset()
+    elif command == 'timelapse':
+        lapsespin()
     return speed, moving
 
 # User callback
