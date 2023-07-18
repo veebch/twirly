@@ -63,7 +63,7 @@ Done! All the required files should now be on the Pico. Whenever you connect to 
 - If the motor isn't spinning, the speed buttons give a **small nudge** clockwise or counterclockwise.
 - There is also a button that performs **1 spin** for automated 360 photos.
 
-All options other than nudges use speed ramping to help things not fall over.
+All options other than nudges use speed ramping to preven things from falling over.
 
 # Video  
 
