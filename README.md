@@ -57,6 +57,14 @@ ampy -p /dev/ttyACM0 put ir_rx
 
 Done! All the required files should now be on the Pico. Whenever you connect to power the script will autorun.
 
+# Controls
+
+There is a continuous spin either clockwise or anticlockwise. When the motor is spinning, the left and right buttons control speed. 
+
+If the motor isn't spinning, the speed buttons give a small nudge clockwise or counterclockwise.
+
+There is also a button that performs 1 spin (with ramping) for automated 360 photos.
+
 # Video  
 
 A quick overview of the build and a demo of it in action.
