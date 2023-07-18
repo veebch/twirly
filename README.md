@@ -12,7 +12,7 @@ A Infrared (IR) remote-controlled turntable. Useful for rotating stuff that you 
 
 - [IR receiver and Remote Control](https://www.amazon.de/-/en/DollaTek-Infrared-Wireless-Control-Arduino/dp/B07DJ58XGC)
 - [DC Motor](https://www.amazon.de/gp/product/B0824V7YGT)
-- [L298N DC driver module](https://www.reichelt.com/ch/de/entwicklerboards-motorsteuerung-2-fach-l298n-debo-drv1-l298n-p282644.html?PROVID=2808) (will handle power/motors up to 35V)
+- [L298N H bridge](https://www.reichelt.com/ch/de/entwicklerboards-motorsteuerung-2-fach-l298n-debo-drv1-l298n-p282644.html?PROVID=2808) (will handle power/motors up to 35V)
 - [Raspberry Pi Pico](https://www.pi-shop.ch/raspberry-pi-pico) (No need for a Pico **W**)
 - [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 - [3d printed gears and case](3d/)
