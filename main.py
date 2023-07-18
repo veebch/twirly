@@ -15,6 +15,8 @@ IN_C = machine.PWM(machine.Pin(IN_C_pin, machine.Pin.OUT))
 IN_D = machine.PWM(machine.Pin(IN_D_pin, machine.Pin.OUT))
 IN_C.freq(1000) 
 IN_D.freq(1000)
+IN_C.duty_u16(0) 
+IN_D.duty_u16(0)
 
 # Remote control buttons
 BUTTONS = {
@@ -26,29 +28,50 @@ BUTTONS = {
     0x12: "reset"
 }
 
-def updatespeed(speed,moving)
-    if moving == -1:
-        IN_C.duty_u16(int((speed/100)*65025))
+irpower = machine.Pin(0, machine.Pin.OUT)
+irpower.value(1)
+
+def updatespeed(speed,moving):
     if moving == 1:
+        IN_C.duty_u16(int((speed/100)*65025))
+        IN_D.duty_u16(0)
+    if moving == - 1:
+        IN_C.duty_u16(0)
         IN_D.duty_u16(int((speed/100)*65025))
         
         
 def stopmotor(speed,moving):
     for i in range (speed, 0, -5):
-        if moving == -1:
-            IN_C.duty_u16(int((i/100)*65025))
+        print("stop")
+        print(i)
         if moving == 1:
             IN_C.duty_u16(int((i/100)*65025))
+            IN_D.duty_u16(0)
+        if moving == - 1:
+            IN_C.duty_u16(0)
+            IN_D.duty_u16(int((i/100)*65025))
+        time.sleep(.1)
+        IN_C.duty_u16(0)
+        IN_D.duty_u16(0)
+    return
             
 def rampup(speed, moving):
-    for i in range (0, speed, 5):
-        if moving == -1:
-            IN_C.duty_u16(int((i/100)*65025))
+    for i in range (15, speed, 5):
+        sp = i+5
+        print(sp)
         if moving == 1:
-            IN_C.duty_u16(int((i/100)*65025))
+            IN_C.duty_u16(int((sp/100)*65025))
+            IN_D.duty_u16(0)
+        if moving == -1:
+            IN_C.duty_u16(0)
+            IN_D.duty_u16(int((sp/100)*65025))
+        time.sleep(.1)
 
 
-def doaspin(command, speed, moving):
+def doaspin(command):
+    global speed
+    global moving
+    print(command, speed, moving)
     if command == 'speed up':
         if moving == 0:
             # If the motor isn't moving, the speed buttons do small adjustments
@@ -71,7 +94,6 @@ def doaspin(command, speed, moving):
     elif command == 'hold cw':
         if moving == -1:
            stopmotor(speed, moving)
-           pass
         if moving != 1:
             print("motor A CW, speed ", speed, "%")
             moving = 1 # CW
@@ -79,18 +101,15 @@ def doaspin(command, speed, moving):
     elif command == 'hold ccw':
         if moving == 1:
            stopmotor(speed, moving)
-           pass
         if moving != -1:
             print("motor A CCW, speed ", speed, "%")
             moving = -1 # CCW
             rampup(speed, moving)
     elif command == 'stop':
-        if moving != 0:
-            stopmotor(speed, moving)
-            moving = 0
+        stopmotor(speed, moving)
+        moving = 0
     elif command == 'reset':
         machine.reset()
-    
     return speed, moving
 
 # User callback
@@ -99,7 +118,7 @@ def cb(data, addr, ctrl):
         pass
     else:
         command = BUTTONS[data]
-        _thread.start_new_thread(doaspin, (command, speed, moving))
+        _thread.start_new_thread(doaspin, (command,))
         time.sleep(.1)
         
 def mainloop():
@@ -111,16 +130,14 @@ def mainloop():
             time.sleep(1)
     except:
         ir.close()
-        IN_C.freq(1000) 
-        IN_D.freq(1000)
-        
-        
+        IN_C.duty_u16(0) 
+        IN_D.duty_u16(0)
         
 
 if __name__ == '__main__':
     speed = 100
     # moving 0 = stopped, 1 = clockwise, -1 = counter clockwise
     moving = 0
-    p = machine.Pin(16, machine.Pin.IN)
+    p = machine.Pin(16, machine.Pin.IN)  
     mainloop()
 
