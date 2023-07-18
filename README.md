@@ -18,7 +18,7 @@ There is speed ramping (gradually speeding up and slowing down) to avoid the sid
 - [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 - [3d printed gears and case](3d/)
 
-Total cost of materials: ~ 35 USD (Power supply for motor not included)
+Total cost of materials: ~ 35 USD (power supply for motor not included)
 
 Build time: <2 hours (not including 3d printing time)
 
