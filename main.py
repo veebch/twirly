@@ -39,6 +39,13 @@ def stopmotor(speed,moving):
             IN_C.duty_u16(int((i/100)*65025))
         if moving == 1:
             IN_C.duty_u16(int((i/100)*65025))
+            
+def rampup(speed, moving):
+    for i in range (0, speed, 5):
+        if moving == -1:
+            IN_C.duty_u16(int((i/100)*65025))
+        if moving == 1:
+            IN_C.duty_u16(int((i/100)*65025))
 
 
 def doaspin(command, speed, moving):
@@ -46,14 +53,14 @@ def doaspin(command, speed, moving):
         if moving == 0:
             # If the motor isn't moving, the speed buttons do small adjustments
             pass
-            # m.MotorRun('MA', 'forward', 100, .1)
+            # nudge cw
         else:
             speed += 5
             speed = min(100, speed)
             updatespeed(speed, moving)
     elif command == 'speed down':
         if moving == 0:
-            # m.MotorRun('MA', 'backward', 100, .1)
+            # nudge ccw
             pass
         else:
             speed -= 5
@@ -63,22 +70,20 @@ def doaspin(command, speed, moving):
                 moving = 0
     elif command == 'hold cw':
         if moving == -1:
-           # m.MotorStop('MA', speed)
+           stopmotor(speed, moving)
            pass
         if moving != 1:
             print("motor A CW, speed ", speed, "%")
-            # m.MotorHold('MA', 'forward', speed)
-            pass
             moving = 1 # CW
+            rampup(speed, moving)
     elif command == 'hold ccw':
         if moving == 1:
-           # m.MotorStop('MA', speed)
+           stopmotor(speed, moving)
            pass
         if moving != -1:
             print("motor A CCW, speed ", speed, "%")
-            # m.MotorHold('MA', 'backward', speed)
-            pass
             moving = -1 # CCW
+            rampup(speed, moving)
     elif command == 'stop':
         if moving != 0:
             stopmotor(speed, moving)
