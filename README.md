@@ -20,7 +20,7 @@ There is speed ramping (gradually speeding up and slowing down) to avoid the sid
 
 Total cost of materials: ~ 35 USD
 
-Build time: <3 hours (not including 3d printing time)
+Build time: <2 hours (not including 3d printing time)
 
 ## Assembly
 
