@@ -71,7 +71,7 @@ def lapsespin():
     print("full spin")
     startspeed = 15
     maxspeed = 100
-    delay = .5
+    delay = 5
     spinfor = .0158
     for i in range(128):
         start = time.ticks_ms()					# Make a note of start time 
