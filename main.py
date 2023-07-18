@@ -8,13 +8,14 @@ import machine
 from ir_rx.print_error import print_error  # Optional print of error codes
 from ir_rx.nec import NEC_16
 
-# Motor drive module
+# Motor drive module - PWM for speed control
 A_1A_pin = 14
 A_1B_pin = 15
-A_1A = machine.Pin(A_1A_pin, machine.Pin.OUT)
-A_1B = machine.Pin(A_1B_pin, machine.Pin.OUT)
-A_1A.value(0) 
-A_1B.value(0) 
+A_1A = machine.PWM(machine.Pin(A_1A_pin, machine.Pin.OUT))
+A_1B = machine.PWM(machine.Pin(A_1B_pin, machine.Pin.OUT))
+A_1A.freq(1000) 
+A_1B.freq(1000)
+A_1A.duty_u16(0)
 
 # Remote control buttons
 BUTTONS = {
