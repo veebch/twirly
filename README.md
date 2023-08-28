@@ -65,7 +65,7 @@ Done! All the required files should now be on the Pico. Whenever you connect to 
 
 - There is a **continuous spin** either clockwise or anticlockwise. When the motor is spinning, the left and right buttons control speed. 
 - If the motor isn't spinning, the speed buttons give a **small nudge** clockwise or counterclockwise.
-- There is also a button that performs **1 spin**  in 128 steps of 3 seconds for automated 360 photos.
+- There is also a button that performs **One (approx) 360 degree spin**  in 128 steps of 3 seconds for automated 360 photos.
 
 All options other than nudges use speed ramping to lessen the chance of things falling over.
 
