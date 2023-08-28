@@ -161,7 +161,7 @@ def cb(data, addr, ctrl):
         pass
     else:
         command = BUTTONS[data]
-        _thread.start_new_thread(doaspin, (command,))
+        doaspin(command)
         time.sleep(.1)
         
 def mainloop():
