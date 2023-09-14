@@ -37,7 +37,7 @@ That's pretty much it. You can test that the components are working and then con
 # Firmware
 
 
-Download a `uf2` image and install it on the Pico W according to the [instructions](https://www.raspberrypi.com/documentation/microcontrollers/micropython.html#drag-and-drop-micropython) on the Raspberry Pi website.
+Download a `uf2` image and install it on the Pico according to the [instructions](https://www.raspberrypi.com/documentation/microcontrollers/micropython.html#drag-and-drop-micropython) on the Raspberry Pi website.
 
 Clone this repository to your computer using the commands (from a terminal):
 
