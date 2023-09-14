@@ -71,7 +71,7 @@ All options other than nudges use speed ramping (via PWM) to lessen the chance o
 
 # Video  
 
-A quick overview of the build and a demo of it in action.
+An overview of the build and a demo of it in action.
 
 # Acknowledgements
 
