@@ -15,8 +15,8 @@ There are relatively cheap turntables (only slightly more expensive than this DI
 # Hardware
 
 - [IR receiver and Remote Control](https://www.amazon.de/-/en/DollaTek-Infrared-Wireless-Control-Arduino/dp/B07DJ58XGC)
-- [DC Motor](https://www.amazon.de/gp/product/B0824V7YGT)
-- [L298N H bridge](https://www.reichelt.com/ch/de/entwicklerboards-motorsteuerung-2-fach-l298n-debo-drv1-l298n-p282644.html?PROVID=2808) (will handle power/motors up to 35V)
+- Stepper Motor
+- DRV8825
 - [Raspberry Pi Pico](https://www.pi-shop.ch/raspberry-pi-pico) (No need for a Pico **W** for current functionality. Although you could use a **W** to make a turntable that's controlled by a webpage, which you might prefer to the IR remote control option)
 - [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 - [3d printed gears and case](3d/)
@@ -28,8 +28,6 @@ Build time: <2 hours (not including 3d printing time)
 ## Assembly
 
 - Connect a power source to **VCC** and **GND** on the h bridge.
-- Connect **GPIO 14** and **GPIO 15** to **IN C** and **IN D** on the h bridge.
-- Connect the motor to outputs **C** and **D** on the h bridge.
 - Connect the IR sensor, using **GPIO 0** for **VCC**, and **GPIO 16** for **S** (signal).
 
 That's pretty much it. You can test that the components are working and then connect the gears to the bearing and assemble them in an enclosure. This is the bit where you can get creative. There are some files that you might find useful in the [3d directory](3d/).
@@ -77,7 +75,9 @@ An overview of the build and a demo of it in action.
 
 IR code based on some of [Peter Hinch's work](https://github.com/peterhinch/micropython_ir). If you want to adapt the code to use a different remote, the testing file in the `ir_tx` should help.
 
-The gears are made using the [openscad library by Chris Spencer](https://github.com/chrisspen/gears).
+The gears are made using the [openscad library by Chris Spencer](https://github.com/chrisspen/gears). 
+
+The micropython driver for the drv8825 is by [Rob Hammerlin](https://gitlab.com/robhamerling/micropython-drv8825).
 
 # Licence 
 
