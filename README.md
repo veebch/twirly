@@ -27,7 +27,6 @@ Build time: <2 hours (not including 3d printing time)
 
 ## Assembly
 
-- Connect a power source to **VCC** and **GND** on the h bridge.
 - Connect the IR sensor, using **GPIO 0** for **VCC**, and **GPIO 16** for **S** (signal).
 
 That's pretty much it. You can test that the components are working and then connect the gears to the bearing and assemble them in an enclosure. This is the bit where you can get creative. There are some files that you might find useful in the [3d directory](3d/).
