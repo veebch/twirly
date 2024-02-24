@@ -16,8 +16,8 @@ There are relatively cheap turntables (only slightly more expensive than this DI
 
 - [IR receiver and Remote Control](https://www.amazon.de/-/en/DollaTek-Infrared-Wireless-Control-Arduino/dp/B07DJ58XGC)
 - [Stepper Motor](https://www.amazon.de/TEQStone-Stepper-Printer-Degrees-Extruder/dp/B0BMX62X22/ref=sr_1_4)
-- DRV8825
-- 20V PD trigger
+- DRV8825 to control the stepper motor
+- 20V PD trigger to power the turntable
 - [Raspberry Pi Pico](https://www.pi-shop.ch/raspberry-pi-pico) (No need for a Pico **W** for current functionality. Although you could use a **W** to make a turntable that's controlled by a webpage, which you might prefer to the IR remote control option)
 - [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 - [3d printed gears and case](3d/)
