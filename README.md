@@ -5,7 +5,7 @@
 
 # Twirly Shirley
 
-A Infrared (IR) remote-controlled turntable. Useful for rotating stuff that you (can't/ are too lazy to) get to. 
+A Infrared (IR) remote-controlled turntable powered by USB-C. Useful for rotating stuff that you (can't/ are too lazy to) get to. 
 
 The application in the video is photography, but it could easily be repurposed as a rotating TV stand/ food carousel/ cake decorating robot etc.
 
