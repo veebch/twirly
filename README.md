@@ -67,8 +67,6 @@ An overview of the build and a demo of it in action.
 
 # Acknowledgements
 
-IR code based on some of [Peter Hinch's work](https://github.com/peterhinch/micropython_ir). If you want to adapt the code to use a different remote, the testing file in the `ir_tx` should help.
-
 The gears are made using the [openscad library by Chris Spencer](https://github.com/chrisspen/gears). 
 
 The micropython driver for the drv8825 is by [Rob Hammerlin](https://gitlab.com/robhamerling/micropython-drv8825).
