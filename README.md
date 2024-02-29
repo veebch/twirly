@@ -5,7 +5,7 @@
 
 # Twirly Shirley
 
-A Infrared (IR) remote-controlled turntable powered by USB-C. Useful for rotating stuff that you (can't/ are too lazy to) get to. 
+A remote-controlled turntable powered by USB-C. Useful for rotating stuff that you (can't/ are too lazy to) get to. 
 
 The application in the video is photography, but it could easily be repurposed as a rotating TV stand/ food carousel/ cake decorating robot etc.
 
@@ -13,16 +13,14 @@ There are relatively cheap turntables (only slightly more expensive than this DI
 
 
 # Hardware
-
-- [IR receiver and Remote Control](https://www.amazon.de/-/en/DollaTek-Infrared-Wireless-Control-Arduino/dp/B07DJ58XGC)
 - [Stepper Motor](https://www.amazon.de/TEQStone-Stepper-Printer-Degrees-Extruder/dp/B0BMX62X22/ref=sr_1_4)
 - DRV8825 to control the stepper motor
 - 20V PD trigger to power the turntable
-- [Raspberry Pi Pico](https://www.pi-shop.ch/raspberry-pi-pico) (No need for a Pico **W** for current functionality. Although you could use a **W** to make a turntable that's controlled by a webpage, which you might prefer to the IR remote control option)
+- [Raspberry Pi Pico W](https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html) 
 - [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 - [3d printed gears and case](3d/)
 
-Total cost of materials: ~ 35 USD
+Total cost of materials: ~ 30 USD
 
 Build time: <2 hours (not including 3d printing time)
 
