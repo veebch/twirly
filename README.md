@@ -5,7 +5,7 @@
 
 # Twirly Shirley
 
-A Infrared (IR) remote-controlled turntable powered by USB-C. Useful for rotating stuff that you (can't/ are too lazy to) get to. 
+A remote-controlled turntable powered by USB-C. Useful for rotating stuff that you (can't/ are too lazy to) get to. 
 
 The application in the video is photography, but it could easily be repurposed as a rotating TV stand/ food carousel/ cake decorating robot etc.
 
@@ -13,22 +13,24 @@ There are relatively cheap turntables (only slightly more expensive than this DI
 
 
 # Hardware
-
-- [IR receiver and Remote Control](https://www.amazon.de/-/en/DollaTek-Infrared-Wireless-Control-Arduino/dp/B07DJ58XGC)
 - [Stepper Motor](https://www.amazon.de/TEQStone-Stepper-Printer-Degrees-Extruder/dp/B0BMX62X22/ref=sr_1_4)
 - DRV8825 to control the stepper motor
 - 20V PD trigger to power the turntable
-- [Raspberry Pi Pico](https://www.pi-shop.ch/raspberry-pi-pico) (No need for a Pico **W** for current functionality. Although you could use a **W** to make a turntable that's controlled by a webpage, which you might prefer to the IR remote control option)
+- [Raspberry Pi Pico W](https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html) 
 - [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 - [3d printed gears and case](3d/)
 
-Total cost of materials: ~ 35 USD
+Total cost of materials: ~ 30 USD
 
 Build time: <2 hours (not including 3d printing time)
 
 ## Assembly
 
-- Connect the IR sensor, using **GPIO 0** for **VCC**, and **GPIO 16** for **S** (signal).
+- Print the case and remove the supports if you've used any (for the USB port).
+
+### Wiring
+
+
 
 That's pretty much it. You can test that the components are working and then connect the gears to the bearing and assemble them in an enclosure. This is the bit where you can get creative. There are some files that you might find useful in the [3d directory](3d/).
 
@@ -53,7 +55,6 @@ Now, using the port path (in our case `/dev/ttyACM0`) copy the contents to the r
 
 ```
 ampy -p /dev/ttyACM0 put main.py 
-ampy -p /dev/ttyACM0 put ir_rx
 ```
 (*NB. make sure you are using the right port name, as shown in the port listing command above*)
 
@@ -61,19 +62,14 @@ Done! All the required files should now be on the Pico. Whenever you connect to 
 
 # Controls
 
-- There is a **continuous spin** either clockwise or anticlockwise. When the motor is spinning, the left and right buttons control speed. 
-- If the motor isn't spinning, the speed buttons give a **small nudge** clockwise or counterclockwise.
-- There is also a button that performs **One (approx) 360 degree spin**  in 128 steps of 3 seconds for automated 360° photos.
-
-All options other than small nudges use speed ramping (via PWM) to lessen the chance of things falling over.
+- There is a **360°spin** either clockwise or anticlockwise. 
+- The + and - buttons give a **small nudge** clockwise or counterclockwise respectively.
 
 # Video  
 
 An overview of the build and a demo of it in action.
 
 # Acknowledgements
-
-IR code based on some of [Peter Hinch's work](https://github.com/peterhinch/micropython_ir). If you want to adapt the code to use a different remote, the testing file in the `ir_tx` should help.
 
 The gears are made using the [openscad library by Chris Spencer](https://github.com/chrisspen/gears). 
 
