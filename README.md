@@ -26,7 +26,11 @@ Build time: <2 hours (not including 3d printing time)
 
 ## Assembly
 
-- Print the case and remove the supports if you've used any (for the USB port). 
+- Print the case and remove the supports if you've used any (for the USB port).
+
+### Wiring
+
+
 
 That's pretty much it. You can test that the components are working and then connect the gears to the bearing and assemble them in an enclosure. This is the bit where you can get creative. There are some files that you might find useful in the [3d directory](3d/).
 
