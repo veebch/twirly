@@ -6,22 +6,22 @@
   <title>Turntable 2</title>
   <style>
     body{
-      background: #191919;
+      background: #ffffff;
       font-family: Arial, sans-serif;
         }
 
     nav{
       width:400px;
       height:400px;
-      background: #191919;
+      background: #555555;
       border-radius: 50%;
       padding: 20px;
       -webkit-transform: rotate(45deg);
       -moz-transform: rotate(45deg);
       transform: rotate(45deg);
-      box-shadow: inset -10px 0 12px -6px #111111,
-        inset 12px 0 5px -6px #222222,
-        inset 0 0 0 10px #222222,
+      box-shadow: inset -10px 0 12px -6px #C0C0C0,
+        inset 12px 0 5px -6px #C0C0C0,
+        inset 0 0 0 10px #888888,
         inset 2px 0 4px 10px rgba(0,0,0,0.4),
         1px 0 4px rgba(0,0,0,0.8);
       box-sizing: border-box;
@@ -33,28 +33,31 @@
       transform: translateY(-50%);
       transform: translateX(-50%);
       transform: rotate(-45deg);
-      color: #999;
+      color: gold;
       z-index: 99999;
-      font-size: 1.5rem;
+      font-size: 2rem;
     }
     #a {
-      top: 40%;
-      left: 42%;}
+      font-size: 80px;
+      top: 18%;
+      left: 43%;}
     #b {
-      top: 16%;
-      left: 20%;
+      top: 13%;
+      left: 18%;
     }
     #c {
-      top: 16%;
-      left: 75%;
+      font-size: 80px;
+      top: -7%;
+      left: 69%;
     }
     #d {
-      top: 64%;
+      top: 62%;
       left: 64%;
     }
     #e {
-      top: 66%;
-      left: 23%;
+      font-size: 80px;
+      top: 42%;
+      left: 20%;
     }
 
 
@@ -82,7 +85,7 @@
       margin: 2%;
       position: relative;
       float: left;
-      box-shadow: 1px 0px 3px 1px rgba(0,0,0,0.4), inset 0 0 0 1px #000;
+      box-shadow: 1px 0px 3px 1px rgba(0,0,0,0.4), inset 0 0 0 1px #212121;
     }
 
     .button::after{
@@ -90,7 +93,7 @@
       display: block;
       width: 50%;
       height: 50%;
-      background: #191919;
+      background: #555555;
       position: absolute;
       border-radius: inherit;
     }
@@ -104,7 +107,7 @@
     .button.top::after{
       bottom: 0;
       right: 0;
-      box-shadow: inset 2px 1px 2px 0 rgba(0,0,0,0.4), 10px 10px 0 10px #191919;
+      box-shadow: inset 2px 1px 2px 0 rgba(0,0,0,0.4), 10px 10px 0 10px #555555;
       -webkit-transform: skew(-3deg,-3deg) scale(0.96);
       -moz-transform: skew(-3deg,-3deg) scale(0.96);
       transform: skew(-3deg,-3deg) scale(0.96);
@@ -118,7 +121,7 @@
     .button.right::after{
       bottom: 0;
       left: 0;
-      box-shadow: inset -2px 3px 2px -2px rgba(0,0,0,0.4), -10px 10px 0 10px #191919;
+      box-shadow: inset -2px 3px 2px -2px rgba(0,0,0,0.4), -10px 10px 0 10px #555555;
       -webkit-transform: skew(3deg,3deg) scale(0.96);
       -moz-transform: skew(3deg,3deg) scale(0.96);
       transform: skew(3deg,3deg) scale(0.96);
@@ -133,7 +136,7 @@
     .button.left::after{
       top: 0;
       right: 0;
-      box-shadow: inset 2px -1px 2px 0 rgba(0,0,0,0.4), 10px -10px 0 10px #191919;
+      box-shadow: inset 2px -1px 2px 0 rgba(0,0,0,0.4), 10px -10px 0 10px #555555;
       -webkit-transform: skew(3deg,3deg) scale(0.96);
       -moz-transform: skew(3deg,3deg) scale(0.96);
       transform: skew(3deg,3deg) scale(0.96);
@@ -148,7 +151,7 @@
     .button.bottom::after{
       top: 0;
       left: 0;
-      box-shadow: inset -2px -3px 2px -2px rgba(0,0,0,0.4), -10px -10px 0 10px #191919;
+      box-shadow: inset -2px -3px 2px -2px rgba(0,0,0,0.4), -10px -10px 0 10px #555555;
       -webkit-transform: skew(-3deg,-3deg) scale(0.96);
       -moz-transform: skew(-3deg,-3deg) scale(0.96);
       transform: skew(-3deg,-3deg) scale(0.96);
@@ -200,10 +203,10 @@
     <a id="butt-left" class="button left" href="#"><i class="icon-backward"></i></a>
     <a id="butt-bott" class="button bottom" href="#"><i class="icon-pause"></i></a>
     <a id="center-butt" class="center-button" href="#"><i class="icon-stop"></i></a>
-    <p id="a">HALT</p>
-    <p id="b">360°></p>
+    <p id="a">□<p>
+    <p id="b">◯ ></p>
     <p id="c">></p>
-    <p id="d">< 360°</p>
+    <p id="d">< ◯</p>
     <p id="e"><</p>
   </nav>
   
@@ -223,11 +226,11 @@
   <script src="data:text/javascript,document.getElementById('butt-left').onclick = async function() { await fetch('/toggle'); };" defer></script>
   
 <footer>
-            <p>Turntable 2<br><a href="https://veeb.ch">veeb.ch/</a></p>
+            <p>Turntable 2<br><a href="https://veeb.ch">VEEB Projects</a></p>
 </footer>
 </body>
 </html>
 
 
 
- 
+
