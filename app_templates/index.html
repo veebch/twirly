@@ -195,21 +195,39 @@
 </head>
 <body>
   <nav>
-    <a class="button top" href="#"><i class="icon-play"></i>+</a>
-    <a class="button right" href="#"><i class="icon-forward"></i></a>
-    <a class="button left" href="#"><i class="icon-backward"></i></a>
-    <a class="button bottom" href="#"><i class="icon-pause"></i></a>
-    <a class="center-button" href="#"><i class="icon-stop"></i></a>
+    <a id="butt-top" class="button top" href="#"><i class="icon-play"></i>+</a>
+    <a id="butt-right" class="button right" href="#"><i class="icon-forward"></i></a>
+    <a id="butt-left" class="button left" href="#"><i class="icon-backward"></i></a>
+    <a id="butt-bott" class="button bottom" href="#"><i class="icon-pause"></i></a>
+    <a id="center-butt" class="center-button" href="#"><i class="icon-stop"></i></a>
     <p id="a">HALT</p>
     <p id="b">360°></p>
     <p id="c">></p>
     <p id="d">< 360°</p>
     <p id="e"><</p>
   </nav>
-
+  
+  <script src="data:text/javascript,document.getElementById('a').onclick = async function() { await fetch('/toggle'); };" defer></script>
+  <script src="data:text/javascript,document.getElementById('center-butt').onclick = async function() { await fetch('/toggle'); };" defer></script>
+  
+  <script src="data:text/javascript,document.getElementById('b').onclick = async function() { await fetch('/toggle'); };" defer></script>
+  <script src="data:text/javascript,document.getElementById('butt-bott').onclick = async function() { await fetch('/toggle'); };" defer></script>
+  
+  <script src="data:text/javascript,document.getElementById('c').onclick = async function() { await fetch('/toggle'); };" defer></script>
+  <script src="data:text/javascript,document.getElementById('butt-right').onclick = async function() { await fetch('/toggle'); };" defer></script>
+  
+  <script src="data:text/javascript,document.getElementById('d').onclick = async function() { await fetch('/toggle'); };" defer></script>
+  <script src="data:text/javascript,document.getElementById('butt-top').onclick = async function() { await fetch('/toggle'); };" defer></script>
+  
+  <script src="data:text/javascript,document.getElementById('e').onclick = async function() { await fetch('/toggle'); };" defer></script>
+  <script src="data:text/javascript,document.getElementById('butt-left').onclick = async function() { await fetch('/toggle'); };" defer></script>
+  
 <footer>
             <p>Turntable 2<br><a href="https://veeb.ch">veeb.ch/</a></p>
 </footer>
 </body>
 </html>
 
+
+
+ 
