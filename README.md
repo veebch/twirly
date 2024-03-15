@@ -62,8 +62,8 @@ Done! All the required files should now be on the Pico. Whenever you connect to 
 
 # Controls
 
-- There is a **360°spin** either clockwise or anticlockwise. 
-- The + and - buttons give a **small nudge** clockwise or counterclockwise respectively.
+- The > and < buttons give a **small nudge** clockwise or counterclockwise respectively.
+- There is a **full circle spin** either clockwise or anticlockwise. 
 
 # Video  
 
