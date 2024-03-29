@@ -78,7 +78,7 @@ def application_mode():
         try:
             # full step variants, different speeds and directions
             # <number of steps>, <step type>, <step frequency>
-            action(810, "Full", 100)
+            action(810, "Full", 50)
         except KeyboardInterrupt:
             print("Interrupted from Keyboard")
         return "OK"
@@ -87,7 +87,7 @@ def application_mode():
         try:
             # full step variants, different speeds and directions
             # <number of steps>, <step type>, <step frequency>
-            action(-810, "Full", 100)
+            action(-810, "Full", 50)
         except KeyboardInterrupt:
             print("Interrupted from Keyboard")
         return "OK"
@@ -96,7 +96,7 @@ def application_mode():
         try:
             # full step variants, different speeds and directions
             # <number of steps>, <step type>, <step frequency>
-            action(6, "Full", 100)
+            action(6, "Full", 20)
         except KeyboardInterrupt:
             print("Interrupted from Keyboard")
         return "OK"
@@ -105,7 +105,7 @@ def application_mode():
         try:
             # full step variants, different speeds and directions
             # <number of steps>, <step type>, <step frequency>
-            action(-6, "Full", 100)
+            action(-6, "Full", 20)
         except KeyboardInterrupt:
             print("Interrupted from Keyboard")
         return "OK"
@@ -117,18 +117,18 @@ def application_mode():
             # first ramp up
             steplength = 1
             for x in range(5):
-                action(steplength, "Full", 100)
+                action(steplength, "Full", 20)
                 utime.sleep(3)
-                action(steplength, "Full", 100)
+                action(steplength, "Full", 20)
                 utime.sleep(3)
                 steplength = steplength + 1
             for x in range(124):
-                action(6, "Full", 100)
+                action(6, "Full", 20)
                 utime.sleep(3)
             for x in range(5):
-                action(steplength, "Full", 100)
+                action(steplength, "Full", 20)
                 utime.sleep(3)
-                action(steplength, "Full", 100)
+                action(steplength, "Full", 20)
                 utime.sleep(3)
                 steplength = steplength - 1
         except KeyboardInterrupt:
