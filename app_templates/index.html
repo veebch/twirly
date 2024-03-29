@@ -12,7 +12,7 @@
     nav{
       width:400px;
       height:400px;
-      background: #555555;
+      background: #ccc;
       border-radius: 50%;
       padding: 20px;
       -webkit-transform: rotate(45deg);
@@ -32,9 +32,10 @@
       transform: translateY(-50%);
       transform: translateX(-50%);
       transform: rotate(-45deg);
-      color: gold;
+      color: orange;
       z-index: 99999;
       font-size: 2rem;
+      text-shadow: 0px 1px 0px rgba(255,255,255,.4), 0px -1px 0px rgba(0,0,0,.4);
     }
     #a {
       font-size: 80px;
@@ -62,7 +63,7 @@
 
     a {
       text-decoration: none;
-      color: #B8860B ;
+      color: orange ;
     }
 
     .center-button{
@@ -72,7 +73,7 @@
       position: absolute;
       top: 31%;
       left: 31%;
-      background: #212121;
+      background: #fff;
       border-radius: 50%;
       box-shadow: 1px 0 4px rgba(0,0,0,0.8);
     }
@@ -92,21 +93,21 @@
       display: block;
       width: 50%;
       height: 50%;
-      background: #555555;
+      background: #ccc;
       position: absolute;
       border-radius: inherit;
     }
 
     .button.top{
       border-radius: 100% 0 0 0;
-      background: -webkit-radial-gradient(bottom right, ellipse cover, #212121 35%,#292929 75%);
-      background: radial-gradient(bottom right, ellipse cover, #212121 35%,#292929 75%);
+      background: -webkit-radial-gradient(bottom right, ellipse cover, #ccc 35%,#555 75%);
+      background: radial-gradient(bottom right, ellipse cover, #ccc 35%,#555 75%);
     }
 
     .button.top::after{
       bottom: 0;
       right: 0;
-      box-shadow: inset 2px 1px 2px 0 rgba(0,0,0,0.4), 10px 10px 0 10px #555555;
+      box-shadow: inset 2px 1px 2px 0 rgba(0,0,0,0.4), 10px 10px 0 10px #ccc;
       -webkit-transform: skew(-3deg,-3deg) scale(0.96);
       -moz-transform: skew(-3deg,-3deg) scale(0.96);
       transform: skew(-3deg,-3deg) scale(0.96);
@@ -114,13 +115,14 @@
 
     .button.right{
       border-radius: 0 100% 0 0;
-      background: -webkit-radial-gradient(bottom left, ellipse cover, #212121 35%,#292929 75%);
+      background: -webkit-radial-gradient(bottom left, ellipse cover, #ccc 35%,#555 75%);
+      background: radial-gradient(bottom left, ellipse cover, #ccc 35%,#555 75%);
     }
 
     .button.right::after{
       bottom: 0;
       left: 0;
-      box-shadow: inset -2px 3px 2px -2px rgba(0,0,0,0.4), -10px 10px 0 10px #555555;
+      box-shadow: inset -2px 3px 2px -2px rgba(0,0,0,0.4), -10px 10px 0 10px #ccc;
       -webkit-transform: skew(3deg,3deg) scale(0.96);
       -moz-transform: skew(3deg,3deg) scale(0.96);
       transform: skew(3deg,3deg) scale(0.96);
@@ -128,14 +130,14 @@
 
     .button.left{
       border-radius: 0 0 0 100%;
-      background: -webkit-radial-gradient(top right, ellipse cover, #212121 35%,#292929 75%);
-       background: radial-gradient(top right, ellipse cover, #212121 35%,#292929 75%);
+      background: -webkit-radial-gradient(top right, ellipse cover, #ccc 35%,#555 75%);
+      background: radial-gradient(top right, ellipse cover, #ccc 35%,#555 75%);
     }
 
     .button.left::after{
       top: 0;
       right: 0;
-      box-shadow: inset 2px -1px 2px 0 rgba(0,0,0,0.4), 10px -10px 0 10px #555555;
+      box-shadow: inset 2px -1px 2px 0 rgba(0,0,0,0.4), 10px -10px 0 10px #ccc;
       -webkit-transform: skew(3deg,3deg) scale(0.96);
       -moz-transform: skew(3deg,3deg) scale(0.96);
       transform: skew(3deg,3deg) scale(0.96);
@@ -143,14 +145,15 @@
 
     .button.bottom{
       border-radius: 0 0 100% 0;
-      background: -webkit-radial-gradient(top left, ellipse cover, #212121 35%,#292929 75%);
-      background: radial-gradient(top left, ellipse cover, #212121 35%,#292929 75%);
+      background: -webkit-radial-gradient(top left, ellipse cover, #ccc 35%,#555 75%);
+
+      background: radial-gradient(top left, ellipse cover, #ccc 35%,#292929 75%);
     }
 
     .button.bottom::after{
       top: 0;
       left: 0;
-      box-shadow: inset -2px -3px 2px -2px rgba(0,0,0,0.4), -10px -10px 0 10px #555555;
+      box-shadow: inset -2px -3px 2px -2px rgba(0,0,0,0.4), -10px -10px 0 10px #ccc;
       -webkit-transform: skew(-3deg,-3deg) scale(0.96);
       -moz-transform: skew(-3deg,-3deg) scale(0.96);
       transform: skew(-3deg,-3deg) scale(0.96);
