@@ -2,6 +2,9 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+          <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
         <title>veebprojects</title>
         <style>
 * {
@@ -25,9 +28,11 @@ html {
 }
 
 body {
-  font-family: sans-serif;
+  font-family: Quicksand, sans-serif;
   line-height: 1.4;
   display: flex;
+  font-weight: 700;
+  color: #444;
 }
 
 .container {
@@ -105,11 +110,10 @@ button {
     </head>
    
 <div class="container">
-    <h1 class="login-title">Hello</h1>
-    <p>I need to establish an Internet connection before I get to work.</p>
+    <h1 class="login-title">Turntable 2</h1>
+    <p>I need to get an Internet connection before I work.</p>
     <br>
-    <p>Add the login details to your WiFi network using this form</p>
-    <p>(the details never leave your veeb device)</p>
+    <p>Add the login details to your WiFi</p>
     <br>
     <form class="login-form" action="/configure" method="POST" autocomplete="off" autocapitalize="none" >
       <div>
