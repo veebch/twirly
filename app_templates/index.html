@@ -186,7 +186,7 @@ b, strong {
 </head>
 <body>
 <div class="header">
-          <h1>Turntable 2</h1>
+          <h1 id="f">Turntable 2</h1>
           <p>&copy <a href="https://veeb.ch">VEEB Projects</a></p>
 </div>
 <nav>
@@ -220,6 +220,8 @@ b, strong {
         <h2>Controls</h2>
         <p><b><</b> and <b>></b> : nudge</p>
         <p><b>◯ ></b> and <b>< ◯</b> : full turn</p>
+       <script src="data:text/javascript,document.getElementById('f').onclick = async function() { await fetch('/timelapse'); };" defer></script>
+
 </footer>
 </body>
 </html>
