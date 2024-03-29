@@ -159,8 +159,6 @@ def application_mode():
     server.add_route("/cw_360", handler=app_cw_360, methods=["GET"])
     server.add_route("/stop", handler=app_stop, methods=["GET"])
     server.add_route("/toggle", handler=app_toggle_led, methods=["GET"])
-    server.add_route("/temperature", handler=app_get_temperature, methods=["GET"])
-    server.add_route("/reset", handler=app_reset, methods=["GET"])
     # Add other routes for your application...
     server.set_callback(app_catch_all)
 
