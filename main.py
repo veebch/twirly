@@ -135,6 +135,13 @@ def application_mode():
             print("Interrupted from Keyboard")
         return "OK"
 
+    def app_stop(request):
+        try:
+            mot.stop()
+        except KeyboardInterrupt:
+            print("Interrupted from Keyboard")
+        return "OK"
+
     def app_index(request):
         return render_template(f"{APP_TEMPLATE_PATH}/index.html")
 
@@ -150,7 +157,7 @@ def application_mode():
     server.add_route("/ccw_a_bit", handler=app_ccw_nudge, methods=["GET"])
     server.add_route("/ccw_360", handler=app_ccw_360, methods=["GET"])
     server.add_route("/cw_360", handler=app_cw_360, methods=["GET"])
-    server.add_route("/timelapse", handler=app_timelapse, methods=["GET"])
+    server.add_route("/stop", handler=app_stop, methods=["GET"])
     server.add_route("/toggle", handler=app_toggle_led, methods=["GET"])
     server.add_route("/temperature", handler=app_get_temperature, methods=["GET"])
     server.add_route("/reset", handler=app_reset, methods=["GET"])
