@@ -239,7 +239,6 @@ class DRV8825(object):
             print("Supported microsteps: 1,2,4,8,16,32")
             microsteps = 1
         steps = revolutions * self.steps_per_revolution * microsteps
-        print(steps)
         self.steps(steps, microsteps, stepfreq)
 
     def freerun(self, stepfreq=200, microsteps=1):
@@ -278,3 +277,4 @@ class DRV8825(object):
 
 
 #
+
