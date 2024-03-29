@@ -66,29 +66,57 @@ def application_mode():
     print("Entering application mode.")
     onboard_led = machine.Pin("LED", machine.Pin.OUT)
 
-    def app_left_a_bit(request):
-        def action(revs, mode, speed):
-            input(f"Press <Enter> to continue {revs=} {mode=} {speed=} ")
-            mot.revolutions(revs, mode, speed)
+    def action(steps, mode, speed):
+        mot.steps(steps, mode, speed)
+        while mot.get_progress() > 0:  # if not all steps taken
+            mot.disable()
+            break
+            sleep_ms(50)  # wait
 
-            return abs(revs * mot.steps_per_revolution - mot.progress)
-
+    def app_cw_360(request):
         try:
             # full step variants, different speeds and directions
             # <number of steps>, <step type>, <step frequency>
-            action(1, "Full", 50)
-            action(-1, "Full", 100)
-            action(5, "Full", 400)
-            action(-5, "Full", 600)
-            # microstepping variants
-            action(1, "Half", 500)
-            action(-1, "1/4", 1000)
-            action(5, "1/8", 2000)
-            action(-5, "1/16", 4000)
-            action(3, "1/32", 8000)
+            action(810, "Full", 600)
         except KeyboardInterrupt:
             print("Interrupted from Keyboard")
-        mot.disable()
+        return "OK"
+
+    def app_ccw_360(request):
+        try:
+            # full step variants, different speeds and directions
+            # <number of steps>, <step type>, <step frequency>
+            action(-810, "Full", 600)
+        except KeyboardInterrupt:
+            print("Interrupted from Keyboard")
+        return "OK"
+
+    def app_cw_nudge(request):
+        try:
+            # full step variants, different speeds and directions
+            # <number of steps>, <step type>, <step frequency>
+            action(6, "Full", 20)
+        except KeyboardInterrupt:
+            print("Interrupted from Keyboard")
+        return "OK"
+
+    def app_ccw_nudge(request):
+        try:
+            # full step variants, different speeds and directions
+            # <number of steps>, <step type>, <step frequency>
+            action(-6, "Full", 20)
+        except KeyboardInterrupt:
+            print("Interrupted from Keyboard")
+        return "OK"
+
+    def app_timelapse(request):
+        try:
+            # full step variants, different speeds and directions
+            # <number of steps>, <step type>, <step frequency>
+            mot.stop()
+        except KeyboardInterrupt:
+            print("Interrupted from Keyboard")
+        return "OK"
 
     def app_index(request):
         return render_template(f"{APP_TEMPLATE_PATH}/index.html")
@@ -97,33 +125,15 @@ def application_mode():
         onboard_led.toggle()
         return "OK"
 
-    def app_get_temperature(request):
-        # Not particularly reliable but uses built in hardware.
-        # Demos how to incorporate senasor data into this application.
-        # The front end polls this route and displays the output.
-        # Replace code here with something else for a 'real' sensor.
-        # Algorithm used here is from:
-        # https://www.coderdojotc.org/micropython/advanced-labs/03-internal-temperature/
-        sensor_temp = machine.ADC(4)
-        reading = sensor_temp.read_u16() * (3.3 / (65535))
-        temperature = 27 - (reading - 0.706) / 0.001721
-        return f"{round(temperature, 1)}"
-
-    def app_reset(request):
-        # Deleting the WIFI configuration file will cause the device to reboot as
-        # the access point and request new configuration.
-        os.remove(WIFI_FILE)
-        # Reboot from new thread after we have responded to the user.
-        _thread.start_new_thread(machine_reset, ())
-        return render_template(
-            f"{APP_TEMPLATE_PATH}/reset.html", access_point_ssid=AP_NAME
-        )
-
     def app_catch_all(request):
         return "Not found.", 404
 
     server.add_route("/", handler=app_index, methods=["GET"])
-    server.add_route("/leftabit", handler=app_left_a_bit, methods=["GET"])
+    server.add_route("/cw_a_bit", handler=app_cw_nudge, methods=["GET"])
+    server.add_route("/ccw_a_bit", handler=app_ccw_nudge, methods=["GET"])
+    server.add_route("/ccw_360", handler=app_ccw_360, methods=["GET"])
+    server.add_route("/cw_360", handler=app_cw_360, methods=["GET"])
+    server.add_route("/timelapse", handler=app_timelapse, methods=["GET"])
     server.add_route("/toggle", handler=app_toggle_led, methods=["GET"])
     server.add_route("/temperature", handler=app_get_temperature, methods=["GET"])
     server.add_route("/reset", handler=app_reset, methods=["GET"])
