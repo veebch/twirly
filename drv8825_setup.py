@@ -5,7 +5,9 @@
 
 import sys
 from machine import Pin
+from encoder_portable import Encoder
 from drv8825 import DRV8825
+from switch import Switch
 
 
 def setup_stepper():
@@ -29,4 +31,35 @@ def setup_stepper():
     return DRV8825(step_pin, direction_pin, resolution_pins, sleep_pin, reset_pin)
 
 
+def setup_rotary():
+    """setup for rotary encoder, returns an instance or None"""
+    if sys.platform == "esp32":  # ====== ESP32 wiring ====
+        sw1 = Pin(32, Pin.IN)
+        sw2 = Pin(35, Pin.IN)
+    elif sys.platform == "rp2":  # ====== RP2040 wiring ====
+        sw1 = Pin(0, Pin.IN)
+        sw2 = Pin(1, Pin.IN)
+    else:
+        print("Provide pin wiring of rotary encoder for", sys.platform)
+        return None
+    return Encoder(sw1, sw2)  # rotary with push button
+
+
+def setup_switches():
+    """setup for 2 end switches, returns a tuple or None"""
+    if sys.platform == "esp32":  # ====== ESP32 wiring ====
+        button = Switch(34)
+        switch1 = Switch(13)
+        switch2 = Switch(15)
+    elif sys.platform == "rp2":  # ====== RP2040 wiring ====
+        button = Switch(2)
+        switch1 = Switch(14)
+        switch2 = Switch(15)
+    else:
+        print("Provide pin wiring of end switch for", sys.platform)
+        return (None, None, None)
+    return (button, switch1, switch2)  # end switches
+
+
 #
+
