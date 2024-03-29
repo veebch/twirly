@@ -78,7 +78,7 @@ def application_mode():
         try:
             # full step variants, different speeds and directions
             # <number of steps>, <step type>, <step frequency>
-            action(810, "Full", 600)
+            action(810, "Full", 200)
         except KeyboardInterrupt:
             print("Interrupted from Keyboard")
         return "OK"
@@ -87,7 +87,7 @@ def application_mode():
         try:
             # full step variants, different speeds and directions
             # <number of steps>, <step type>, <step frequency>
-            action(-810, "Full", 600)
+            action(-810, "Full", 200)
         except KeyboardInterrupt:
             print("Interrupted from Keyboard")
         return "OK"
