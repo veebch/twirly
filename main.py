@@ -6,6 +6,7 @@ import os
 import utime
 import _thread
 import drv8825_setup
+import sys
 
 AP_NAME = "pi pico"
 AP_DOMAIN = "pipico.net"
@@ -113,7 +114,23 @@ def application_mode():
         try:
             # full step variants, different speeds and directions
             # <number of steps>, <step type>, <step frequency>
-            mot.stop()
+            # first ramp up
+            steplength = 1
+            for x in range(5):
+                action(steplength, "Full", 20)
+                utime.sleep(3)
+                action(steplength, "Full", 20)
+                utime.sleep(3)
+                steplength = steplength + 1
+            for x in range(124):
+                action(6, "Full", 20)
+                utime.sleep(3)
+            for x in range(5):
+                action(steplength, "Full", 20)
+                utime.sleep(3)
+                action(steplength, "Full", 20)
+                utime.sleep(3)
+                steplength = steplength - 1
         except KeyboardInterrupt:
             print("Interrupted from Keyboard")
         return "OK"
@@ -181,4 +198,3 @@ except Exception:
 
 # Start the web server...
 server.run()
-
