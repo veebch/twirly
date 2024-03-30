@@ -38,6 +38,7 @@
       color: orange;
       z-index: 99999;
       font-size: 2rem;
+      pointer-events: none; /* Allow pointer events to pass through the text */
     }
     #a {
       font-size: 80px;
@@ -182,7 +183,16 @@ footer {
 b, strong {
    color: orange;
    }
-  </style>
+
+
+.button:active::after {
+  background: #aaa; /* Change background color when button is clicked */
+}
+
+.button:active {
+  box-shadow: 1px 1px 2px rgba(140, 0, 0, 0.6); /* Add a slight shadow when button is clicked */
+
+    </style>
 </head>
 <body>
 <div class="header">
