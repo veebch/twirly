@@ -2,7 +2,7 @@
 
 # Twirly Shirley
 
-A remote-controlled turntable powered by USB-C. Useful for rotating stuff that you (can't/ are too lazy to) get to. 
+A remote-controlled, programmable turntable powered by USB-C. Useful for making stop motion video and generally rotating stuff that you can't (or are too lazy to) get to. 
 
 The application in the video is photography, but it could easily be repurposed as a rotating TV stand/ food carousel/ cake decorating robot etc.
 
