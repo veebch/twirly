@@ -70,6 +70,10 @@ Done! All the required files should now be on the Pico. Whenever you connect to 
 
 First, give your WiFi credentials to the Pico by scanning for the WiFi, then point a web browser at the IP of the pico and you'll see:
 
+<div align="center">
+<img src="images/remote.png" width="33%">
+</div>
+
 
 (It is possible to do this without connecting to WiFi, but giving the pico W an internet connection makes it easier to add features later.)
 
