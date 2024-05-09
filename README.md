@@ -56,7 +56,7 @@ ampy -p /dev/ttyACM0 put main.py
 Done! All the required files should now be on the Pico. Whenever you connect to power the script will autorun.
 
 # Controls
-![remote control](./images/remote.png)
+<img src="images/remote.png" width="50%">
 
 - The > and < buttons give a **small nudge** clockwise or counterclockwise respectively.
 - There is a **full circle spin** either clockwise or anticlockwise. 
