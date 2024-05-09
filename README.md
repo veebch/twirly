@@ -4,8 +4,6 @@
 
 A remote-controlled, programmable turntable powered by USB-C. Useful for making stop motion video and generally rotating stuff that you can't (or are too lazy to) get to. 
 
-The application in the video is photography, but it could easily be repurposed as a rotating TV stand/ food carousel/ cake decorating robot etc.
-
 There are relatively cheap turntables (only slightly more expensive than this DIY version) that do the same thing, but building one is more interesting/ flexible. For example, if you need to make a version for heavy weights/large items, this should be a good start, as well as a much cheaper option than [that kind of turntable](https://noxon.tech/en/360-turntable/).
 
 
@@ -65,7 +63,7 @@ Done! All the required files should now be on the Pico. Whenever you connect to 
 
 # Video  
 
-An overview of the build and a demo of it in action.
+An overview of the build and a demo of it in action:
 
 # Acknowledgements
 
