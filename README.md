@@ -15,7 +15,7 @@ There are relatively cheap turntables (only slightly more expensive than this DI
 - [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 - [3d printed gears and case](3d/)
 
-Total cost of materials: ~ 30 USD
+Total cost of materials: <50 USD
 
 Build time: <2 hours (not including 3d printing time)
 
