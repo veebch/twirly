@@ -57,9 +57,11 @@ Done! All the required files should now be on the Pico. Whenever you connect to 
 
 # Controls
 
-First, give your wifi credentials to the pico, then point a web browser at the IP of the pico and you'll see:
+First, give your WiFi credentials to the Pico by scanning for the WiFi, then point a web browser at the IP of the pico and you'll see:
 
 <img src="images/remote.png" width="33%">
+
+(It is possible to do this without connecting to WiFi, but giving the pico W an internet connection makes it easier to add features later.)
 
 - The > and < buttons give a **small nudge** clockwise or counterclockwise respectively.
 - There is a **full circle spin** either clockwise or anticlockwise. 
