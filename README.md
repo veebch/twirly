@@ -2,7 +2,7 @@
 
 # Twirly Shirley
 
-A remote-controlled, programmable turntable powered by USB-C. Useful for making stop motion video and generally rotating stuff that you can't (or are too lazy to) get to. 
+A remote-controlled, programmable turntable powered by USB-c. Useful for making stop motion video and generally rotating stuff that you can't (or are too lazy to) get to. 
 
 There are relatively cheap turntables (only slightly more expensive than this DIY version) that do the same thing, but building one is more interesting/ flexible. For example, if you need to make a version for heavy weights/large items, the contents of this repository should be a good start, as well as a much cheaper option than [that kind of turntable](https://noxon.tech/en/360-turntable/).
 
@@ -11,6 +11,7 @@ There are relatively cheap turntables (only slightly more expensive than this DI
 - [Stepper Motor](https://www.amazon.de/TEQStone-Stepper-Printer-Degrees-Extruder/dp/B0BMX62X22/ref=sr_1_4)
 - DRV8825 to control the stepper motor
 - 20V PD trigger to power the turntable
+- Step Down Voltage convertor (to reduce the 20V down to 5V in order to power the microcontroller)
 - [Raspberry Pi Pico W](https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html) 
 - [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 - [3d printed gears and case](3d/)
@@ -19,9 +20,15 @@ Total cost of materials: <50 USD
 
 Build time: <2 hours (not including 3d printing time)
 
+## Tools
+- Soldering Iron
+- Multimeter
+- Patience
+
 ## Assembly
 
-- Print the case.
+- Print the case. mount the Pico and DRV8825 to the prototype board, as well as the two capacitors which will straddle your 20V and 5V power respectively.
+- Adjust the Step-Down converter so that it outputs 5V
 
 ### Wiring
 
