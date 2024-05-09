@@ -34,7 +34,7 @@ Build time: <2 hours (not including 3d printing time)
 
 The DRV8825 needs to be wired connected to GPIO according the the table below:
 
-That's pretty much it. You can test that the components are working and then connect the gears to the bearing and assemble them in an enclosure. This is the bit where you can get creative. There are some files that you might find useful in the [3d directory](3d/).
+That's pretty much it. You can test that the components are working and then connect the gears to the bearing and assemble them in an enclosure. There are some files that you might find useful in the [3d directory](3d/).
 
 # Firmware
 
