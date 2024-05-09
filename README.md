@@ -68,7 +68,8 @@ Done! All the required files should now be on the Pico. Whenever you connect to 
 
 # Controls
 
-First, give your WiFi credentials to the Pico by scanning for the WiFi, then point a web browser at the IP of the pico and you'll see:
+First, give your WiFi credentials to the Pico by scanning for the WiFi and connecting to 'pi pico'. You'll be redirected to a webpage that asks for your WiFi credentials. 
+Then, point a web browser at the IP of the Pico and you'll see:
 
 <div align="center">
 <img src="images/remote.png" width="33%">
