@@ -85,6 +85,12 @@ Then, point a web browser at the IP of the Pico and you'll see:
 
 An overview of the build and a demo of it in action:
 
+# Lighting diagram for Roller-Boot
+
+<div align="center">
+<img src="images/lighting.png" width="33%">
+</div>
+
 # Acknowledgements
 
 The gears are made using the [openscad library by Chris Spencer](https://github.com/chrisspen/gears). 
