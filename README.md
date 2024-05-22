@@ -88,7 +88,7 @@ An overview of the build and a demo of it in action:
 # Lighting diagram for Roller-Boot
 
 <div align="center">
-<img src="images/lighting.png" width="33%">
+<img src="images/lighting.png" width="66%">
 </div>
 
 # Acknowledgements
