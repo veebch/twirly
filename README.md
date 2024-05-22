@@ -32,7 +32,11 @@ Build time: <2 hours (not including 3d printing time)
 
 ### Wiring
 
-The DRV8825 needs to be wired connected to GPIO according the the table below:
+The DRV8825 needs to be wired to match the photo below. For something more specific, the code contains all the individual GPIO pins. 
+
+<div align="center">
+<img src="images/guts.png" width="33%">
+</div>
 
 That's pretty much it. You can test that the components are working and then connect the gears to the bearing and assemble them in an enclosure. There are some files that you might find useful in the [3d directory](3d/).
 
@@ -64,10 +68,13 @@ Done! All the required files should now be on the Pico. Whenever you connect to 
 
 # Controls
 
-First, give your WiFi credentials to the Pico by scanning for the WiFi, then point a web browser at the IP of the pico and you'll see:
+First, give your WiFi credentials to the Pico by scanning for the WiFi and connecting to 'pi pico'. You'll be redirected to a webpage that asks for your WiFi credentials. 
+Then, point a web browser at the IP of the Pico and you'll see:
+
 <div align="center">
 <img src="images/remote.png" width="33%">
 </div>
+
 
 (It is possible to do this without connecting to WiFi, but giving the pico W an internet connection makes it easier to add features later.)
 
@@ -77,6 +84,12 @@ First, give your WiFi credentials to the Pico by scanning for the WiFi, then poi
 # Video  
 
 An overview of the build and a demo of it in action:
+
+# Lighting diagram for Roller-Boot
+
+<div align="center">
+<img src="images/lighting.png" width="33%">
+</div>
 
 # Acknowledgements
 
