@@ -87,7 +87,7 @@ An overview of the build and a demo of it in action:
 
 https://youtu.be/peo0DxWtorY
 
-# Lighting diagram for Roller-Boot
+# Lighting diagram for Roller-Boot Video
 
 <div align="center">
 <img src="images/lighting.png" width="66%">
