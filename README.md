@@ -35,7 +35,7 @@ Build time: <2 hours (not including 3d printing time)
 The DRV8825 needs to be wired to match the photo below. For something more specific, the code contains all the individual GPIO pins. 
 
 <div align="center">
-<img src="images/guts.png" width="66%">
+<img src="images/guts.jpg" width="66%">
 </div>
 
 That's pretty much it. You can test that the components are working and then connect the gears to the bearing and assemble them in an enclosure. There are some files that you might find useful in the [3d directory](3d/).
