@@ -75,7 +75,7 @@ Then, point a web browser at the IP of the Pico and you'll see:
 </div>
 
 
-(It is possible to do this without connecting to WiFi, but giving the pico W an internet connection makes it easier to add features later.)
+(It is possible to do make a control page without connecting to a router, but giving the pico W an internet connection makes it easier to add features later.)
 
 - The > and < buttons give a **small nudge** clockwise or counterclockwise respectively.
 - There is a **full circle spin** either clockwise or anticlockwise. 
