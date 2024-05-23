@@ -2,7 +2,7 @@
 
 # Twirly Shirley
 
-A remote-controlled, programmable turntable powered by USB-c. Useful for making stop motion video and generally rotating stuff that you can't (or are too lazy to) get to. 
+A remote-controlled, programmable turntable powered by USB-c. Useful for making stop motion video and rotating stuff that you can't (or are too lazy to) get to. 
 
 There are relatively cheap turntables (only slightly more expensive than this DIY version) that do the same thing, but building one is more interesting/ flexible. For example, if you need to make a version for heavy weights/large items, the contents of this repository should be a good start, as well as a much cheaper option than [that kind of turntable](https://noxon.tech/en/360-turntable/).
 
@@ -38,10 +38,9 @@ The DRV8825 needs to be wired to match the photo below. The code contains all th
 <img src="images/guts.jpg" width="66%">
 </div>
 
-That's pretty much it. You can test that the components are working and then connect the gears to the bearing and assemble them in an enclosure. There are some files that you might find useful in the [3d directory](3d/).
+That's pretty much it. You can test that the components are working and then connect the gears to the bearing and assemble them in an enclosure. There parts we used are in the [3d directory](3d/).
 
 # Firmware
-
 
 Download a `uf2` image and install it on the Pico according to the [instructions](https://www.raspberrypi.com/documentation/microcontrollers/micropython.html#drag-and-drop-micropython) on the Raspberry Pi website.
 
