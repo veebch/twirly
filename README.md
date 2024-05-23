@@ -32,7 +32,7 @@ Build time: <2 hours (not including 3d printing time)
 
 ### Wiring
 
-The DRV8825 needs to be wired to match the photo below. For something more specific, the code contains all the individual GPIO pins. 
+The DRV8825 needs to be wired to match the photo below. The code contains all the individual GPIO pins. 
 
 <div align="center">
 <img src="images/guts.jpg" width="66%">
