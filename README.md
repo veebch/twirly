@@ -2,7 +2,7 @@
 
 # Twirly Shirley
 
-A remote-controlled, programmable turntable powered by USB-c. Useful for making stop motion video and generally rotating stuff that you can't (or are too lazy to) get to. 
+A remote-controlled, programmable turntable powered by USB-c. Useful for making stop motion video and rotating stuff that you can't (or are too lazy to) get to. 
 
 There are relatively cheap turntables (only slightly more expensive than this DIY version) that do the same thing, but building one is more interesting/ flexible. For example, if you need to make a version for heavy weights/large items, the contents of this repository should be a good start, as well as a much cheaper option than [that kind of turntable](https://noxon.tech/en/360-turntable/).
 
@@ -32,16 +32,15 @@ Build time: <2 hours (not including 3d printing time)
 
 ### Wiring
 
-The DRV8825 needs to be wired to match the photo below. For something more specific, the code contains all the individual GPIO pins. 
+The DRV8825 needs to be wired to match the photo below. The code contains all the individual GPIO pins. 
 
 <div align="center">
-<img src="images/guts.png" width="66%">
+<img src="images/guts.jpg" width="66%">
 </div>
 
-That's pretty much it. You can test that the components are working and then connect the gears to the bearing and assemble them in an enclosure. There are some files that you might find useful in the [3d directory](3d/).
+That's pretty much it. You can test that the components are working and then connect the gears to the bearing and assemble them in an enclosure. There parts we used are in the [3d directory](3d/).
 
 # Firmware
-
 
 Download a `uf2` image and install it on the Pico according to the [instructions](https://www.raspberrypi.com/documentation/microcontrollers/micropython.html#drag-and-drop-micropython) on the Raspberry Pi website.
 
@@ -76,7 +75,7 @@ Then, point a web browser at the IP of the Pico and you'll see:
 </div>
 
 
-(It is possible to do this without connecting to WiFi, but giving the pico W an internet connection makes it easier to add features later.)
+(It is possible to do make a control page without connecting to a router, but giving the pico W an internet connection makes it easier to add features later.)
 
 - The > and < buttons give a **small nudge** clockwise or counterclockwise respectively.
 - There is a **full circle spin** either clockwise or anticlockwise. 
@@ -85,7 +84,9 @@ Then, point a web browser at the IP of the Pico and you'll see:
 
 An overview of the build and a demo of it in action:
 
-# Lighting diagram for Roller-Boot
+https://youtu.be/peo0DxWtorY
+
+# Lighting diagram for Roller-Boot Video
 
 <div align="center">
 <img src="images/lighting.png" width="66%">
