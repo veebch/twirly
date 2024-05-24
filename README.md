@@ -2,7 +2,7 @@
 
 # Twirly Shirley
 
-A remote-controlled, programmable turntable powered by USB-c. Useful for making stop motion video and rotating stuff that you can't (or are too lazy to) get to. 
+A remote-controlled programmable precision turntable powered by USB-c, driven by a stepper motor. Useful for making stop motion video and rotating stuff that you can't (or are too lazy to) get to. 
 
 There are relatively cheap turntables (only slightly more expensive than this DIY version) that do the same thing, but building one is more interesting/ flexible. For example, if you need to make a version for heavy weights/large items, the contents of this repository should be a good start, as well as a much cheaper option than [that kind of turntable](https://noxon.tech/en/360-turntable/).
 
