@@ -84,7 +84,7 @@ Then, point a web browser at the IP of the Pico and you'll see:
 
 An overview of the build and a demo of it in action:
 
-https://youtu.be/peo0DxWtorY
+<iframe width="560" height="315" src="https://www.youtube.com/embed/peo0DxWtorY?si=nf22sGd6dKs7J2ei" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 # Lighting diagram for Roller-Boot Video
 
