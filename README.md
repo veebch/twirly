@@ -98,6 +98,8 @@ The gears are made using the [openscad library by Chris Spencer](https://github.
 
 The micropython driver for the drv8825 is by [Rob Hammerlin](https://gitlab.com/robhamerling/micropython-drv8825).
 
+The remote control was based on [Phewap by Simon Pricket](https://github.com/simonprickett/phewap)
+
 # Licence 
 
 GPL 3.0
