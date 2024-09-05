@@ -29,12 +29,12 @@ Build time: <2 hours (not including 3d printing time)
 
 ## Assembly
 
-- Print the case. mount the Pico and DRV8825 to the prototype board, as well as the two capacitors which will be connected to Volatge and ground for the 20V and 5V power respectively (this will provide a smoother voltage for the bridge).
+- Print the case. mount the Pico and DRV8825 to the prototype board, as well as the two capacitors.
 - Adjust the Step-Down converter so that it outputs 5V
 
 ### Wiring
 
-The DRV8825 needs to be wired to match the photo below. The code contains all the individual GPIO pins. 
+The DRV8825 needs to be wired to match the photo below. The code contains all the individual GPIO pins. The capacitors are connected to the voltage and ground for the 20V and 5V supplies respectively (providing a smoother voltage for the bridge). 
 
 <div align="center">
 <img src="images/guts.jpg" width="66%">
