@@ -17,6 +17,7 @@ There are relatively cheap turntables (only slightly more expensive than this DI
 - [Raspberry Pi Pico W](https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html) 
 - [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 - [3d printed gears and case](3d/)
+- Prototype Board for mounting the pico and the DRV8825 to
 - 2x Capacitors (100μF)
 
 
@@ -31,8 +32,9 @@ Build time: <2 hours (not including 3d printing time)
 
 ## Assembly
 
-- Print the case. mount the Pico and DRV8825 to the prototype board, as well as the two capacitors.
-- Adjust the Step-Down converter so that it outputs 5V
+- Print the case. Mount the Pico and DRV8825 to the prototype board, as well as the two capacitors which you place across both power rails of the board (see photo below)
+- Adjust the Step-Down converter so that it outputs 5V and solder it to the 5V rail on the prototype board, this is used to power the pico and logic on the DRV8825.
+- Solder the output of the PD trigger (20V) the the other rail. This will be used to power the motor.
 
 ### Wiring
 
