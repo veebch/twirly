@@ -38,7 +38,11 @@ Build time: <2 hours (not including 3d printing time)
 
 ### Wiring
 
-The A1,A2,B1,B2 on the DRV8825 need to be wired to match the coils on the motor - Motors vary, so check your datasheets (some trial and error may be needed). The code contains all the individual GPIO pins. The capacitors are connected across the voltage and ground rails on the yellow card for the 20V and 5V supplies respectively (providing a smoother voltage for the bridge). 
+The A1,A2,B1,B2 on the DRV8825 need to be wired to match the coils on the motor - Motors vary, so check your datasheets (some trial and error may be needed). 
+
+For the Pico the python code (```main.py```) contains all the individual GPIO pins. 
+
+The capacitors are connected across the voltage and ground rails on the yellow prototype card for the 20V and 5V supplies respectively (providing a smoother voltage for the bridge). 
 
 <div align="center">
 <img src="images/guts.jpg" width="66%">
