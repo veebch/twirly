@@ -14,7 +14,7 @@ There are relatively cheap turntables (only slightly more expensive than this DI
 - DRV8825 to control the stepper motor
 - 20V PD trigger to power the turntable
 - Step Down Voltage convertor (to reduce the 20V down to 5V in order to power the microcontroller)
-- [Raspberry Pi Pico W](https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html) 
+- [Raspberry Pi Pico W](https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html) microcontroller 
 - [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 - [3d printed gears and case](3d/)
 - Prototype Board for mounting the pico and the DRV8825 to
