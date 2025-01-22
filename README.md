@@ -17,6 +17,8 @@ There are relatively cheap turntables (only slightly more expensive than this DI
 - [Raspberry Pi Pico W](https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html) 
 - [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 - [3d printed gears and case](3d/)
+- 2x Capacitors (100μF)
+
 
 Total cost of materials: <50 USD
 
