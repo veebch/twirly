@@ -38,7 +38,7 @@ Build time: <2 hours (not including 3d printing time)
 
 ### Wiring
 
-The DRV8825 needs to be wired to match the photo below. The code contains all the individual GPIO pins. The capacitors are connected across the voltage and ground rails on the yellow card for the 20V and 5V supplies respectively (providing a smoother voltage for the bridge). 
+The DRV8825 needs to be wired to match the motor - Motors vary, so some trial and error may be needed. The code contains all the individual GPIO pins. The capacitors are connected across the voltage and ground rails on the yellow card for the 20V and 5V supplies respectively (providing a smoother voltage for the bridge). 
 
 <div align="center">
 <img src="images/guts.jpg" width="66%">
