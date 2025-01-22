@@ -1,8 +1,10 @@
+![Action Shot](/images/thumb.jpg)
+
 [![YouTube Channel Views](https://img.shields.io/youtube/channel/views/UCz5BOU9J9pB_O0B8-rDjCWQ?label=YouTube&style=social)](https://www.youtube.com/channel/UCz5BOU9J9pB_O0B8-rDjCWQ) [![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=social&logo=instagram&logoColor=black)](https://www.instagram.com/v_e_e_b/)
 
 # Twirly Shirley
 
-A remote-controlled, programmable turntable powered by USB-c. Useful for making stop motion video and rotating stuff that you can't (or are too lazy to) get to. 
+A remote-controlled programmable precision turntable powered by USB-c, driven by a stepper motor. Useful for making stop motion video and rotating stuff that you can't (or are too lazy to) get to. 
 
 There are relatively cheap turntables (only slightly more expensive than this DIY version) that do the same thing, but building one is more interesting/ flexible. For example, if you need to make a version for heavy weights/large items, the contents of this repository should be a good start, as well as a much cheaper option than [that kind of turntable](https://noxon.tech/en/360-turntable/).
 
@@ -27,12 +29,12 @@ Build time: <2 hours (not including 3d printing time)
 
 ## Assembly
 
-- Print the case. mount the Pico and DRV8825 to the prototype board, as well as the two capacitors which will straddle your 20V and 5V power respectively.
+- Print the case. mount the Pico and DRV8825 to the prototype board, as well as the two capacitors.
 - Adjust the Step-Down converter so that it outputs 5V
 
 ### Wiring
 
-The DRV8825 needs to be wired to match the photo below. The code contains all the individual GPIO pins. 
+The DRV8825 needs to be wired to match the photo below. The code contains all the individual GPIO pins. The capacitors are connected to the voltage and ground for the 20V and 5V supplies respectively (providing a smoother voltage for the bridge). 
 
 <div align="center">
 <img src="images/guts.jpg" width="66%">
@@ -84,8 +86,7 @@ Then, point a web browser at the IP of the Pico and you'll see:
 
 An overview of the build and a demo of it in action:
 
-https://youtu.be/peo0DxWtorY
-
+[![YouTube](http://i.ytimg.com/vi/peo0DxWtorY/hqdefault.jpg)](https://www.youtube.com/watch?v=peo0DxWtorY)
 # Lighting diagram for Roller-Boot Video
 
 <div align="center">
@@ -97,6 +98,8 @@ https://youtu.be/peo0DxWtorY
 The gears are made using the [openscad library by Chris Spencer](https://github.com/chrisspen/gears). 
 
 The micropython driver for the drv8825 is by [Rob Hammerlin](https://gitlab.com/robhamerling/micropython-drv8825).
+
+The remote control was based on [Phewap by Simon Prickett](https://github.com/simonprickett/phewap)
 
 # Licence 
 
