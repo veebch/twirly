@@ -69,7 +69,10 @@ python -m serial.tools.list_ports
 Now, using the port path (in our case `/dev/ttyACM0`) copy the contents to the repository by installing [ampy](https://pypi.org/project/adafruit-ampy/) and using  and the commands:
 
 ```
-ampy -p /dev/ttyACM0 put main.py 
+ampy -p /dev/ttyACM0 put main.py
+ampy -p /dev/ttyACM0 put phew
+ampy -p /dev/ttyACM0 put ap_templates
+ampy -p /dev/ttyACM0 put app_templates
 ```
 (*NB. make sure you are using the right port name, as shown in the port listing command above*)
 
