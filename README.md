@@ -73,6 +73,8 @@ ampy -p /dev/ttyACM0 put main.py
 ampy -p /dev/ttyACM0 put phew
 ampy -p /dev/ttyACM0 put ap_templates
 ampy -p /dev/ttyACM0 put app_templates
+ampy -p /dev/ttyACM0 put drv*
+ampy -p /dev/ttyACM0 put encoder_portable.py
 ```
 (*NB. make sure you are using the right port name, as shown in the port listing command above*)
 
