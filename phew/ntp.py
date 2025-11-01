@@ -1,4 +1,8 @@
-import machine, time, usocket, struct
+import machine, time, struct
+try:
+    import usocket
+except ImportError:
+    import socket as usocket
 
 def fetch(synch_with_rtc=True, timeout=10):
   ntp_host = "pool.ntp.org"

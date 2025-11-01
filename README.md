@@ -38,11 +38,140 @@ Build time: <2 hours (not including 3d printing time)
 
 ### Wiring
 
-The A1,A2,B1,B2 on the DRV8825 need to be wired to match the coils on the motor - Motors vary, so check your datasheets (some trial and error may be needed). 
+The turntable requires precise wiring between the Raspberry Pi Pico W, DRV8825 stepper driver, and stepper motor. All connections must be secure to ensure reliable operation.
 
-For the Pico, the python code (```main.py```) contains all the individual GPIO pins. 
+#### Power Supply Connections
 
-The capacitors are connected across the voltage and ground rails on the yellow prototype card for the 20V and 5V supplies respectively (providing a smoother voltage for the bridge). 
+**20V Motor Power (from PD trigger):**
+- PD Trigger 20V output → DRV8825 VMOT
+- PD Trigger Ground → DRV8825 GND (power ground)
+
+**5V Logic Power (from step-down converter):**
+- Step-down converter 5V output → DRV8825 VDD
+- Step-down converter Ground → DRV8825 GND (logic ground)
+- Step-down converter 5V output → Pico VSYS
+- Step-down converter Ground → Pico GND
+
+#### DRV8825 to Raspberry Pi Pico W Connections
+
+**Essential Control Pins:**
+- Pico GPIO 6 → DRV8825 DIR (Direction control)
+- Pico GPIO 7 → DRV8825 STEP (Step pulse input)
+- Pico GPIO 8 → DRV8825 SLEEP (Must be HIGH to enable driver)
+- Pico GPIO 9 → DRV8825 RESET (Must be HIGH for normal operation)
+- Pico GND → DRV8825 GND (logic ground)
+
+**Microstepping Control Pins (M0, M1, M2):**
+- Pico GPIO 12 → DRV8825 M0
+- Pico GPIO 11 → DRV8825 M1
+- Pico GPIO 10 → DRV8825 M2
+
+**Enable Pin Configuration:**
+- DRV8825 ENABLE → GND (always enabled for continuous operation)
+
+#### DRV8825 to Stepper Motor Connections
+
+**4-Wire Bipolar Stepper Motor:**
+The stepper motor has two coils (A and B), each with two wires. Connect as follows:
+- Motor Coil A Wire 1 → DRV8825 A1
+- Motor Coil A Wire 2 → DRV8825 A2
+- Motor Coil B Wire 1 → DRV8825 B1
+- Motor Coil B Wire 2 → DRV8825 B2
+
+**Important:** All four motor wires must be connected. The motor will not function properly with only partial connections. If the motor direction is incorrect, swap the connections of one coil (either A1/A2 or B1/B2).
+
+#### Microstepping Resolution Control
+
+The M0, M1, M2 pins control the stepping resolution according to this table:
+
+| M2 | M1 | M0 | Resolution | Steps per Revolution |
+|----|----|----|------------|---------------------|
+| 0  | 0  | 0  | Full step  | 200                 |
+| 0  | 0  | 1  | Half step  | 400                 |
+| 0  | 1  | 0  | 1/4 step   | 800                 |
+| 0  | 1  | 1  | 1/8 step   | 1600                |
+| 1  | 0  | 0  | 1/16 step  | 3200                |
+| 1  | 0  | 1  | 1/32 step  | 6400                |
+
+The default configuration uses 1/16 microstepping (16 microsteps per full step) for smooth operation.
+
+#### Current Limiting
+
+The DRV8825 includes a potentiometer for current limiting. Set this according to your stepper motor specifications:
+- Measure the reference voltage on the REF pin
+- Current limit = VREF × 2
+- For a 1A motor, set VREF to 0.5V
+- Always set current limit at or below motor rating
+
+#### Capacitor Placement
+
+Install decoupling capacitors close to the DRV8825:
+- 100μF electrolytic capacitor across 20V motor power (VMOT to GND)
+- 100μF electrolytic capacitor across 5V logic power (VDD to GND)
+
+These capacitors smooth voltage fluctuations and protect against voltage spikes.
+
+The capacitors are connected across the voltage and ground rails on the yellow prototype card for the 20V and 5V supplies respectively (providing a smoother voltage for the bridge).
+
+#### Gear Ratio Configuration
+
+The turntable uses a gear reduction system where the stepper motor drives a small gear that rotates a larger turntable gear. The default configuration assumes:
+- Motor gear: 20 teeth
+- Turntable gear: 81 teeth
+- Gear ratio: 4.05:1 (81/20)
+
+This means the motor must rotate 4.05 times to achieve one full rotation of the turntable. The software automatically compensates for this ratio in all movement calculations.
+
+To modify the gear ratio for different gear combinations, update the GEAR_RATIO constant in main.py:
+```python
+GEAR_RATIO = large_gear_teeth / small_gear_teeth
+```
+
+## Features
+
+### Microstepping Control
+The system supports variable microstepping resolution from 1 to 32 microsteps per full step, providing smooth motion control. Higher microstepping values result in smoother rotation but require more steps for the same angular movement.
+
+### Web Interface
+- **Responsive Design**: Works on desktop and mobile devices
+- **Dark Mode**: Toggle between light and dark themes with automatic preference saving
+- **Real-time Control**: Instant motor control and status updates
+- **Timelapse Mode**: Automated rotation with configurable parameters and progress tracking
+
+### Network Access
+- **mDNS Support**: Access the device at `twirly.local` without knowing the IP address
+- **WiFi AP Mode**: Creates its own network when unable to connect to existing WiFi
+- **Status LED**: Visual feedback for network connectivity and motor activity
+
+### Motor Control
+- **Speed Ramping**: 3-phase acceleration/deceleration for smooth starts and stops
+- **Gear Ratio Compensation**: Automatic adjustment for mechanical gear reduction
+- **Direction Control**: Clockwise and counter-clockwise rotation
+- **Precise Positioning**: Accurate angular positioning with microstepping precision
+
+## Troubleshooting
+
+### Motor Not Moving
+1. **Check Wiring**: Verify all four motor wires are properly connected to the DRV8825 outputs (2B, 2A, 1A, 1B)
+2. **Power Supply**: Ensure the motor power supply (M+ and M-) is connected and providing adequate voltage
+3. **Current Limiting**: Verify the DRV8825 current limit is properly set for your motor
+4. **Enable Pin**: Confirm the ENABLE pin is properly connected and the motor is enabled in software
+
+### Erratic Movement
+1. **Timing Issues**: The DRV8825 requires minimum 1.9μs pulse width - ensure proper timing delays
+2. **Power Supply Noise**: Add capacitors across power supply lines to reduce electrical noise
+3. **Loose Connections**: Check all wire connections for secure contact
+4. **Current Setting**: Adjust the DRV8825 current limit potentiometer if motor skips steps
+
+### Network Issues
+1. **WiFi Connection**: Check that WiFi credentials are correct in main.py
+2. **mDNS Problems**: If `twirly.local` doesn't work, use the IP address displayed on startup
+3. **Access Point Mode**: Device creates "Twirly" network if WiFi connection fails
+
+### Web Interface Problems
+1. **Browser Compatibility**: Use a modern browser with JavaScript enabled
+2. **Network Connectivity**: Ensure device and browser are on the same network
+3. **Cache Issues**: Hard refresh the page (Ctrl+F5) if updates don't appear 
 
 <div align="center">
 <img src="images/guts.jpg" width="66%">

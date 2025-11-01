@@ -6,18 +6,18 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
-  <title>Turntable 2</title>
+  <title>Twirly Shirley</title>
   <style>
     body{
       background: #ffffff;
       font-family: 'Quicksand', sans-serif;
         }
     nav{
-      width:400px;
-      height:400px;
+      width:300px;
+      height:300px;
       background: #ccc;
       border-radius: 50%;
-      padding: 20px;
+      padding: 15px;
       -webkit-transform: rotate(45deg);
       -moz-transform: rotate(45deg);
       transform: rotate(45deg);
@@ -30,6 +30,87 @@
       position: relative;
       margin: 5px auto;
     }
+    
+    /* Command feedback window styling */
+    .feedback-window {
+      background: #f8f9fa;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 20px auto;
+      max-width: 400px;
+      min-height: 150px;
+      max-height: 200px;
+      overflow-y: auto;
+      font-family: 'Courier New', monospace;
+      color: #495057;
+      font-size: 12px;
+      line-height: 1.4;
+      position: relative;
+    }
+    
+    .feedback-window h3 {
+      margin-top: 0;
+      color: #343a40;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 16px;
+      border-bottom: 1px solid #dee2e6;
+      padding-bottom: 5px;
+      padding-right: 60px; /* Make room for clear button */
+    }
+    
+    .clear-feedback {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background: #e9ecef;
+      color: #495057;
+      border: 1px solid #ced4da;
+      border-radius: 3px;
+      padding: 2px 8px;
+      font-size: 10px;
+      cursor: pointer;
+      font-family: 'Quicksand', sans-serif;
+    }
+    
+    .clear-feedback:hover {
+      background: #dee2e6;
+    }
+    
+    .feedback-content {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    
+    .command-entry {
+      margin: 2px 0;
+      padding: 2px 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .command-entry.executing {
+      color: #fd7e14;
+      animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    
+    .command-entry.completed {
+      color: #198754;
+    }
+    
+    .command-entry.error {
+      color: #dc3545;
+    }
+    
+    .timestamp {
+      color: #6c757d;
+      font-size: 10px;
+    }
+
     #a, #b, #c, #d, #e {
       position: absolute;
       transform: translateY(-50%);
@@ -37,11 +118,11 @@
       transform: rotate(-45deg);
       color: orange;
       z-index: 99999;
-      font-size: 2rem;
+      font-size: 1.5rem;
       pointer-events: none; /* Allow pointer events to pass through the text */
     }
     #a {
-      font-size: 80px;
+      font-size: 60px;
       top: 16%;
       left: 42%;
       text-shadow: 0px 0px 1px rgba(0,0,0,.4);
@@ -52,7 +133,7 @@
       text-shadow: 0px -1px 0px rgba(255,255,255,.4), 0px 1px 0px rgba(0,0,0,.4);
     }
     #c {
-      font-size: 80px;
+      font-size: 60px;
       top: -7%;
       left: 69%;
       text-shadow: 1px 0px 0px rgba(255,255,255,.4), -1px 0px 0px rgba(0,0,0,.4);
@@ -63,10 +144,168 @@
       text-shadow: 0px 1px 0px rgba(255,255,255,.4), 0px -1px 0px rgba(0,0,0,.4);
     }
     #e {
-      font-size: 80px;
+      font-size: 60px;
       top: 42%;
       left: 20%;
       text-shadow: -1px 0px 0px rgba(255,255,255,.4), 1px 0px 0px rgba(0,0,0,.4);
+    }
+    
+    /* Control buttons styling */
+    .control-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 15px auto;
+      max-width: 400px;
+    }
+    
+    .control-button {
+      border: none;
+      border-radius: 8px;
+      color: white;
+      padding: 12px 20px;
+      font-size: 14px;
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+      transition: all 0.2s ease;
+      min-width: 120px;
+    }
+    
+    .control-button.timelapse {
+      background: linear-gradient(135deg, #ff6b35, #f7931e);
+    }
+    
+    .control-button.timelapse:hover {
+      background: linear-gradient(135deg, #e55a2b, #e8841a);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+    
+    .control-button.stop {
+      background: linear-gradient(135deg, #ff6b35, #f7931e);
+    }
+    
+    .control-button.stop:hover {
+      background: linear-gradient(135deg, #e55a2b, #e8841a);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+    
+    .control-button:active {
+      transform: translateY(0);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    
+    .control-button:disabled {
+      background: #999;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    /* Status LED styling */
+    .led-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 15px auto;
+      max-width: 400px;
+    }
+    
+    .status-led {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #e9ecef;
+      border: 2px solid #ced4da;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
+    }
+    
+    .led-label {
+      font-family: 'Quicksand', sans-serif;
+      font-size: 14px;
+      color: #6c757d;
+      font-weight: 500;
+    }
+    
+    /* Timelapse parameters styling */
+    
+    .status-led.active {
+      background: #28a745;
+      border-color: #1e7e34;
+      box-shadow: 0 0 0 4px rgba(40, 167, 69, 0.3);
+      animation: ledPulse 0.6s ease-out;
+    }
+    
+    @keyframes ledPulse {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+      }
+      50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 6px rgba(40, 167, 69, 0.3);
+      }
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 4px rgba(40, 167, 69, 0.1);
+      }
+    }
+
+    /* Timelapse parameters styling */
+    .timelapse-params {
+      background: #f8f9fa;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 20px auto;
+      max-width: 400px;
+      font-family: 'Quicksand', sans-serif;
+    }
+    
+    .timelapse-params h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      color: #343a40;
+      font-size: 16px;
+      text-align: center;
+      border-bottom: 1px solid #dee2e6;
+      padding-bottom: 8px;
+    }
+    
+    .param-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .param-row label {
+      color: #495057;
+      font-weight: 600;
+      font-size: 14px;
+      flex: 1;
+    }
+    
+    .param-row input {
+      background: white;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      padding: 5px 8px;
+      font-size: 14px;
+      width: 80px;
+      text-align: center;
+      font-family: 'Quicksand', sans-serif;
+    }
+    
+    .param-row input:focus {
+      outline: none;
+      border-color: #80bdff;
+      box-shadow: 0 0 0 2px rgba(0,123,255,.25);
     }
 
 
@@ -178,6 +417,158 @@ footer {
   text-align: center;
   padding: 3px;
   color: grey;
+  position: relative;
+}
+
+/* Theme toggle styling */
+.theme-toggle {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  background: #f0f0f0;
+  border: 2px solid #ddd;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 18px;
+}
+
+.theme-toggle:hover {
+  background: #e0e0e0;
+  transform: scale(1.1);
+}
+
+/* Dark mode styles */
+body.dark-mode {
+  background: #1a1a1a;
+  color: #e0e0e0;
+}
+
+body.dark-mode .header {
+  color: #e0e0e0;
+}
+
+body.dark-mode .theme-toggle {
+  background: #333;
+  border-color: #555;
+  color: #fff;
+}
+
+body.dark-mode .theme-toggle:hover {
+  background: #444;
+}
+
+body.dark-mode .timelapse-params {
+  background: #2a2a2a;
+  border-color: #444;
+  color: #e0e0e0;
+}
+
+body.dark-mode .timelapse-params h3 {
+  color: #e0e0e0;
+  border-color: #444;
+}
+
+body.dark-mode .param-row label {
+  color: #ccc;
+}
+
+body.dark-mode .param-row input {
+  background: #333;
+  border-color: #555;
+  color: #e0e0e0;
+}
+
+body.dark-mode .param-row input:focus {
+  border-color: #66b3ff;
+}
+
+body.dark-mode .feedback-window {
+  background: #2a2a2a;
+  border-color: #444;
+  color: #e0e0e0;
+}
+
+body.dark-mode .feedback-window h3 {
+  color: #e0e0e0;
+  border-color: #444;
+}
+
+body.dark-mode .clear-feedback {
+  background: #444;
+  color: #e0e0e0;
+  border-color: #666;
+}
+
+body.dark-mode .clear-feedback:hover {
+  background: #555;
+}
+
+body.dark-mode .command-entry.completed {
+  color: #4ade80;
+}
+
+body.dark-mode .command-entry.executing {
+  color: #fb923c;
+}
+
+body.dark-mode .command-entry.error {
+  color: #f87171;
+}
+
+body.dark-mode .timestamp {
+  color: #9ca3af;
+}
+
+body.dark-mode footer {
+  color: #aaa;
+}
+
+body.dark-mode nav {
+  background: #444;
+  box-shadow: inset -10px 0 12px -6px #333,
+    inset 12px 0 5px -6px #333,
+    inset 0 0 0 10px #222,
+    inset 2px 0 4px 10px rgba(0,0,0,0.6),
+    1px 0 4px rgba(0,0,0,0.9);
+}
+
+body.dark-mode .button {
+  box-shadow: 1px 0px 3px 1px rgba(0,0,0,0.6), inset 0 0 0 1px #555;
+}
+
+body.dark-mode .button::after {
+  background: #2a2a2a !important;
+}
+
+body.dark-mode .center-button {
+  background: #333;
+  box-shadow: 1px 0 4px rgba(0,0,0,0.9);
+}
+
+body.dark-mode .led-label {
+  color: #aaa;
+}
+
+body.dark-mode .button.top::after {
+  box-shadow: inset 2px 1px 2px 0 rgba(255,255,255,0.4), 10px 10px 0 10px transparent;
+}
+
+body.dark-mode .button.right::after {
+  box-shadow: inset -2px 3px 2px -2px rgba(255,255,255,0.4), -10px 10px 0 10px transparent;
+}
+
+body.dark-mode .button.left::after {
+  box-shadow: inset 2px -1px 2px 0 rgba(255,255,255,0.4), 10px -10px 0 10px transparent;
+}
+
+body.dark-mode .button.bottom::after {
+  box-shadow: inset -2px -3px 2px -2px rgba(255,255,255,0.4), -10px -10px 0 10px transparent;
 }
 
 b, strong {
@@ -191,14 +582,18 @@ b, strong {
 
 .button:active {
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6); /* Add a slight shadow when button is clicked */
+}
 
     </style>
 </head>
 <body>
 <div class="header">
-          <h1 id="f">Turntable 2</h1>
-          <p>&copy <a href="https://veeb.ch">VEEB Projects</a></p>
+          <h1>Twirly Shirley</h1>
+          <div class="theme-toggle" onclick="toggleDarkMode()">
+            <span class="toggle-icon">🌙</span>
+          </div>
 </div>
+
 <nav>
     <a id="butt-top" class="button top" href="#"></a>
     <a id="butt-right" class="button right" href="#"></a>
@@ -210,31 +605,333 @@ b, strong {
     <p id="d">< ◯</p>
     <p id="e"><</p>
   </nav>
+
+<!-- Status LED -->
+<div class="led-container">
+  <div class="status-led" id="status-led"></div>
+  <span class="led-label">Activity</span>
+</div>
+
+<!-- Timelapse Parameters -->
+<div class="timelapse-params">
+  <h3>Timelapse Settings</h3>
+  <div class="param-row">
+    <label for="angle-input">Angle (degrees):</label>
+    <input type="number" id="angle-input" value="360" min="1" max="3600">
+  </div>
+  <div class="param-row">
+    <label for="steps-input">Steps:</label>
+    <input type="number" id="steps-input" value="160" min="1" max="1000">
+  </div>
+  <div class="param-row">
+    <label for="pause-input">Pause (seconds):</label>
+    <input type="number" id="pause-input" value="3" min="0.1" max="60" step="0.1">
+  </div>
+</div>
+
+<!-- Control Buttons -->
+<div class="control-buttons">
+  <button id="timelapse-btn" class="control-button timelapse">Start Timelapse</button>
+  <button id="stop-btn" class="control-button stop">Stop</button>
+</div>
+
+<!-- Command Feedback Window -->
+<div class="feedback-window">
+  <h3>Command Monitor</h3>
+  <button class="clear-feedback" onclick="clearFeedback()">Clear</button>
+  <div class="feedback-content" id="feedback-content">
+<div class="command-entry completed">
+<span class="timestamp">[00:00]</span> System ready - Microstepping enabled
+</div>
+  </div>
+</div>
     </div>
 
-  <script src="data:text/javascript,document.getElementById('f').onclick = async function() { await fetch('/timelapse'); };" defer></script>
-
-  <script src="data:text/javascript,document.getElementById('center-butt').onclick = async function() { await fetch('/stop'); };" defer></script>
-
-  <script src="data:text/javascript,document.getElementById('butt-bott').onclick = async function() { await fetch('/cw_360'); };" defer></script>
-
- <script src="data:text/javascript,document.getElementById('butt-right').onclick = async function() { await fetch('/cw_a_bit'); };" defer></script>
-
- <script src="data:text/javascript,document.getElementById('butt-top').onclick = async function() { await fetch('/ccw_360'); };" defer></script>
-
- <script src="data:text/javascript,document.getElementById('butt-left').onclick = async function() { await fetch('/ccw_a_bit'); };" defer></script>
+  <script>
+    // Dark mode toggle functionality
+    function toggleDarkMode() {
+      const body = document.body;
+      const toggle = document.querySelector('.theme-toggle .toggle-icon');
+      
+      body.classList.toggle('dark-mode');
+      
+      // Update toggle icon
+      if (body.classList.contains('dark-mode')) {
+        toggle.textContent = '☀️';
+        localStorage.setItem('darkMode', 'enabled');
+      } else {
+        toggle.textContent = '🌙';
+        localStorage.setItem('darkMode', 'disabled');
+      }
+    }
+    
+    // Load saved theme preference - default to dark mode
+    window.addEventListener('load', () => {
+      const darkMode = localStorage.getItem('darkMode');
+      const toggle = document.querySelector('.theme-toggle .toggle-icon');
+      
+      // Default to dark mode unless explicitly disabled
+      if (darkMode !== 'disabled') {
+        document.body.classList.add('dark-mode');
+        toggle.textContent = '☀️';
+      }
+    });
+    
+    // Command feedback system
+    let commandCount = 0;
+    
+    function getTimestamp() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      return `[${hours}:${minutes}:${seconds}]`;
+    }
+    
+    function addFeedback(message, type = 'completed') {
+      const feedbackContent = document.getElementById('feedback-content');
+      const entry = document.createElement('div');
+      entry.className = `command-entry ${type}`;
+      entry.innerHTML = `<span class="timestamp">${getTimestamp()}</span> ${message}`;
+      
+      feedbackContent.appendChild(entry);
+      
+      // Auto-scroll to bottom
+      feedbackContent.scrollTop = feedbackContent.scrollHeight;
+      
+      // Keep only last 15 entries (increased from 10)
+      const entries = feedbackContent.querySelectorAll('.command-entry');
+      if (entries.length > 15) {
+        entries[0].remove();
+      }
+      
+      commandCount++;
+    }
+    
+    function clearFeedback() {
+      const feedbackContent = document.getElementById('feedback-content');
+      feedbackContent.innerHTML = '';
+      addFeedback('Command history cleared', 'completed');
+    }
+    
+    // LED status indicator
+    let ledTimeout = null;
+    
+    function setLEDState(active) {
+      const led = document.getElementById('status-led');
+      if (active) {
+        led.classList.add('active');
+        // Clear any existing timeout
+        if (ledTimeout) {
+          clearTimeout(ledTimeout);
+          ledTimeout = null;
+        }
+      } else {
+        led.classList.remove('active');
+      }
+    }
+    
+    function flashLED() {
+      const led = document.getElementById('status-led');
+      led.classList.add('active');
+      
+      // Clear any existing timeout
+      if (ledTimeout) {
+        clearTimeout(ledTimeout);
+      }
+      
+      // Set timeout to turn off LED after 1 second (for quick commands)
+      ledTimeout = setTimeout(() => {
+        led.classList.remove('active');
+        ledTimeout = null;
+      }, 1000);
+    }
+    
+    async function executeCommand(url, description) {
+      try {
+        // Start LED for immediate feedback
+        setLEDState(true);
+        
+        // Start progress polling to monitor command execution
+        if (!progressInterval) {
+          startProgressPolling();
+        }
+        
+        addFeedback(`${description}...`, 'executing');
+        const response = await fetch(url);
+        const result = await response.text();
+        
+        if (response.ok) {
+          // Use the detailed response from the server if available
+          const message = result && result !== 'OK' ? result : `${description} ✓`;
+          addFeedback(message, 'completed');
+        } else {
+          addFeedback(`${description} ✗ (HTTP ${response.status})`, 'error');
+        }
+        
+        // LED will be turned off by progress polling when command completes
+        
+      } catch (error) {
+        addFeedback(`${description} ✗ (${error.message})`, 'error');
+        // Turn off LED on error
+        setLEDState(false);
+      }
+    }
+    
+    // Progress polling for timelapse and command execution
+    let progressInterval = null;
+    
+    function startProgressPolling() {
+      if (progressInterval) clearInterval(progressInterval);
+      
+      progressInterval = setInterval(async () => {
+        try {
+          const response = await fetch('/progress');
+          const progress = await response.json();
+          
+          // Control LED based on any command execution
+          setLEDState(progress.command_executing);
+          
+          if (progress.running) {
+            addFeedback(`Step ${progress.current_step} of ${progress.total_steps} (${progress.percentage}%)`, 'executing');
+          } else if (!progress.command_executing) {
+            // Stop polling if no commands are running
+            clearInterval(progressInterval);
+            progressInterval = null;
+          }
+        } catch (error) {
+          console.log('Progress polling error:', error);
+        }
+      }, 500); // Poll every 500ms for more responsive LED
+    }
+    
+    // Start polling immediately when page loads to catch any ongoing commands
+    window.addEventListener('load', () => {
+      startProgressPolling();
+    });
+    
+    // Command handlers with feedback
+    document.getElementById('timelapse-btn').onclick = async function() { 
+      this.disabled = true;
+      this.textContent = 'Running Timelapse...';
+      
+      // Get timelapse parameters
+      const angle = document.getElementById('angle-input').value;
+      const steps = document.getElementById('steps-input').value;
+      const pause = document.getElementById('pause-input').value;
+      
+      // Start progress polling
+      startProgressPolling();
+      
+      // Send parameters to timelapse endpoint
+      await executeCommand(`/timelapse?angle=${angle}&steps=${steps}&pause=${pause}`, `Starting timelapse: ${angle}° in ${steps} steps, ${pause}s pause`);
+      
+      // Stop progress polling when done
+      if (progressInterval) {
+        clearInterval(progressInterval);
+        progressInterval = null;
+      }
+      
+      this.disabled = false;
+      this.textContent = 'Start Timelapse';
+    };
+    
+    document.getElementById('stop-btn').onclick = async function() { 
+      await executeCommand('/stop', 'Emergency stop');
+    };
+    
+    // Keep center button for backward compatibility but make it less prominent
+    document.getElementById('center-butt').onclick = async function() { 
+      await executeCommand('/stop', 'Emergency stop');
+    };
+    
+    document.getElementById('butt-bott').onclick = async function() { 
+      await executeCommand('/cw_360', 'Clockwise 360° rotation');
+    };
+    
+    document.getElementById('butt-right').onclick = async function() { 
+      await executeCommand('/cw_a_bit', 'Clockwise nudge');
+    };
+    
+    document.getElementById('butt-top').onclick = async function() { 
+      await executeCommand('/ccw_360', 'Counter-clockwise 360°');
+    };
+    
+    document.getElementById('butt-left').onclick = async function() { 
+      await executeCommand('/ccw_a_bit', 'Counter-clockwise nudge');
+    };
+    
+    // Initialize with system status and add periodic status updates
+    window.addEventListener('load', function() {
+      // Initial system ready message
+      setTimeout(() => {
+        addFeedback('Turntable system initialized', 'completed');
+      }, 500);
+      
+      // Check system status periodically
+      setInterval(async () => {
+        try {
+          const response = await fetch('/status');
+          if (!response.ok) {
+            addFeedback('⚠️ System check failed', 'error');
+          }
+        } catch (error) {
+          addFeedback('⚠️ Connection lost', 'error');
+        }
+      }, 30000); // Check every 30 seconds
+    });
+    
+    // Add keyboard shortcuts
+    document.addEventListener('keydown', function(event) {
+      if (event.target.tagName.toLowerCase() === 'input') return; // Don't interfere with inputs
+      
+      switch(event.key.toLowerCase()) {
+        case 'arrowleft':
+          event.preventDefault();
+          document.getElementById('butt-left').click();
+          break;
+        case 'arrowright':
+          event.preventDefault();
+          document.getElementById('butt-right').click();
+          break;
+        case 'arrowup':
+          event.preventDefault();
+          document.getElementById('butt-top').click();
+          break;
+        case 'arrowdown':
+          event.preventDefault();
+          document.getElementById('butt-bott').click();
+          break;
+        case ' ':
+        case 'escape':
+          event.preventDefault();
+          document.getElementById('stop-btn').click();
+          break;
+        case 't':
+          event.preventDefault();
+          document.getElementById('timelapse-btn').click();
+          break;
+      }
+    });
+    
+    // Add visual feedback for button presses
+    document.querySelectorAll('.button, .center-button, .control-button').forEach(element => {
+      element.addEventListener('mousedown', function() {
+        this.style.transform = (this.style.transform || '') + ' scale(0.95)';
+      });
+      
+      element.addEventListener('mouseup', function() {
+        this.style.transform = this.style.transform.replace(' scale(0.95)', '');
+      });
+      
+      element.addEventListener('mouseleave', function() {
+        this.style.transform = this.style.transform.replace(' scale(0.95)', '');
+      });
+    });
+  </script>
 
  <footer>
-        <h2>Controls</h2>
-        <p><b><</b> and <b>></b> : nudge</p>
-        <p><b>◯ ></b> and <b>< ◯</b> : full turn</p>
+        <p><small>&copy; <a href="https://veeb.ch">VEEB Projects</a></small></p>
 </footer>
 </body>
 </html>
-
-
-
-
-
-
-

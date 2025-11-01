@@ -66,6 +66,7 @@ This driver was developed after some examples:
 
 from machine import Pin, Timer
 from time import sleep_ms
+import utime
 
 
 class DRV8825(object):
@@ -188,15 +189,21 @@ class DRV8825(object):
     def one_step(self, direction):
         """perform one step (forward if direction > 0, backward if direction < 0)"""
         if direction > 0:
-            self._direction_pin.on()
+            self._direction_pin.on()   # BACK TO ORIGINAL: positive = HIGH
+            utime.sleep_us(2)  # Direction setup time
             self._step_pin.on()  # actual step (rising edge)
             self._actual_pos += 1
+            utime.sleep_us(2)  # Minimum 1.9us high pulse for DRV8825
             self._step_pin.off()
+            utime.sleep_us(2)  # Minimum 1.9us low pulse for DRV8825
         elif direction < 0:
-            self._direction_pin.off()
+            self._direction_pin.off()  # BACK TO ORIGINAL: negative = LOW
+            utime.sleep_us(2)  # Direction setup time
             self._step_pin.on()
             self._actual_pos -= 1
+            utime.sleep_us(2)  # Minimum 1.9us high pulse for DRV8825
             self._step_pin.off()
+            utime.sleep_us(2)  # Minimum 1.9us low pulse for DRV8825
 
     def _timer_callback(self, t):
         """determine if stepping action opportune

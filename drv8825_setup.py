@@ -23,7 +23,7 @@ def setup_stepper():
         step_pin = 7  # STEP
         sleep_pin = 8  # SLEEP
         reset_pin = 9  # RESET
-        resolution_pins = (12, 11, 10)  # (M0, M1, M2) tuple
+        resolution_pins = (12, 11, 10)  # (M0, M1, M2) tuple - microstepping enabled!
     else:
         print("Provide pin wiring of DRV8825 for", sys.platform)
         return None

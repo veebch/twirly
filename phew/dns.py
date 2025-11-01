@@ -1,4 +1,11 @@
-import uasyncio, usocket
+import uasyncio
+try:
+    import usocket
+except ImportError:
+    try:
+        import socket as usocket
+    except ImportError:
+        import usocket_compat as usocket
 from . import logging
 
 async def _handler(socket, ip_address):

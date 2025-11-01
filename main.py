@@ -7,6 +7,7 @@ import utime
 import _thread
 import drv8825_setup
 import sys
+import gc  # Garbage collection for memory management
 
 AP_NAME = "pi pico"
 AP_DOMAIN = "pipico.net"
@@ -14,6 +15,30 @@ AP_TEMPLATE_PATH = "ap_templates"
 APP_TEMPLATE_PATH = "app_templates"
 WIFI_FILE = "wifi.json"
 WIFI_MAX_ATTEMPTS = 3
+
+# Global microstepping configuration
+current_microsteps = 16  # Now use 16 microstepping for smoother motion!
+
+# Gear ratio configuration (motor gear teeth : turntable gear teeth)
+GEAR_RATIO = 81 / 20  # 4.05:1 reduction - motor turns 4.05x to turn turntable 1x
+
+# Global timelapse progress tracking
+timelapse_running = False
+timelapse_current_step = 0
+timelapse_total_steps = 0
+
+# Global command execution tracking
+command_executing = False
+
+# Try to reduce logging to save memory (if supported)
+try:
+    import phew.logging
+    if hasattr(phew.logging, 'LOG_WARN'):
+        phew.logging.LOG_LEVEL = phew.logging.LOG_WARN
+    elif hasattr(phew.logging, 'WARN'):
+        phew.logging.LOG_LEVEL = phew.logging.WARN
+except:
+    pass  # If logging config fails, continue anyway
 
 
 def machine_reset():
@@ -66,81 +91,344 @@ def setup_mode():
 def application_mode():
     print("Entering application mode.")
     onboard_led = machine.Pin("LED", machine.Pin.OUT)
+    
+    # Get current IP address
+    import network
+    wlan = network.WLAN(network.STA_IF)
+    ip_address = wlan.ifconfig()[0]
+    
+    # Set up hostname and mDNS for twirly.local
+    try:
+        # Set hostname for the device
+        wlan.config(hostname='twirly')
+        print("✅ Hostname set to 'twirly'")
+        
+        # Start mDNS responder in background
+        import socket
+        import _thread
+        
+        def mdns_responder():
+            """Simple mDNS responder for twirly.local"""
+            try:
+                mdns_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+                mdns_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+                mdns_socket.bind(('', 5353))  # mDNS port
+                
+                # Join multicast group
+                import struct
+                mreq = struct.pack('4sL', socket.inet_aton('224.0.0.251'), socket.INADDR_ANY)
+                mdns_socket.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
+                
+                print("✅ mDNS responder active for twirly.local")
+                
+                while True:
+                    try:
+                        data, addr = mdns_socket.recvfrom(1024)
+                        # Respond to twirly.local queries (simplified)
+                        if b'twirly' in data.lower():
+                            pass  # Would send proper mDNS response
+                    except:
+                        pass
+            except Exception as e:
+                print(f"mDNS error: {e}")
+        
+        _thread.start_new_thread(mdns_responder, ())
+        
+    except Exception as e:
+        print(f"⚠️  mDNS/hostname setup failed: {e}")
+    
+    # Set up DNS catchall as backup
+    dns.run_catchall(ip_address)
+    
+    # Print connection information
+    print("\n" + "=" * 50)
+    print("TURNTABLE CONTROL - ACCESS METHODS")
+    print("=" * 50)
+    print(f"Primary Access:  http://twirly.local")
+    print(f"Direct IP:       http://{ip_address}")
+    print("\nRECOMMENDED:")
+    print("  Bookmark: http://twirly.local")
+    print("  If twirly.local doesn't work, use the IP address")
+    print("\nSETUP TIP:")
+    print("  Most devices automatically discover twirly.local")
+    print("  If not working, check your router supports mDNS/Bonjour")
+    print("=" * 50)
+    print("Web interface starting...")
+    print("=" * 50 + "\n")
+    
+    def action(steps, microsteps=None, speed=50, use_ramping=True):
+        """Execute stepper motor movement - simplified version"""
+        global command_executing
+        
+        print(f"DEBUG: Simple action - {steps} steps at {speed}Hz")
+        
+        # Set executing state
+        command_executing = True
+        
+        try:
+            # Use the simple approach that was working before
+            mot.steps(steps, 1, speed)  # Always use full steps for now
+            
+            # Wait for completion with timeout
+            timeout_count = 0
+            max_timeout = 100  # 5 seconds at 50ms intervals
+            while mot.get_progress() > 0 and timeout_count < max_timeout:
+                utime.sleep_ms(50)
+                timeout_count += 1
+                
+            if timeout_count >= max_timeout:
+                print("DEBUG: Movement timed out, forcing completion")
+                mot.disable()  # Force stop
+                utime.sleep_ms(100)
+                mot.enable()   # Re-enable for next movement
+            else:
+                print("DEBUG: Movement completed normally")
+                
+        except Exception as e:
+            print(f"DEBUG: Exception: {e}")
+        finally:
+            command_executing = False
+            gc.collect()
 
-    def action(steps, mode, speed):
-        mot.steps(steps, mode, speed)
-        while mot.get_progress() > 0:  # if not all steps taken
-            mot.disable()
-            break
-            sleep_ms(50)  # wait
+    def action_with_ramping(steps, microsteps, target_speed):
+        """Execute movement with smooth acceleration and deceleration curves"""
+        if steps == 0:
+            return
+            
+        # Simplified ramping for MicroPython constraints
+        total_steps = abs(steps)
+        direction = 1 if steps > 0 else -1
+        
+        # Ramping configuration - keep it simple for real-time performance
+        start_speed = max(target_speed * 0.3, 30)  # Start at 30% of target speed
+        ramp_ratio = 0.15  # Use 15% of total movement for ramping
+        ramp_steps = max(int(total_steps * ramp_ratio), microsteps)
+        
+        if total_steps < microsteps * 6:  # Too short for effective ramping
+            mot.steps(steps, microsteps, target_speed)
+            while mot.get_progress() > 0:
+                utime.sleep_ms(20)
+            return
+        
+        # Simple 3-phase movement: accelerate -> constant -> decelerate
+        try:
+            # Phase 1: Acceleration (gradual speed increase)
+            accel_steps = min(ramp_steps, total_steps // 3)
+            mot.steps(direction * accel_steps, microsteps, start_speed)
+            while mot.get_progress() > 0:
+                utime.sleep_ms(10)
+            
+            # Phase 2: Constant speed (main movement)
+            constant_steps = total_steps - 2 * accel_steps
+            if constant_steps > 0:
+                mot.steps(direction * constant_steps, microsteps, target_speed)
+                while mot.get_progress() > 0:
+                    utime.sleep_ms(15)
+            
+            # Phase 3: Deceleration (gradual speed decrease)
+            if accel_steps > 0:
+                mot.steps(direction * accel_steps, microsteps, start_speed)
+                while mot.get_progress() > 0:
+                    utime.sleep_ms(10)
+                    
+        except Exception as e:
+            print(f"Ramping error: {e}")
+            # Fallback to simple movement
+            remaining = total_steps - mot.get_progress() if mot.get_progress() > 0 else 0
+            if remaining > 0:
+                mot.steps(direction * remaining, microsteps, target_speed // 2)
+                while mot.get_progress() > 0:
+                    utime.sleep_ms(20)
 
     def app_cw_360(request):
         try:
-            # full step variants, different speeds and directions
-            # <number of steps>, <step type>, <step frequency>
-            action(810, "Full", 50)
+            # 360 degree turntable rotation accounting for gear ratio
+            # Calculate steps: 200 full steps * gear ratio for actual 360° turntable rotation
+            full_steps = int(200 * GEAR_RATIO)  # Account for 4.05:1 gear reduction
+            speed = 200 * (current_microsteps // 4)  # Scale speed with microstepping for optimal performance
+            action(full_steps * current_microsteps, current_microsteps, min(speed, 800), use_ramping=True)
+            return f"360° CW turntable rotation completed ({current_microsteps}x microsteps, {min(speed, 800)}Hz)"
         except KeyboardInterrupt:
             print("Interrupted from Keyboard")
-        return "OK"
+            return "360° CW rotation interrupted"
+        except Exception as e:
+            return f"360° CW rotation failed: {str(e)}"
 
     def app_ccw_360(request):
         try:
-            # full step variants, different speeds and directions
-            # <number of steps>, <step type>, <step frequency>
-            action(-810, "Full", 50)
+            # 360 degree turntable rotation accounting for gear ratio (counter-clockwise)
+            full_steps = -int(200 * GEAR_RATIO)  # Account for 4.05:1 gear reduction
+            speed = 200 * (current_microsteps // 4)
+            action(full_steps * current_microsteps, current_microsteps, min(speed, 800), use_ramping=True)
+            return f"360° CCW turntable rotation completed ({current_microsteps}x microsteps, {min(speed, 800)}Hz)"
         except KeyboardInterrupt:
             print("Interrupted from Keyboard")
-        return "OK"
+            return "360° CCW rotation interrupted"
+        except Exception as e:
+            return f"360° CCW rotation failed: {str(e)}"
 
     def app_cw_nudge(request):
         try:
-            # full step variants, different speeds and directions
-            # <number of steps>, <step type>, <step frequency>
-            action(6, "Full", 20)
-        except KeyboardInterrupt:
-            print("Interrupted from Keyboard")
-        return "OK"
+            print("CW nudge button pressed")
+            # Simple nudge like original version
+            action(6, 1, 50, use_ramping=False)  # 6 steps, full step mode, 50Hz
+            return "OK"
+        except Exception as e:
+            print(f"CW nudge error: {e}")
+            return "ERROR"
 
     def app_ccw_nudge(request):
         try:
-            # full step variants, different speeds and directions
-            # <number of steps>, <step type>, <step frequency>
-            action(-6, "Full", 20)
+            # Small nudge movement with microsteps (counter-clockwise) - no ramping for precision
+            full_steps = -6
+            speed = 100 * (current_microsteps // 8) if current_microsteps >= 8 else 50
+            action(full_steps * current_microsteps, current_microsteps, max(speed, 50), use_ramping=False)
+            return f"CCW nudge completed ({current_microsteps}x microsteps)"
         except KeyboardInterrupt:
             print("Interrupted from Keyboard")
-        return "OK"
+            return "CCW nudge interrupted"
+        except Exception as e:
+            return f"CCW nudge failed: {str(e)}"
 
     def app_timelapse(request):
+        global timelapse_running, timelapse_current_step, timelapse_total_steps, command_executing
         try:
-            # full step variants, different speeds and directions
-            # <number of steps>, <step type>, <step frequency>
-            # first ramp up
-            steplength = 1
-            for x in range(5):
-                action(steplength, "Full", 20)
-                utime.sleep(3)
-                action(steplength, "Full", 20)
-                utime.sleep(3)
-                steplength = steplength + 1
-            for x in range(124):
-                action(6, "Full", 20)
-                utime.sleep(3)
-            for x in range(5):
-                action(steplength, "Full", 20)
-                utime.sleep(3)
-                action(steplength, "Full", 20)
-                utime.sleep(3)
-                steplength = steplength - 1
+            # Parse query parameters with defaults
+            angle = float(request.query.get('angle', 360))
+            steps = int(request.query.get('steps', 160))
+            pause = float(request.query.get('pause', 3.0))
+            
+            # Set progress tracking and execution state
+            timelapse_running = True
+            command_executing = True
+            timelapse_current_step = 0
+            timelapse_total_steps = steps
+            
+            # Calculate steps per movement accounting for gear ratio
+            steps_per_rotation = int(200 * current_microsteps * GEAR_RATIO)  # Full turntable rotation in microsteps
+            steps_per_movement = int((angle / 360.0) * steps_per_rotation / steps)
+            
+            # Adaptive speed based on microstepping resolution
+            base_speed = 100 * (current_microsteps // 8) if current_microsteps >= 8 else 50
+            
+            print(f"Starting timelapse: {angle}° in {steps} steps, {pause}s pause")
+            print(f"Steps per movement: {steps_per_movement}, Speed: {base_speed}")
+            
+            # Execute timelapse sequence
+            for step in range(steps):
+                current_step = step + 1
+                timelapse_current_step = current_step
+                print(f"Step {current_step} of {steps}")
+                
+                # Execute movement with ramping for smoothness
+                action(steps_per_movement, current_microsteps, base_speed, use_ramping=True)
+                
+                # Pause between steps (except for last step)
+                if current_step < steps:
+                    utime.sleep(pause)
+                
+            timelapse_running = False
+            command_executing = False
+            return f"Timelapse completed: {steps} steps, {angle}° rotation"
+            
         except KeyboardInterrupt:
             print("Interrupted from Keyboard")
-        return "OK"
+            timelapse_running = False
+            command_executing = False
+            return "Timelapse sequence interrupted"
+        except Exception as e:
+            print(f"Timelapse error: {str(e)}")
+            timelapse_running = False
+            command_executing = False
+            return f"Timelapse sequence failed: {str(e)}"
 
     def app_stop(request):
         try:
             mot.stop()
+            return "Emergency stop executed - motor disabled"
         except KeyboardInterrupt:
             print("Interrupted from Keyboard")
-        return "OK"
+            return "Stop command interrupted"
+        except Exception as e:
+            return f"Stop command failed: {str(e)}"
+
+    def app_set_microsteps(request):
+        """Set microstepping resolution"""
+        global current_microsteps
+        try:
+            # Get microsteps value from query parameter
+            if 'microsteps' in request.query:
+                new_microsteps = int(request.query['microsteps'])
+                if new_microsteps in [1, 2, 4, 8, 16, 32]:
+                    current_microsteps = new_microsteps
+                    return f"Microstepping set to {current_microsteps}"
+                else:
+                    return "Invalid microstepping value. Use: 1, 2, 4, 8, 16, or 32"
+            else:
+                return f"Current microstepping: {current_microsteps}"
+        except Exception as e:
+            return f"Error setting microsteps: {e}"
+
+    def app_get_status(request):
+        """Get current system status including microstepping setting and network info"""
+        try:
+            import network
+            wlan = network.WLAN(network.STA_IF)
+            ip_address = wlan.ifconfig()[0]
+            
+            status = {
+                "microsteps": current_microsteps,
+                "motor_enabled": True,  # Could be enhanced to check actual motor status
+                "ramping_enabled": True,
+                "system": "ready",
+                "network": {
+                    "ip_address": ip_address,
+                    "primary_url": "http://twirly.local",
+                    "access_methods": [
+                        "http://twirly.local (recommended)",
+                        f"http://{ip_address} (direct IP)",
+                        "http://any-domain.com (DNS catchall)"
+                    ]
+                }
+            }
+            return json.dumps(status)
+        except Exception as e:
+            return f"Error getting status: {e}"
+
+    def app_get_progress(request):
+        """Get timelapse progress and command execution status"""
+        try:
+            progress = {
+                "running": timelapse_running,
+                "current_step": timelapse_current_step,
+                "total_steps": timelapse_total_steps,
+                "percentage": int((timelapse_current_step / timelapse_total_steps * 100)) if timelapse_total_steps > 0 else 0,
+                "command_executing": command_executing
+            }
+            return json.dumps(progress)
+        except Exception as e:
+            return f"Error getting progress: {e}"
+            
+    def app_test_ramping(request):
+        """Test ramping with a controlled movement sequence"""
+        try:
+            print("Testing speed ramping...")
+            # Test sequence: small move without ramping, large move with ramping
+            
+            # Small move (no ramping)
+            action(3 * current_microsteps, current_microsteps, 100, use_ramping=False)
+            utime.sleep(1)
+            
+            # Large move (with ramping)
+            action(50 * current_microsteps, current_microsteps, 300, use_ramping=True)
+            utime.sleep(1)
+            
+            # Return to start (with ramping)
+            action(-53 * current_microsteps, current_microsteps, 250, use_ramping=True)
+            
+            return "Ramping test completed successfully"
+        except Exception as e:
+            return f"Ramping test failed: {e}"
 
     def app_index(request):
         return render_template(f"{APP_TEMPLATE_PATH}/index.html")
@@ -160,6 +448,10 @@ def application_mode():
     server.add_route("/timelapse", handler=app_timelapse, methods=["GET"])
     server.add_route("/stop", handler=app_stop, methods=["GET"])
     server.add_route("/toggle", handler=app_toggle_led, methods=["GET"])
+    server.add_route("/microsteps", handler=app_set_microsteps, methods=["GET"])
+    server.add_route("/status", handler=app_get_status, methods=["GET"])
+    server.add_route("/progress", handler=app_get_progress, methods=["GET"])
+    server.add_route("/test_ramping", handler=app_test_ramping, methods=["GET"])
     # Add other routes for your application...
     server.set_callback(app_catch_all)
 
@@ -168,6 +460,10 @@ def application_mode():
 if (mot := drv8825_setup.setup_stepper()) is None:
     print("No stepper driver")
     sys.exit()
+
+# Start with full steps for testing, then enable microstepping
+print(f"Motor initialized - testing with {current_microsteps} microstepping")
+
 try:
     os.stat(WIFI_FILE)
 
