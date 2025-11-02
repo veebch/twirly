@@ -23,8 +23,9 @@ The mobile-friendly web interface provides complete control over the turntable w
 1. **Flash MicroPython** to your Pico W
 2. **Wire the hardware** - see [WIRING.md](WIRING.md) for detailed connections
 3. **Copy files** to the Pico W filesystem
-4. **Edit WiFi settings** in `main.py`
-5. **Access** the web interface at `http://twirly.local`
+4. **Power on** - Twirly will automatically start an access point for WiFi setup
+5. **Connect to "pi pico" WiFi** and configure your network credentials
+6. **Access** the web interface at `http://twirly.local` once connected
 
 ## Key Features
 
