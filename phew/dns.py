@@ -1,18 +1,27 @@
 import uasyncio
 try:
-    import usocket
+    # Try modern socket import first
+    import socket
 except ImportError:
     try:
-        import socket as usocket
+        # Fall back to old usocket for older MicroPython
+        import usocket as socket
     except ImportError:
-        import usocket_compat as usocket
+        print("WARNING: No socket module available")
+        socket = None
 from . import logging
 
-async def _handler(socket, ip_address):
+async def _handler(socket_obj, ip_address):
   while True:
     try:
-      yield uasyncio.core._io_queue.queue_read(socket)
-      request, client = socket.recvfrom(256)
+      # Simple approach - poll for data availability
+      await uasyncio.sleep_ms(10)  # Small delay to prevent busy loop
+      try:
+        request, client = socket_obj.recvfrom(256)
+      except OSError:
+        # No data available, continue loop
+        continue
+        
       response = request[:2] # request id
       response += b"\x81\x80" # response flags
       response += request[4:6] + request[4:6] # qd/an count
@@ -23,17 +32,27 @@ async def _handler(socket, ip_address):
       response += b"\x00\x00\x00\x3C" # time to live 60 seconds
       response += b"\x00\x04" # response length (4 bytes = 1 ipv4 address)
       response += bytes(map(int, ip_address.split("."))) # ip address parts
-      socket.sendto(response, client)
+      socket_obj.sendto(response, client)
     except Exception as e:
-      logging.error(e)
+      logging.error(f"DNS handler error: {e}")
+      await uasyncio.sleep_ms(100)  # Prevent tight error loops
 
 def run_catchall(ip_address, port=53):
+  if socket is None:
+    logging.error("No socket module available - DNS server cannot start")
+    return
+    
   logging.info("> starting catch all dns server on port {}".format(port))
 
-  _socket = usocket.socket(usocket.AF_INET, usocket.SOCK_DGRAM)
-  _socket.setblocking(False)
-  _socket.setsockopt(usocket.SOL_SOCKET, usocket.SO_REUSEADDR, 1)
-  _socket.bind(usocket.getaddrinfo(ip_address, port, 0, usocket.SOCK_DGRAM)[0][-1])
+  try:
+    _socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    _socket.setblocking(False)
+    _socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    _socket.bind(socket.getaddrinfo(ip_address, port, 0, socket.SOCK_DGRAM)[0][-1])
 
-  loop = uasyncio.get_event_loop()
-  loop.create_task(_handler(_socket, ip_address))
+    loop = uasyncio.get_event_loop()
+    loop.create_task(_handler(_socket, ip_address))
+    logging.info(f"DNS catchall server started on {ip_address}:{port}")
+  except Exception as e:
+    logging.error(f"Failed to start DNS server: {e}")
+    return

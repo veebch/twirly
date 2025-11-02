@@ -99,43 +99,31 @@ def application_mode():
     
     # Set up hostname and mDNS for twirly.local
     try:
-        # Set hostname for the device
-        wlan.config(hostname='twirly')
-        print("Hostname set to 'twirly'")
+        # Modern MicroPython mDNS approach
+        import network
         
-        # Start mDNS responder in background
-        import socket
-        import _thread
+        # Set hostname for the device (this enables mDNS in modern MicroPython)
+        network.hostname('twirly')
+        print("Hostname set to 'twirly' with mDNS enabled")
         
-        def mdns_responder():
-            """Simple mDNS responder for twirly.local"""
-            try:
-                mdns_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-                mdns_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-                mdns_socket.bind(('', 5353))  # mDNS port
-                
-                # Join multicast group
-                import struct
-                mreq = struct.pack('4sL', socket.inet_aton('224.0.0.251'), socket.INADDR_ANY)
-                mdns_socket.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
-                
-                print("mDNS responder active for twirly.local")
-                
-                while True:
-                    try:
-                        data, addr = mdns_socket.recvfrom(1024)
-                        # Respond to twirly.local queries (simplified)
-                        if b'twirly' in data.lower():
-                            pass  # Would send proper mDNS response
-                    except:
-                        pass
-            except Exception as e:
-                print(f"mDNS error: {e}")
-        
-        _thread.start_new_thread(mdns_responder, ())
+        # Try to start mDNS service if available
+        try:
+            import mdns
+            mdns.start('twirly', '_http._tcp', 80)
+            print("mDNS service started for twirly.local")
+        except ImportError:
+            # Check if mDNS might already be working from network.hostname()
+            print("Built-in mDNS may already be active from network.hostname()")
+            print("If twirly.local doesn't work, a reboot may be needed to clear port conflicts")
         
     except Exception as e:
         print(f"WARNING: mDNS/hostname setup failed: {e}")
+        # Final fallback - try basic hostname setting
+        try:
+            wlan.config(hostname='twirly')
+            print("Basic hostname set to 'twirly'")
+        except:
+            print("All hostname methods failed")
     
     # Set up DNS catchall as backup
     dns.run_catchall(ip_address)
@@ -290,20 +278,10 @@ def application_mode():
         except Exception as e:
             return f"CCW nudge failed: {str(e)}"
 
-    def app_timelapse(request):
+    def timelapse_worker(angle, steps, pause):
+        """Worker function that runs timelapse in background thread"""
         global timelapse_running, timelapse_current_step, timelapse_total_steps, command_executing
         try:
-            # Parse query parameters with defaults
-            angle = float(request.query.get('angle', 360))
-            steps = int(request.query.get('steps', 160))
-            pause = float(request.query.get('pause', 3.0))
-            
-            # Set progress tracking and execution state
-            timelapse_running = True
-            command_executing = True
-            timelapse_current_step = 0
-            timelapse_total_steps = steps
-            
             # Calculate steps per movement accounting for gear ratio
             steps_per_rotation = int(200 * current_microsteps * GEAR_RATIO)  # Full turntable rotation in microsteps
             steps_per_movement = int((angle / 360.0) * steps_per_rotation / steps)
@@ -326,21 +304,45 @@ def application_mode():
                 # Pause between steps (except for last step)
                 if current_step < steps:
                     utime.sleep(pause)
-                
-            timelapse_running = False
-            command_executing = False
-            return f"Timelapse completed: {steps} steps, {angle}° rotation"
+                    
+            print(f"Timelapse completed: {steps} steps, {angle}° rotation")
             
-        except KeyboardInterrupt:
-            print("Interrupted from Keyboard")
-            timelapse_running = False
-            command_executing = False
-            return "Timelapse sequence interrupted"
         except Exception as e:
             print(f"Timelapse error: {str(e)}")
+        finally:
+            # Always clean up state
             timelapse_running = False
             command_executing = False
-            return f"Timelapse sequence failed: {str(e)}"
+
+    def app_timelapse(request):
+        global timelapse_running, timelapse_current_step, timelapse_total_steps, command_executing
+        try:
+            # Check if a timelapse is already running
+            if timelapse_running or command_executing:
+                return "Error: Timelapse already running or another command executing"
+                
+            # Parse query parameters with defaults
+            angle = float(request.query.get('angle', 360))
+            steps = int(request.query.get('steps', 160))
+            pause = float(request.query.get('pause', 3.0))
+            
+            # Set progress tracking and execution state
+            timelapse_running = True
+            command_executing = True
+            timelapse_current_step = 0
+            timelapse_total_steps = steps
+            
+            # Start timelapse in background thread
+            _thread.start_new_thread(timelapse_worker, (angle, steps, pause))
+            
+            # Return immediately while timelapse runs in background
+            return f"Timelapse started: {angle}° in {steps} steps, {pause}s pause"
+            
+        except Exception as e:
+            print(f"Timelapse start error: {str(e)}")
+            timelapse_running = False
+            command_executing = False
+            return f"Failed to start timelapse: {str(e)}"
 
     def app_stop(request):
         try:

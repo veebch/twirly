@@ -599,7 +599,6 @@ b, strong {
     <a id="butt-right" class="button right" href="#"></a>
     <a id="butt-left" class="button left" href="#"></a>
     <a id="butt-bott" class="button bottom" href="#"></a>
-    <a id="center-butt" class="center-button" href="#"></a>
     <p id="b">◯ ></p>
     <p id="c">></p>
     <p id="d">< ◯</p>
@@ -640,9 +639,6 @@ b, strong {
   <h3>Command Monitor</h3>
   <button class="clear-feedback" onclick="clearFeedback()">Clear</button>
   <div class="feedback-content" id="feedback-content">
-<div class="command-entry completed">
-<span class="timestamp">[00:00]</span> System ready - Microstepping enabled
-</div>
   </div>
 </div>
     </div>
@@ -780,9 +776,11 @@ b, strong {
     
     // Progress polling for timelapse and command execution
     let progressInterval = null;
+    let lastProgressStep = 0;
     
     function startProgressPolling() {
       if (progressInterval) clearInterval(progressInterval);
+      lastProgressStep = 0; // Reset tracking
       
       progressInterval = setInterval(async () => {
         try {
@@ -793,11 +791,16 @@ b, strong {
           setLEDState(progress.command_executing);
           
           if (progress.running) {
-            addFeedback(`Step ${progress.current_step} of ${progress.total_steps} (${progress.percentage}%)`, 'executing');
+            // Only update if the step has changed to avoid spam
+            if (progress.current_step !== lastProgressStep) {
+              lastProgressStep = progress.current_step;
+              addFeedback(`Timelapse progress: Step ${progress.current_step} of ${progress.total_steps} (${progress.percentage}%)`, 'executing');
+            }
           } else if (!progress.command_executing) {
             // Stop polling if no commands are running
             clearInterval(progressInterval);
             progressInterval = null;
+            lastProgressStep = 0;
           }
         } catch (error) {
           console.log('Progress polling error:', error);
@@ -837,12 +840,7 @@ b, strong {
     };
     
     document.getElementById('stop-btn').onclick = async function() { 
-      await executeCommand('/stop', 'Emergency stop');
-    };
-    
-    // Keep center button for backward compatibility but make it less prominent
-    document.getElementById('center-butt').onclick = async function() { 
-      await executeCommand('/stop', 'Emergency stop');
+      await executeCommand('/stop', 'Stop');
     };
     
     document.getElementById('butt-bott').onclick = async function() { 
@@ -915,7 +913,7 @@ b, strong {
     });
     
     // Add visual feedback for button presses
-    document.querySelectorAll('.button, .center-button, .control-button').forEach(element => {
+    document.querySelectorAll('.button, .control-button').forEach(element => {
       element.addEventListener('mousedown', function() {
         this.style.transform = (this.style.transform || '') + ' scale(0.95)';
       });
@@ -927,6 +925,14 @@ b, strong {
       element.addEventListener('mouseleave', function() {
         this.style.transform = this.style.transform.replace(' scale(0.95)', '');
       });
+    });
+  </script>
+
+  <script>
+    // Initialize the page when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add initial system ready message with proper timestamp
+      addFeedback('System ready - Microstepping enabled', 'completed');
     });
   </script>
 
