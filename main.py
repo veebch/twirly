@@ -101,7 +101,7 @@ def application_mode():
     try:
         # Set hostname for the device
         wlan.config(hostname='twirly')
-        print("✅ Hostname set to 'twirly'")
+        print("Hostname set to 'twirly'")
         
         # Start mDNS responder in background
         import socket
@@ -119,7 +119,7 @@ def application_mode():
                 mreq = struct.pack('4sL', socket.inet_aton('224.0.0.251'), socket.INADDR_ANY)
                 mdns_socket.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
                 
-                print("✅ mDNS responder active for twirly.local")
+                print("mDNS responder active for twirly.local")
                 
                 while True:
                     try:
@@ -135,7 +135,7 @@ def application_mode():
         _thread.start_new_thread(mdns_responder, ())
         
     except Exception as e:
-        print(f"⚠️  mDNS/hostname setup failed: {e}")
+        print(f"WARNING: mDNS/hostname setup failed: {e}")
     
     # Set up DNS catchall as backup
     dns.run_catchall(ip_address)

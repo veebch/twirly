@@ -873,10 +873,10 @@ b, strong {
         try {
           const response = await fetch('/status');
           if (!response.ok) {
-            addFeedback('⚠️ System check failed', 'error');
+            addFeedback('WARNING: System check failed', 'error');
           }
         } catch (error) {
-          addFeedback('⚠️ Connection lost', 'error');
+          addFeedback('WARNING: Connection lost', 'error');
         }
       }, 30000); // Check every 30 seconds
     });

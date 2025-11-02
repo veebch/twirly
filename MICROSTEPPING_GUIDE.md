@@ -34,11 +34,11 @@ The DRV8825 driver supports the following microstepping resolutions:
 ## Speed Ramping Implementation
 
 ### When Ramping is Applied:
-- ✅ **360° rotations**: Full ramping for smooth professional motion
-- ✅ **Timelapse sequences**: Ramping on each movement for cinematic quality
-- ✅ **Large movements**: Movements > 20 full steps equivalent
-- ❌ **Small nudges**: No ramping for precise positioning
-- ❌ **Tiny adjustments**: Movements < 6 full steps equivalent
+- **360° rotations**: Full ramping for smooth professional motion
+- **Timelapse sequences**: Ramping on each movement for cinematic quality
+- **Large movements**: Movements > 20 full steps equivalent
+- **Small nudges**: No ramping for precise positioning
+- **Tiny adjustments**: Movements < 6 full steps equivalent
 
 ### Ramping Profile:
 1. **Acceleration Phase**: 15% of movement at 30-100% target speed

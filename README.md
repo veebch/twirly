@@ -2,52 +2,88 @@
 
 [![YouTube Channel Views](https://img.shields.io/youtube/channel/views/UCz5BOU9J9pB_O0B8-rDjCWQ?label=YouTube&style=social)](https://www.youtube.com/channel/UCz5BOU9J9pB_O0B8-rDjCWQ) [![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=social&logo=instagram&logoColor=black)](https://www.instagram.com/v_e_e_b/)
 
-# Twirly Shirley
+# Twirly - WiFi Turntable Controller
 
-A remote-controlled programmable precision turntable powered by USB-c, driven by a stepper motor. Useful for making stop motion video and rotating stuff that you can't (or are too lazy to) get to. 
+A web-controlled turntable system using Raspberry Pi Pico W and DRV8825 stepper motor driver. Perfect for product photography, 360° documentation, and time-lapse videos.
 
-There are relatively cheap turntables (only slightly more expensive than this DIY version) that do the same thing, but building one is more interesting/ flexible. For example, if you need to make a version for heavy weights/large items, the contents of this repository should be a good start, as well as a much cheaper option than [that kind of turntable](https://noxon.tech/en/360-turntable/).
+## Quick Start
 
+### What You Need
+- Raspberry Pi Pico W
+- DRV8825 stepper motor driver  
+- NEMA stepper motor (4-wire bipolar)
+- 20V power supply for motor
+- 5V power supply for logic
 
-# Hardware
-- [Stepper Motor](https://www.amazon.de/TEQStone-Stepper-Printer-Degrees-Extruder/dp/B0BMX62X22/ref=sr_1_4)
-- DRV8825 to control the stepper motor
-- 20V PD trigger to power the turntable
-- Step Down Voltage convertor (to reduce the 20V down to 5V in order to power the microcontroller)
-- [Raspberry Pi Pico W](https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html) microcontroller 
-- [Rotating Bearing](https://www.amazon.de/-/en/dp/B073NZ4GT4?psc=1&ref=ppx_yo2ov_dt_b_product_details)
-- [3d printed gears and case](3d/)
-- Prototype Board for mounting the pico and the DRV8825 to
-- 2x Capacitors (100μF)
+### Basic Setup
 
+1. **Flash MicroPython** to your Pico W
+2. **Wire the hardware** - see [WIRING.md](WIRING.md) for detailed connections
+3. **Copy files** to the Pico W filesystem
+4. **Edit WiFi settings** in `main.py`:
+   ```python
+   WIFI_SSID = "your_network_name"
+   WIFI_PASSWORD = "your_password"
+   ```
+5. **Run** `main.py` on the Pico W
+6. **Access** the web interface at `http://twirly.local`
 
-Total cost of materials: <50 USD
+## Key Features
 
-Build time: <2 hours (not including 3d printing time)
+- **Microstepping Control**: Smooth motion with 1-32 microstepping
+- **Web Interface**: Mobile-friendly with dark mode
+- **Timelapse Mode**: Automated rotation for photography
+- **Network Access**: WiFi with mDNS (`twirly.local`) or AP fallback
+- **Gear Compensation**: Automatic adjustment for gear ratios
 
-## Tools
-- Soldering Iron
-- Multimeter
-- Patience
+## Documentation
 
-## Assembly
+| Guide | Description |
+|-------|-------------|
+| [WIRING.md](WIRING.md) | Detailed hardware connections and setup |
+| [FEATURES.md](FEATURES.md) | Complete feature list and configuration options |
+| [TROUBLESHOOTING.md](TROUBLESHOOTING.md) | Common issues and solutions |
 
-- Print the case. Mount the Pico and DRV8825 to the prototype board, as well as the two capacitors which you place across both power rails of the board (see photo below)
-- Adjust the Step-Down converter so that it outputs 5V and solder it to the 5V rail on the prototype board, this is used to power the pico and logic on the DRV8825.
-- Solder the output of the PD trigger (20V) the the other rail. This will be used to power the motor.
+## Quick Hardware Setup
 
-### Wiring
+### Essential Connections
+```
+Pico W          DRV8825
+------          -------
+GP2       →     STEP
+GP3       →     DIR  
+GP4       →     ENABLE
+GP6-8     →     M0-M2 (microstepping)
+GND       →     GND
 
-The turntable requires precise wiring between the Raspberry Pi Pico W, DRV8825 stepper driver, and stepper motor. All connections must be secure to ensure reliable operation.
+Power: 20V to VMOT, 5V to VDD
+Motor: 4-wire stepper to 2B,2A,1A,1B
+```
 
-#### Power Supply Connections
+### Current Limiting
+Set DRV8825 current limit before connecting motor:
+1. Measure voltage on current limit potentiometer
+2. Adjust to: `Motor_Current × 0.8` volts
+3. Example: 1.5A motor = 1.2V reference
 
-**20V Motor Power (from PD trigger):**
-- PD Trigger 20V output → DRV8825 VMOT
-- PD Trigger Ground → DRV8825 GND (power ground)
+## Usage
 
-**5V Logic Power (from step-down converter):**
-- Step-down converter 5V output → DRV8825 VDD
+1. **Power on** - device connects to WiFi or creates "Twirly" network
+2. **Open browser** to `http://twirly.local` (or shown IP address)
+3. **Control manually** with step buttons or rotation presets
+4. **Run timelapse** with custom parameters and progress tracking
+
+## File Structure
+
+- `main.py` - Main web server and motor control
+- `drv8825.py` - Stepper motor driver with proper timing
+- `drv8825_setup.py` - Microstepping pin configuration  
+- `app_templates/` - Web interface files
+- `phew/` - Lightweight web framework
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 - Step-down converter Ground → DRV8825 GND (logic ground)
 - Step-down converter 5V output → Pico VSYS
 - Step-down converter Ground → Pico GND
