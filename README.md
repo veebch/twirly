@@ -6,6 +6,18 @@
 
 A web-controlled turntable system using Raspberry Pi Pico W and DRV8825 stepper motor driver. Perfect for product photography, 360° documentation, and time-lapse videos.
 
+## Demo Video
+
+[![Twirly Demo Video](https://img.youtube.com/vi/YOUR_VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
+
+*Click to watch the full demonstration*
+
+## Web Interface
+
+![Remote Control Interface](/images/remote.png)
+
+The mobile-friendly web interface provides complete control over the turntable with real-time feedback and dark mode support.
+
 ## Quick Start
 
 1. **Flash MicroPython** to your Pico W
