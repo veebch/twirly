@@ -7,8 +7,8 @@
 A web-controlled turntable system using Raspberry Pi Pico W and DRV8825 stepper motor driver. Perfect for product photography, 360° documentation, and time-lapse videos.
 
 ## Demo Video
-peo0DxWtorY
-[![Twirly Demo Video](https://img.youtube.com/vi/peo0DxWtorY/0.jpg)](https://www.youtube.com/watch?v=peo0DxWtorY)]
+
+[![Twirly Demo Video](https://img.youtube.com/vi/peo0DxWtorY/0.jpg)](https://www.youtube.com/watch?v=peo0DxWtorY)
 
 *Click to watch the full demonstration*
 

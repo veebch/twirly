@@ -5,7 +5,7 @@ import machine
 import os
 import utime
 import _thread
-import drv8825_setup
+import drivers.drv8825_setup as drv8825_setup
 import sys
 import gc  # Garbage collection for memory management
 
