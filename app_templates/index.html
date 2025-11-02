@@ -784,7 +784,20 @@ b, strong {
       
       progressInterval = setInterval(async () => {
         try {
-          const response = await fetch('/progress');
+          // Add timeout to prevent hanging requests
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second timeout
+          
+          const response = await fetch('/progress', { 
+            signal: controller.signal,
+            cache: 'no-cache' 
+          });
+          clearTimeout(timeoutId);
+          
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+          
           const progress = await response.json();
           
           // Control LED based on any command execution
@@ -797,6 +810,14 @@ b, strong {
               addFeedback(`Timelapse progress: Step ${progress.current_step} of ${progress.total_steps} (${progress.percentage}%)`, 'executing');
             }
           } else if (!progress.command_executing) {
+            // Timelapse completed - re-enable button and show completion
+            const timelapseBtn = document.getElementById('timelapse-btn');
+            if (timelapseBtn.disabled) {
+              addFeedback('Timelapse completed successfully', 'completed');
+              timelapseBtn.disabled = false;
+              timelapseBtn.textContent = 'Start Timelapse';
+            }
+            
             // Stop polling if no commands are running
             clearInterval(progressInterval);
             progressInterval = null;
@@ -804,13 +825,17 @@ b, strong {
           }
         } catch (error) {
           console.log('Progress polling error:', error);
+          // Don't stop polling on error - server might be temporarily busy
         }
-      }, 500); // Poll every 500ms for more responsive LED
+      }, 1000); // Poll every 1 second for better responsiveness
     }
     
     // Start polling immediately when page loads to catch any ongoing commands
     window.addEventListener('load', () => {
-      startProgressPolling();
+      // Add a small delay to ensure page is fully loaded
+      setTimeout(() => {
+        startProgressPolling();
+      }, 1000);
     });
     
     // Command handlers with feedback
@@ -826,17 +851,35 @@ b, strong {
       // Start progress polling
       startProgressPolling();
       
-      // Send parameters to timelapse endpoint
-      await executeCommand(`/timelapse?angle=${angle}&steps=${steps}&pause=${pause}`, `Starting timelapse: ${angle}° in ${steps} steps, ${pause}s pause`);
-      
-      // Stop progress polling when done
-      if (progressInterval) {
-        clearInterval(progressInterval);
-        progressInterval = null;
+      try {
+        // Start timelapse without waiting for completion
+        addFeedback(`Starting timelapse: ${angle}° in ${steps} steps, ${pause}s pause`, 'executing');
+        
+        // Send timelapse request
+        const response = await fetch(`/timelapse?angle=${angle}&steps=${steps}&pause=${pause}`);
+        const result = await response.text();
+        
+        if (response.ok) {
+          addFeedback(result, 'completed');
+          // Don't re-enable button here - let progress polling handle it when timelapse completes
+        } else {
+          addFeedback(`Failed to start timelapse (HTTP ${response.status})`, 'error');
+          this.disabled = false;
+          this.textContent = 'Start Timelapse';
+          if (progressInterval) {
+            clearInterval(progressInterval);
+            progressInterval = null;
+          }
+        }
+      } catch (error) {
+        addFeedback(`Failed to start timelapse: ${error.message}`, 'error');
+        this.disabled = false;
+        this.textContent = 'Start Timelapse';
+        if (progressInterval) {
+          clearInterval(progressInterval);
+          progressInterval = null;
+        }
       }
-      
-      this.disabled = false;
-      this.textContent = 'Start Timelapse';
     };
     
     document.getElementById('stop-btn').onclick = async function() { 
