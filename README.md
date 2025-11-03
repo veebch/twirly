@@ -25,7 +25,7 @@ The mobile-friendly web interface provides complete control over the turntable w
 3. **Copy files** to the Pico W filesystem
 4. **Power on** - Twirly will automatically start an access point for WiFi setup
 5. **Connect to "pi pico" WiFi** and configure your network credentials
-6. **Access** the web interface at http://picow.local (or the IP address shown in the console)
+6. **Access** the web interface at http://picow.local 
 
 ## Key Features
 
@@ -45,6 +45,7 @@ The mobile-friendly web interface provides complete control over the turntable w
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
 
 
 
