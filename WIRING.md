@@ -1,5 +1,7 @@
 # Wiring Guide
 
+![Raspberry Pi Pico GPIO Pinout](https://github.com/veebch/pico-gpio/blob/main/pico-gpio-printout.webp)
+
 This guide provides detailed wiring instructions for connecting the Raspberry Pi Pico W to the DRV8825 stepper motor driver.
 
 ## Required Components
