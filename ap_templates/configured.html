@@ -106,13 +106,24 @@
     </head>
     <body>
         <div class="container">
-            <h1 class=p1>Attempting Connection</h1>
-            <p class=p1>The device will now reboot and try to connect to the &quot;{{ssid}}&quot; wireless network.</p>
+            <h1 class="login-title">📡 Configuration Saved</h1>
+            <p class="p1">The device will now restart and attempt to connect to "{{ssid}}" network.</p>
             <br>
-            <p class=p1>If the device doesn't connect, go back and try again</p>
+            <div style="background-color: #e8f5e8; padding: 15px; border-radius: 9px; margin: 15px 0;">
+                <p style="font-weight: 600; color: #2d5e2d;">After successful connection, access the device at:</p>
+                <p style="font-family: monospace; font-size: 16px; margin: 8px 0;">
+                    🔗 <strong>http://picow.local</strong> (recommended)
+                </p>
+                <p style="font-size: 14px; color: #666; margin: 8px 0;">
+                    📍 Or check your router for the assigned IP address
+                </p>
+            </div>
+            <p class="p1">You can now disconnect from this setup network and connect to your regular WiFi.</p>
+            <br>
+            <p style="font-size: 14px; color: #666;">If the device doesn't connect successfully, it will restart in setup mode again.</p>
             <br>
             <button class="btn btn--form" value="back" onclick="history.back()">
-                Back
+                Try Different Settings
             </button>
         </div>
     </body>

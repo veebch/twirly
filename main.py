@@ -66,7 +66,7 @@ def setup_mode():
             json.dump(request.form, f)
             f.close()
 
-        # Reboot from new thread after we have responded to the user.
+        # Schedule reboot to attempt connection with new credentials
         _thread.start_new_thread(machine_reset, ())
         return render_template(
             f"{AP_TEMPLATE_PATH}/configured.html", ssid=request.form["ssid"]
@@ -93,31 +93,97 @@ def application_mode():
     print("Entering application mode.")
     onboard_led = machine.Pin("LED", machine.Pin.OUT)
     
-    # Get current IP address
+    # Get current IP address with retry logic for CYW43 stability
     import network
     wlan = network.WLAN(network.STA_IF)
-    ip_address = wlan.ifconfig()[0]
     
-    # Set simple hostname for easy network access
+    # Add retry logic for network interface issues
+    ip_address = None
+    for attempt in range(3):
+        try:
+            ip_address = wlan.ifconfig()[0]
+            if ip_address and ip_address != '0.0.0.0':
+                break
+        except Exception as e:
+            print(f"Network interface error (attempt {attempt+1}): {e}")
+            if attempt < 2:
+                import utime
+                utime.sleep(2)  # Wait before retry
+    
+    if not ip_address or ip_address == '0.0.0.0':
+        print("ERROR: Could not get valid IP address - network may be unstable")
+        ip_address = "unknown"
+    
+    # Set hostname and use lwIP's built-in mDNS (if available) - but be gentle with CYW43
+    hostname_set = False
     try:
-        import network
-        wlan = network.WLAN(network.STA_IF)
-        wlan.config(hostname='twirly')
-        print("Hostname set to 'twirly' - try http://twirly.local")
+        # The Pico W defaults to 'picow.local' which works well
+        # No need to override - just verify it's working
+        if ip_address and ip_address != "unknown":
+            import lwip_mdns
+            if lwip_mdns.setup_lwip_mdns('picow'):  # Use default hostname
+                print("Hostname and mDNS configured (using picow.local)")
+                hostname_set = True
+            else:
+                print("WARNING: Hostname setup had issues")
     except Exception as e:
-        print(f"Note: hostname setup failed ({e}) - use IP address")
+        print(f"ERROR: Hostname/mDNS setup error: {e}")
     
-    # Set up DNS catchall as backup
-    dns.run_catchall(ip_address)
+    # Fallback to basic hostname setting if needed
+    if not hostname_set and ip_address != "unknown":
+        try:
+            wlan.config(hostname='picow')  # Ensure default hostname
+            print("Basic hostname confirmed as 'picow'")
+            hostname_set = True
+        except Exception as e2:
+            print(f"ERROR: Even basic hostname failed: {e2}")
     
-    # Print connection information - simplified without mDNS complexity
+    # Temporarily disable custom mDNS to avoid socket conflicts with lwIP
+    print("INFO: Custom mDNS announcer disabled to avoid lwIP conflicts")
+    # Skip custom mDNS if network is unstable to avoid overloading CYW43
+    if False:  # Temporarily disabled
+        if ip_address == "unknown":
+            print("WARNING: Skipping mDNS due to network instability")
+        else:
+            # Only use minimal mDNS announcer if network seems stable
+            try:
+                import mdns_announcer
+                if mdns_announcer.start_mdns_announcer('twirly', ip_address, 180):  # Longer interval
+                    print("mDNS announcer started (reduced frequency)")
+            except Exception as e:
+                print(f"INFO: mDNS announcer not started: {e}")
+    
+    if not hostname_set:
+        print("WARNING: No hostname configured - use IP address directly")
+    
+    # Set up DNS catchall as backup (but only if network is stable)
+    if ip_address != "unknown":
+        try:
+            dns.run_catchall(ip_address)
+            print("DNS catchall configured")
+        except Exception as e:
+            print(f"WARNING: DNS catchall failed: {e}")
+    
+    # Print connection information
     print("\n" + "=" * 50)
     print("TWIRLY WEB INTERFACE READY")
     print("=" * 50)
-    print(f"Primary: http://twirly.local")
-    print(f"Backup:  http://{ip_address}")
-    print(f"Network: {wlan.config('ssid')}")
-    print("\nTIP: Bookmark http://twirly.local for easy access")
+    if ip_address != "unknown":
+        print(f"Primary: http://picow.local")
+        print(f"Backup:  http://{ip_address}")
+        try:
+            ssid = wlan.config('ssid')
+            print(f"Network: {ssid}")
+        except:
+            print("Network: Connected (SSID unavailable)")
+        print("\nAccess Methods:")
+        print("1. http://picow.local (mDNS hostname)")
+        print(f"2. http://{ip_address} (direct IP)")
+        print("3. Point any domain to this IP (DNS catchall)")
+    else:
+        print("WARNING: Network interface unstable")
+        print("Check CYW43 WiFi chip status")
+        print("May need device restart")
     print("=" * 50)
     print("Web interface starting...")
     print("=" * 50 + "\n")
@@ -369,9 +435,9 @@ def application_mode():
                 "system": "ready",
                 "network": {
                     "ip_address": ip_address,
-                    "primary_url": "http://twirly.local",
+                    "primary_url": "http://picow.local",
                     "access_methods": [
-                        "http://twirly.local (recommended)",
+                        "http://picow.local (recommended)",
                         f"http://{ip_address} (direct IP)",
                         "http://any-domain.com (DNS catchall)"
                     ]
@@ -395,6 +461,172 @@ def application_mode():
         except Exception as e:
             return f"Error getting progress: {e}"
             
+    def app_debug_mdns(request):
+        """Debug mDNS functionality"""
+        try:
+            # Import and run mDNS test
+            from test_mdns_simple import quick_mdns_test
+            success = quick_mdns_test()
+            status = "SUCCESS" if success else "FAILED"
+            result = f"""<!DOCTYPE html>
+<html>
+<head><title>mDNS Debug Test</title></head>
+<body>
+<h1>mDNS Debug Test Results</h1>
+<p>Status: <strong>{status}</strong></p>
+<p>Check the console output for detailed packet transmission results.</p>
+<p>Run 'sudo tcpdump -i any port 5353' on your computer to monitor mDNS traffic.</p>
+<p><a href="/">Back to Home</a></p>
+</body>
+</html>"""
+            return result
+        except Exception as e:
+            error_msg = f"""<!DOCTYPE html>
+<html>
+<head><title>mDNS Debug Error</title></head>
+<body>
+<h1>mDNS Debug Test Error</h1>
+<p>Error: <strong>{e}</strong></p>
+<p><a href="/">Back to Home</a></p>
+</body>
+</html>"""
+            return error_msg
+    
+    def app_debug_network(request):
+        """Debug network functionality with comprehensive tests"""
+        try:
+            # Import and run network test
+            from network_test import quick_network_test
+            success = quick_network_test()
+            status = "SUCCESS" if success else "FAILED"
+            result = f"""<!DOCTYPE html>
+<html>
+<head><title>Network Debug Test</title></head>
+<body>
+<h1>Network Debug Test Results</h1>
+<p>Status: <strong>{status}</strong></p>
+<p>Check the console output for detailed network diagnostics.</p>
+<p>This test checks UDP socket operations, packet creation, and transmission.</p>
+<p><a href="/">Back to Home</a></p>
+</body>
+</html>"""
+            return result
+        except Exception as e:
+            error_msg = f"""<!DOCTYPE html>
+<html>
+<head><title>Network Debug Error</title></head>
+<body>
+<h1>Network Debug Test Error</h1>
+<p>Error: <strong>{e}</strong></p>
+<p><a href="/">Back to Home</a></p>
+</body>
+</html>"""
+            return error_msg
+            
+    def app_debug_hostname(request):
+        """Check current hostname settings"""
+        try:
+            import network
+            wlan = network.WLAN(network.STA_IF)
+            
+            # Get current network info
+            if wlan.isconnected():
+                ip, subnet, gateway, dns = wlan.ifconfig()
+                
+                # Try to get hostname if possible
+                try:
+                    # Some MicroPython versions expose hostname
+                    hostname = wlan.config('hostname')
+                    hostname_msg = f"Current hostname: {hostname}"
+                except:
+                    hostname_msg = "Hostname not accessible via config"
+                
+                result = f"""<!DOCTYPE html>
+<html>
+<head><title>Hostname Debug</title></head>
+<body>
+<h1>Hostname Debug Information</h1>
+<p><strong>IP Address:</strong> {ip}</p>
+<p><strong>{hostname_msg}</strong></p>
+<p><strong>Test URLs:</strong></p>
+<ul>
+<li><a href="http://twirly.local">http://twirly.local</a></li>
+<li><a href="http://picow.local">http://picow.local</a></li>
+<li><a href="http://{ip}">http://{ip}</a> (direct IP)</li>
+</ul>
+<p><strong>mDNS Status:</strong> Check which URLs work above</p>
+<p><a href="/">Back to Home</a></p>
+</body>
+</html>"""
+                return result
+            else:
+                return "WiFi not connected"
+                
+        except Exception as e:
+            return f"Hostname debug error: {e}"
+    
+    def app_debug_lwip(request):
+        """Test lwIP built-in mDNS functionality"""
+        try:
+            # Import and run lwIP test
+            from lwip_test import test_lwip_mdns_only
+            success = test_lwip_mdns_only()
+            status = "SUCCESS" if success else "FAILED"
+            success_link = '<p>If successful, try accessing <a href="http://twirly.local">http://twirly.local</a></p>' if success else ''
+            result = f"""<!DOCTYPE html>
+<html>
+<head><title>lwIP mDNS Test</title></head>
+<body>
+<h1>lwIP mDNS Test Results</h1>
+<p>Status: <strong>{status}</strong></p>
+<p>Check the console output for detailed results.</p>
+{success_link}
+<p><a href="/">Back to Home</a></p>
+</body>
+</html>"""
+            return result
+        except Exception as e:
+            error_msg = f"""<!DOCTYPE html>
+<html>
+<head><title>lwIP Test Error</title></head>
+<body>
+<h1>lwIP mDNS Test Error</h1>
+<p>Error: <strong>{e}</strong></p>
+<p><a href="/">Back to Home</a></p>
+</body>
+</html>"""
+            return error_msg
+        """Test lwIP built-in mDNS functionality"""
+        try:
+            # Import and run lwIP test
+            from lwip_test import test_lwip_mdns_only
+            success = test_lwip_mdns_only()
+            status = "SUCCESS" if success else "FAILED"
+            success_link = '<p>If successful, try accessing <a href="http://twirly.local">http://twirly.local</a></p>' if success else ''
+            result = f"""<!DOCTYPE html>
+<html>
+<head><title>lwIP mDNS Test</title></head>
+<body>
+<h1>lwIP mDNS Test Results</h1>
+<p>Status: <strong>{status}</strong></p>
+<p>Check the console output for detailed results.</p>
+{success_link}
+<p><a href="/">Back to Home</a></p>
+</body>
+</html>"""
+            return result
+        except Exception as e:
+            error_msg = f"""<!DOCTYPE html>
+<html>
+<head><title>lwIP Test Error</title></head>
+<body>
+<h1>lwIP mDNS Test Error</h1>
+<p>Error: <strong>{e}</strong></p>
+<p><a href="/">Back to Home</a></p>
+</body>
+</html>"""
+            return error_msg
+            
     def app_test_ramping(request):
         """Test ramping with a controlled movement sequence"""
         try:
@@ -417,14 +649,25 @@ def application_mode():
             return f"Ramping test failed: {e}"
 
     def app_index(request):
-        return render_template(f"{APP_TEMPLATE_PATH}/index.html")
+        try:
+            print(f"DEBUG: Serving index page from {APP_TEMPLATE_PATH}/index.html")
+            return render_template(f"{APP_TEMPLATE_PATH}/index.html")
+        except Exception as e:
+            print(f"ERROR: Failed to render index template: {e}")
+            return f"Template error: {e}"
 
     def app_toggle_led(request):
         onboard_led.toggle()
         return "OK"
 
     def app_catch_all(request):
-        return "Not found.", 404
+        # For any unmatched route, serve the main page (DNS catchall behavior)
+        try:
+            print(f"DEBUG: Catch-all serving index for: {request.path}")
+            return render_template(f"{APP_TEMPLATE_PATH}/index.html")
+        except Exception as e:
+            print(f"ERROR: Catch-all template error: {e}")
+            return f"Catch-all template error: {e}"
 
     server.add_route("/", handler=app_index, methods=["GET"])
     server.add_route("/cw_a_bit", handler=app_cw_nudge, methods=["GET"])
@@ -438,8 +681,14 @@ def application_mode():
     server.add_route("/status", handler=app_get_status, methods=["GET"])
     server.add_route("/progress", handler=app_get_progress, methods=["GET"])
     server.add_route("/test_ramping", handler=app_test_ramping, methods=["GET"])
+    server.add_route("/debug_mdns", handler=app_debug_mdns, methods=["GET"])
+    server.add_route("/debug_network", handler=app_debug_network, methods=["GET"])
+    server.add_route("/debug_lwip", handler=app_debug_lwip, methods=["GET"])
+    server.add_route("/debug_hostname", handler=app_debug_hostname, methods=["GET"])
     # Add other routes for your application...
     server.set_callback(app_catch_all)
+    
+    print("Application mode routes configured")
 
 
 # Figure out which mode to start up in...
@@ -459,22 +708,44 @@ try:
         wifi_credentials = json.load(f)
 
         while wifi_current_attempt < WIFI_MAX_ATTEMPTS:
+            print(f"WiFi connection attempt {wifi_current_attempt}/{WIFI_MAX_ATTEMPTS}")
             ip_address = connect_to_wifi(
                 wifi_credentials["ssid"], wifi_credentials["password"]
             )
 
             if is_connected_to_wifi():
                 print(f"Connected to wifi, IP address {ip_address}")
+                # Add small delay to let CYW43 stabilize
+                import utime
+                utime.sleep(3)
                 break
             else:
                 wifi_current_attempt += 1
+                # Add delay between connection attempts for CYW43 stability
+                if wifi_current_attempt < WIFI_MAX_ATTEMPTS:
+                    import utime
+                    utime.sleep(5)
 
         if is_connected_to_wifi():
+            print("Starting application mode...")
+            
+            # Check CYW43 stability before starting application
+            try:
+                import cyw43_utils
+                if not cyw43_utils.check_cyw43_status():
+                    print("WARNING: CYW43 chip appears unstable")
+                else:
+                    print("CYW43 chip status: OK")
+            except Exception as e:
+                print(f"CYW43 diagnostic failed: {e}")
+            
             application_mode()
+            # Note: Don't call server.run() here - it's called at the bottom
         else:
             # Bad configuration, delete the credentials file, reboot
             # into setup mode to get new credentials from the user.
             print("Bad wifi connection!")
+            print("This might be due to CYW43 WiFi chip issues")
             print(wifi_credentials)
             os.remove(WIFI_FILE)
             machine_reset()
@@ -485,4 +756,19 @@ except Exception:
     setup_mode()
 
 # Start the web server...
-server.run()
+print("Starting web server...")
+try:
+    server.run()
+finally:
+    # Cleanup mDNS on exit
+    try:
+        import lwip_mdns
+        lwip_mdns.stop_lwip_mdns()
+    except:
+        pass
+    try:
+        import mdns_announcer
+        mdns_announcer.stop_mdns_announcer()
+    except:
+        pass
+    print("Cleanup complete")
