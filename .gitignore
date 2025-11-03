@@ -1,1 +1,19 @@
+# FreeCAD files
 *.FCStd
+*.FCBak
+*.FCBak1
+*.FCStd1
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE files
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
