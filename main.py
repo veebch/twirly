@@ -20,7 +20,8 @@ WIFI_MAX_ATTEMPTS = 3
 current_microsteps = 16  # Now use 16 microstepping for smoother motion!
 
 # Gear ratio configuration (motor gear teeth : turntable gear teeth)
-GEAR_RATIO = 81 / 20  # 4.05:1 reduction - motor turns 4.05x to turn turntable 1x
+# Motor gear: 27 teeth, Turntable gear: 81 teeth -> motor must turn 3 times per turntable rotation
+GEAR_RATIO = 81 / 27  # 3.0:1 reduction - motor turns 3x to turn turntable 1x
 
 # Global timelapse progress tracking
 timelapse_running = False
@@ -232,8 +233,9 @@ def application_mode():
         try:
             # 360 degree turntable rotation accounting for gear ratio
             # Calculate steps: 200 full steps * gear ratio for actual 360° turntable rotation
-            full_steps = int(200 * GEAR_RATIO)  # Account for 4.05:1 gear reduction
-            speed = 200 * (current_microsteps // 4)  # Scale speed with microstepping for optimal performance
+            full_steps = int(200 * GEAR_RATIO)  # Account for 3.0:1 gear reduction
+            # Slow full-circle speed by 5x for smoother rotation
+            speed = max(50, (200 * (current_microsteps // 4)) // 5)
             action(full_steps * current_microsteps, current_microsteps, min(speed, 800), use_ramping=True)
             return f"360° CW turntable rotation completed ({current_microsteps}x microsteps, {min(speed, 800)}Hz)"
         except KeyboardInterrupt:
@@ -245,8 +247,9 @@ def application_mode():
     def app_ccw_360(request):
         try:
             # 360 degree turntable rotation accounting for gear ratio (counter-clockwise)
-            full_steps = -int(200 * GEAR_RATIO)  # Account for 4.05:1 gear reduction
-            speed = 200 * (current_microsteps // 4)
+            full_steps = -int(200 * GEAR_RATIO)  # Account for 3.0:1 gear reduction
+            # Slow full-circle speed by 5x for smoother rotation
+            speed = max(50, (200 * (current_microsteps // 4)) // 5)
             action(full_steps * current_microsteps, current_microsteps, min(speed, 800), use_ramping=True)
             return f"360° CCW turntable rotation completed ({current_microsteps}x microsteps, {min(speed, 800)}Hz)"
         except KeyboardInterrupt:
@@ -283,7 +286,7 @@ def application_mode():
         global timelapse_running, timelapse_current_step, timelapse_total_steps, command_executing
         try:
             # Calculate steps per movement accounting for gear ratio
-            steps_per_rotation = int(200 * current_microsteps * GEAR_RATIO)  # Full turntable rotation in microsteps
+            steps_per_rotation = int(200 * current_microsteps * GEAR_RATIO)  # Full turntable rotation in microsteps (uses 3.0:1 gear reduction)
             steps_per_movement = int((angle / 360.0) * steps_per_rotation / steps)
             
             # Adaptive speed based on microstepping resolution
