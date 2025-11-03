@@ -1076,7 +1076,7 @@ module worm_gear(modul, tooth_number, thread_starts, width, length, worm_bore, g
 
 //rack_and_pinion (modul=1, rack_length=0, gear_teeth=12  , rack_height=1, gear_bore=6, width=40, pressure_angle=20, helix_angle=10, together_built=0, optimized=true);
 
-ring_gear (modul=1, tooth_number=81, width=10, rim_width=3, pressure_angle=20, helix_angle=-10);
+//ring_gear (modul=1, tooth_number=81, width=19, rim_width=3, pressure_angle=20, helix_angle=20);
 
 //herringbone_ring_gear (modul=1, tooth_number=30, width=5, rim_width=3, pressure_angle=20, helix_angle=30);
 
@@ -1094,4 +1094,4 @@ ring_gear (modul=1, tooth_number=81, width=10, rim_width=3, pressure_angle=20, h
 
 //worm(modul=1, thread_starts=2, length=15, bore=4, pressure_angle=20, lead_angle=10, together_built=true);
 
-worm_gear(modul=1, tooth_number=20, thread_starts=2, width=30, length=20, worm_bore=6, gear_bore=6, pressure_angle=20, lead_angle=10, optimized=1, together_built=1, show_spur=1, show_worm=1);
+worm_gear(modul=1, tooth_number=27, thread_starts=2, width=19, length=20, worm_bore=6, gear_bore=5.5, pressure_angle=20, lead_angle=-20, optimized=1, together_built=1, show_spur=1, show_worm=0);

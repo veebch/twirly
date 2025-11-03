@@ -98,6 +98,15 @@ def application_mode():
     wlan = network.WLAN(network.STA_IF)
     ip_address = wlan.ifconfig()[0]
     
+    # Set simple hostname for easy network access
+    try:
+        import network
+        wlan = network.WLAN(network.STA_IF)
+        wlan.config(hostname='twirly')
+        print("Hostname set to 'twirly' - try http://twirly.local")
+    except Exception as e:
+        print(f"Note: hostname setup failed ({e}) - use IP address")
+    
     # Set up DNS catchall as backup
     dns.run_catchall(ip_address)
     
@@ -105,9 +114,10 @@ def application_mode():
     print("\n" + "=" * 50)
     print("TWIRLY WEB INTERFACE READY")
     print("=" * 50)
-    print(f"Access at: http://{ip_address}")
-    print("\nTIP: Bookmark this URL for easy access")
+    print(f"Primary: http://twirly.local")
+    print(f"Backup:  http://{ip_address}")
     print(f"Network: {wlan.config('ssid')}")
+    print("\nTIP: Bookmark http://twirly.local for easy access")
     print("=" * 50)
     print("Web interface starting...")
     print("=" * 50 + "\n")
@@ -359,7 +369,9 @@ def application_mode():
                 "system": "ready",
                 "network": {
                     "ip_address": ip_address,
+                    "primary_url": "http://twirly.local",
                     "access_methods": [
+                        "http://twirly.local (recommended)",
                         f"http://{ip_address} (direct IP)",
                         "http://any-domain.com (DNS catchall)"
                     ]
