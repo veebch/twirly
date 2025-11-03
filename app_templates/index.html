@@ -205,92 +205,96 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
-    /* Microstepping control - cassette futurism style */
+    /* Microstepping control - matching existing UI style */
     .microstep-control {
-      max-width: 400px;
-      margin: 20px auto;
+      background: #f8f9fa;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
       padding: 15px;
-      background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
-      border: 2px solid #444;
-      border-radius: 0;
-      box-shadow: 
-        inset 2px 2px 4px rgba(255,255,255,0.1),
-        inset -2px -2px 4px rgba(0,0,0,0.5),
-        0 4px 8px rgba(0,0,0,0.3);
-      font-family: 'Courier New', monospace;
-      color: #00ff00;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      margin: 20px auto;
+      max-width: 400px;
+      font-family: 'Quicksand', sans-serif;
     }
     
-    .microstep-label {
-      font-size: 11px;
-      margin-bottom: 10px;
-      text-shadow: 0 0 4px #00ff00;
+    .microstep-control h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      color: #343a40;
+      font-size: 16px;
+      text-align: center;
+      border-bottom: 1px solid #dee2e6;
+      padding-bottom: 8px;
+    }
+    
+    .microstep-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .microstep-row label {
+      color: #495057;
+      font-weight: 600;
+      font-size: 14px;
+      flex: 1;
     }
     
     .microstep-value {
-      background: #000;
-      padding: 2px 8px;
-      border: 1px solid #333;
-      color: #00ff41;
-      font-weight: bold;
+      background: #fff;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      padding: 8px 12px;
+      color: #495057;
+      font-weight: 600;
+      min-width: 60px;
+      text-align: center;
+      font-size: 14px;
     }
     
     .slider-container {
       position: relative;
-      height: 6px;
-      background: #000;
-      border: 1px solid #333;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
+      margin-top: 10px;
     }
     
     .microstep-slider {
       width: 100%;
-      height: 6px;
-      background: transparent;
+      height: 8px;
+      border-radius: 4px;
+      background: #dee2e6;
       outline: none;
       -webkit-appearance: none;
-      position: absolute;
-      top: 0;
-      left: 0;
+      appearance: none;
     }
     
     .microstep-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 16px;
-      height: 16px;
-      background: linear-gradient(45deg, #00ff00, #00aa00);
-      border: 2px solid #fff;
-      border-radius: 0;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff6b35, #f7931e);
       cursor: pointer;
-      box-shadow: 
-        0 0 8px #00ff00,
-        inset 1px 1px 2px rgba(255,255,255,0.3);
-      transform: translateY(-5px);
+      border: 2px solid #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
     
     .microstep-slider::-moz-range-thumb {
-      width: 16px;
-      height: 16px;
-      background: linear-gradient(45deg, #00ff00, #00aa00);
-      border: 2px solid #fff;
-      border-radius: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff6b35, #f7931e);
       cursor: pointer;
-      box-shadow: 
-        0 0 8px #00ff00,
-        inset 1px 1px 2px rgba(255,255,255,0.3);
+      border: 2px solid #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
     
-    .slider-track {
-      position: absolute;
-      top: 2px;
-      height: 2px;
-      background: linear-gradient(90deg, #ff4400 0%, #ffaa00 50%, #00ff00 100%);
-      pointer-events: none;
+    .slider-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+      font-size: 11px;
+      color: #6c757d;
     }
 
     /* Status LED styling */
@@ -599,20 +603,31 @@ body.dark-mode .clear-feedback:hover {
 
 /* Dark mode for microstepping control */
 body.dark-mode .microstep-control {
-  background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
-  border-color: #333;
-  color: #00ff41;
+  background: #2a2a2a;
+  border-color: #444;
+}
+
+body.dark-mode .microstep-control h3 {
+  color: #e0e0e0;
+  border-color: #444;
+}
+
+body.dark-mode .microstep-row label {
+  color: #b0b0b0;
 }
 
 body.dark-mode .microstep-value {
-  background: #000;
-  border-color: #222;
-  color: #00ff41;
+  background: #3a3a3a;
+  border-color: #555;
+  color: #e0e0e0;
 }
 
-body.dark-mode .slider-container {
-  background: #000;
-  border-color: #222;
+body.dark-mode .microstep-slider {
+  background: #444;
+}
+
+body.dark-mode .slider-labels {
+  color: #888;
 }
 
 body.dark-mode .command-entry.completed {
@@ -742,15 +757,23 @@ b, strong {
 
 <!-- Microstepping Control -->
 <div class="microstep-control">
-  <div class="microstep-label">
-    <span>Smoothness: Microsteps</span>
-    <span class="microstep-value" id="microstep-value">16x</span>
+  <h3>Motor Smoothness</h3>
+  <div class="microstep-row">
+    <label for="microstep-slider">Microstepping:</label>
+    <div class="microstep-value" id="microstep-value">16x</div>
   </div>
   <div class="slider-container">
-    <div class="slider-track" id="slider-track"></div>
     <input type="range" class="microstep-slider" id="microstep-slider" 
            min="0" max="5" value="4" step="1"
            onchange="updateMicrostepping(this.value)">
+    <div class="slider-labels">
+      <span>1x</span>
+      <span>2x</span>
+      <span>4x</span>
+      <span>8x</span>
+      <span>16x</span>
+      <span>32x</span>
+    </div>
   </div>
 </div>
 
@@ -869,20 +892,15 @@ b, strong {
     function updateMicrostepping(sliderValue) {
       const microsteps = microstepValues[parseInt(sliderValue)];
       const valueDisplay = document.getElementById('microstep-value');
-      const track = document.getElementById('slider-track');
       
       // Update display
       valueDisplay.textContent = `${microsteps}x`;
-      
-      // Update track width to show progress
-      const percentage = (sliderValue / 5) * 100;
-      track.style.width = `${percentage}%`;
       
       // Send to server
       fetch(`/microsteps?microsteps=${microsteps}`)
         .then(response => response.text())
         .then(result => {
-          addFeedback(`Smoothness set to ${microsteps}x microsteps`, 'completed');
+          addFeedback(`Motor smoothness set to ${microsteps}x microsteps`, 'completed');
         })
         .catch(error => {
           addFeedback(`Failed to set microstepping: ${error}`, 'error');
