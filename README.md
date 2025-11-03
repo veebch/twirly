@@ -32,8 +32,7 @@ The mobile-friendly web interface provides complete control over the turntable w
 - **Microstepping Control**: Smooth motion with 1-32 microstepping
 - **Web Interface**: Mobile-friendly with dark mode
 - **Timelapse Mode**: Automated rotation for photography
-- **Network Access**: WiFi with mDNS hostname (http://picow.local) and IP fallback
-
+- **Network Access**: WiFi with mDNS hostname (http://picow.local) 
 ## Documentation
 
 | Guide | Description |
@@ -45,6 +44,7 @@ The mobile-friendly web interface provides complete control over the turntable w
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
 
 
 
