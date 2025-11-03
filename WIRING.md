@@ -9,12 +9,18 @@ This guide provides detailed wiring instructions for connecting the Raspberry Pi
 - Raspberry Pi Pico W
 - DRV8825 Stepper Motor Driver
 - NEMA stepper motor (4-wire bipolar)
-- 20V power supply for motor
-- 5V power supply for logic
+- 20V PD trigger (USB-C) for motor power supply
+- Step-down converter (20V to 5V) for logic power
 - 470µF capacitor (for 20V supply)
 - 100µF capacitor (for 5V supply)
 - Breadboard or prototype board
 - Jumper wires
+
+## Assembled Components
+
+![Assembled Components](images/guts.jpg)
+
+*Example of the assembled system showing the Raspberry Pi Pico W, DRV8825 driver, USB-C PD trigger, and step-down converter.*
 
 ## Pin Connections
 
@@ -34,10 +40,12 @@ This guide provides detailed wiring instructions for connecting the Raspberry Pi
 
 | Connection | Description |
 |------------|-------------|
-| 20V+ → VMOT | Motor power supply positive |
-| GND → GND | Motor power supply ground |
-| 5V+ → VDD | Logic power supply positive |
-| GND → GND | Logic power supply ground |
+| USB-C PD Trigger 20V+ → VMOT | Motor power from PD trigger |
+| USB-C PD Trigger GND → GND | Motor power ground |
+| Step-down Converter 5V+ → VDD | Logic power from step-down converter |
+| Step-down Converter GND → GND | Logic power ground |
+
+**Power Supply Chain**: USB-C PD Trigger (20V) → Step-down Converter → 5V Logic Supply
 
 ### Motor Connections
 
@@ -98,10 +106,10 @@ The DRV8825 has a built-in current limiting feature that must be properly config
 
 Add capacitors near the DRV8825 to filter power supply noise:
 
-- **470µF capacitor**: Connect across 20V motor supply (VMOT to GND)
-- **100µF capacitor**: Connect across 5V logic supply (VDD to GND)
+- **470µF capacitor**: Connect across 20V PD trigger output (VMOT to GND)
+- **100µF capacitor**: Connect across 5V step-down converter output (VDD to GND)
 
-These capacitors smooth voltage fluctuations and protect against voltage spikes.
+These capacitors smooth voltage fluctuations and protect against voltage spikes from the USB-C PD trigger and step-down converter.
 
 ## Wiring Checklist
 
