@@ -146,17 +146,21 @@ def application_mode():
     print("=" * 50 + "\n")
     
     def action(steps, microsteps=None, speed=50, use_ramping=True):
-        """Execute stepper motor movement - simplified version"""
+        """Execute stepper motor movement with proper microstepping"""
         global command_executing
         
-        print(f"DEBUG: Simple action - {steps} steps at {speed}Hz")
+        # Use global microsteps if not specified
+        if microsteps is None:
+            microsteps = current_microsteps
+            
+        print(f"DEBUG: Action - {steps} steps, {microsteps}x microsteps at {speed}Hz")
         
         # Set executing state
         command_executing = True
         
         try:
-            # Use the simple approach that was working before
-            mot.steps(steps, 1, speed)  # Always use full steps for now
+            # Use proper microstepping - this is the key fix!
+            mot.steps(steps, microsteps, speed)
             
             # Wait for completion with timeout
             timeout_count = 0
