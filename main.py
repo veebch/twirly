@@ -463,65 +463,29 @@ def application_mode():
             
     def app_debug_mdns(request):
         """Debug mDNS functionality"""
-        try:
-            # Import and run mDNS test
-            from test_mdns_simple import quick_mdns_test
-            success = quick_mdns_test()
-            status = "SUCCESS" if success else "FAILED"
-            result = f"""<!DOCTYPE html>
+        return """<!DOCTYPE html>
 <html>
-<head><title>mDNS Debug Test</title></head>
+<head><title>mDNS Debug</title></head>
 <body>
-<h1>mDNS Debug Test Results</h1>
-<p>Status: <strong>{status}</strong></p>
-<p>Check the console output for detailed packet transmission results.</p>
-<p>Run 'sudo tcpdump -i any port 5353' on your computer to monitor mDNS traffic.</p>
+<h1>mDNS Debug - Simplified</h1>
+<p>The system now uses <strong>picow.local</strong> as the default hostname.</p>
+<p>Try accessing: <a href="http://picow.local">http://picow.local</a></p>
 <p><a href="/">Back to Home</a></p>
 </body>
 </html>"""
-            return result
-        except Exception as e:
-            error_msg = f"""<!DOCTYPE html>
-<html>
-<head><title>mDNS Debug Error</title></head>
-<body>
-<h1>mDNS Debug Test Error</h1>
-<p>Error: <strong>{e}</strong></p>
-<p><a href="/">Back to Home</a></p>
-</body>
-</html>"""
-            return error_msg
     
     def app_debug_network(request):
-        """Debug network functionality with comprehensive tests"""
-        try:
-            # Import and run network test
-            from network_test import quick_network_test
-            success = quick_network_test()
-            status = "SUCCESS" if success else "FAILED"
-            result = f"""<!DOCTYPE html>
+        """Debug network functionality"""
+        return """<!DOCTYPE html>
 <html>
-<head><title>Network Debug Test</title></head>
+<head><title>Network Debug</title></head>
 <body>
-<h1>Network Debug Test Results</h1>
-<p>Status: <strong>{status}</strong></p>
-<p>Check the console output for detailed network diagnostics.</p>
-<p>This test checks UDP socket operations, packet creation, and transmission.</p>
+<h1>Network Debug - Simplified</h1>
+<p>The system now uses <strong>picow.local</strong> as the default hostname.</p>
+<p>Network diagnostics have been simplified for better reliability.</p>
 <p><a href="/">Back to Home</a></p>
 </body>
 </html>"""
-            return result
-        except Exception as e:
-            error_msg = f"""<!DOCTYPE html>
-<html>
-<head><title>Network Debug Error</title></head>
-<body>
-<h1>Network Debug Test Error</h1>
-<p>Error: <strong>{e}</strong></p>
-<p><a href="/">Back to Home</a></p>
-</body>
-</html>"""
-            return error_msg
             
     def app_debug_hostname(request):
         """Check current hostname settings"""
@@ -549,11 +513,10 @@ def application_mode():
 <p><strong>IP Address:</strong> {ip}</p>
 <p><strong>{hostname_msg}</strong></p>
 <p><strong>Test URLs:</strong></p>
-<ul>
-<li><a href="http://twirly.local">http://twirly.local</a></li>
-<li><a href="http://picow.local">http://picow.local</a></li>
-<li><a href="http://{ip}">http://{ip}</a> (direct IP)</li>
-</ul>
+                <ul>
+                <li><a href="http://picow.local">http://picow.local</a></li>
+                <li><a href="http://{ip}">http://{ip}</a> (direct IP)</li>
+                </ul>
 <p><strong>mDNS Status:</strong> Check which URLs work above</p>
 <p><a href="/">Back to Home</a></p>
 </body>
@@ -567,65 +530,16 @@ def application_mode():
     
     def app_debug_lwip(request):
         """Test lwIP built-in mDNS functionality"""
-        try:
-            # Import and run lwIP test
-            from lwip_test import test_lwip_mdns_only
-            success = test_lwip_mdns_only()
-            status = "SUCCESS" if success else "FAILED"
-            success_link = '<p>If successful, try accessing <a href="http://twirly.local">http://twirly.local</a></p>' if success else ''
-            result = f"""<!DOCTYPE html>
+        return """<!DOCTYPE html>
 <html>
-<head><title>lwIP mDNS Test</title></head>
+<head><title>lwIP Test</title></head>
 <body>
-<h1>lwIP mDNS Test Results</h1>
-<p>Status: <strong>{status}</strong></p>
-<p>Check the console output for detailed results.</p>
-{success_link}
+<h1>lwIP Test - Simplified</h1>
+<p>The system now uses default <strong>picow.local</strong> hostname.</p>
+<p>Try accessing: <a href="http://picow.local">http://picow.local</a></p>
 <p><a href="/">Back to Home</a></p>
 </body>
 </html>"""
-            return result
-        except Exception as e:
-            error_msg = f"""<!DOCTYPE html>
-<html>
-<head><title>lwIP Test Error</title></head>
-<body>
-<h1>lwIP mDNS Test Error</h1>
-<p>Error: <strong>{e}</strong></p>
-<p><a href="/">Back to Home</a></p>
-</body>
-</html>"""
-            return error_msg
-        """Test lwIP built-in mDNS functionality"""
-        try:
-            # Import and run lwIP test
-            from lwip_test import test_lwip_mdns_only
-            success = test_lwip_mdns_only()
-            status = "SUCCESS" if success else "FAILED"
-            success_link = '<p>If successful, try accessing <a href="http://twirly.local">http://twirly.local</a></p>' if success else ''
-            result = f"""<!DOCTYPE html>
-<html>
-<head><title>lwIP mDNS Test</title></head>
-<body>
-<h1>lwIP mDNS Test Results</h1>
-<p>Status: <strong>{status}</strong></p>
-<p>Check the console output for detailed results.</p>
-{success_link}
-<p><a href="/">Back to Home</a></p>
-</body>
-</html>"""
-            return result
-        except Exception as e:
-            error_msg = f"""<!DOCTYPE html>
-<html>
-<head><title>lwIP Test Error</title></head>
-<body>
-<h1>lwIP mDNS Test Error</h1>
-<p>Error: <strong>{e}</strong></p>
-<p><a href="/">Back to Home</a></p>
-</body>
-</html>"""
-            return error_msg
             
     def app_test_ramping(request):
         """Test ramping with a controlled movement sequence"""
@@ -729,16 +643,6 @@ try:
         if is_connected_to_wifi():
             print("Starting application mode...")
             
-            # Check CYW43 stability before starting application
-            try:
-                import cyw43_utils
-                if not cyw43_utils.check_cyw43_status():
-                    print("WARNING: CYW43 chip appears unstable")
-                else:
-                    print("CYW43 chip status: OK")
-            except Exception as e:
-                print(f"CYW43 diagnostic failed: {e}")
-            
             application_mode()
             # Note: Don't call server.run() here - it's called at the bottom
         else:
@@ -760,15 +664,4 @@ print("Starting web server...")
 try:
     server.run()
 finally:
-    # Cleanup mDNS on exit
-    try:
-        import lwip_mdns
-        lwip_mdns.stop_lwip_mdns()
-    except:
-        pass
-    try:
-        import mdns_announcer
-        mdns_announcer.stop_mdns_announcer()
-    except:
-        pass
-    print("Cleanup complete")
+    print("Server stopped")
