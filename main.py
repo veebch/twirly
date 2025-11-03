@@ -98,49 +98,16 @@ def application_mode():
     wlan = network.WLAN(network.STA_IF)
     ip_address = wlan.ifconfig()[0]
     
-    # Set up hostname and mDNS for twirly.local
-    try:
-        # Modern MicroPython mDNS approach
-        import network
-        
-        # Set hostname for the device (this enables mDNS in modern MicroPython)
-        network.hostname('twirly')
-        print("Hostname set to 'twirly' with mDNS enabled")
-        
-        # Try to start mDNS service if available
-        try:
-            import mdns
-            mdns.start('twirly', '_http._tcp', 80)
-            print("mDNS service started for twirly.local")
-        except ImportError:
-            # Check if mDNS might already be working from network.hostname()
-            print("Built-in mDNS may already be active from network.hostname()")
-            print("If twirly.local doesn't work, a reboot may be needed to clear port conflicts")
-        
-    except Exception as e:
-        print(f"WARNING: mDNS/hostname setup failed: {e}")
-        # Final fallback - try basic hostname setting
-        try:
-            wlan.config(hostname='twirly')
-            print("Basic hostname set to 'twirly'")
-        except:
-            print("All hostname methods failed")
-    
     # Set up DNS catchall as backup
     dns.run_catchall(ip_address)
     
-    # Print connection information
+    # Print connection information - simplified without mDNS complexity
     print("\n" + "=" * 50)
-    print("TURNTABLE CONTROL - ACCESS METHODS")
+    print("TWIRLY WEB INTERFACE READY")
     print("=" * 50)
-    print(f"Primary Access:  http://twirly.local")
-    print(f"Direct IP:       http://{ip_address}")
-    print("\nRECOMMENDED:")
-    print("  Bookmark: http://twirly.local")
-    print("  If twirly.local doesn't work, use the IP address")
-    print("\nSETUP TIP:")
-    print("  Most devices automatically discover twirly.local")
-    print("  If not working, check your router supports mDNS/Bonjour")
+    print(f"Access at: http://{ip_address}")
+    print("\nTIP: Bookmark this URL for easy access")
+    print(f"Network: {wlan.config('ssid')}")
     print("=" * 50)
     print("Web interface starting...")
     print("=" * 50 + "\n")
@@ -392,9 +359,7 @@ def application_mode():
                 "system": "ready",
                 "network": {
                     "ip_address": ip_address,
-                    "primary_url": "http://twirly.local",
                     "access_methods": [
-                        "http://twirly.local (recommended)",
                         f"http://{ip_address} (direct IP)",
                         "http://any-domain.com (DNS catchall)"
                     ]

@@ -25,14 +25,14 @@ The mobile-friendly web interface provides complete control over the turntable w
 3. **Copy files** to the Pico W filesystem
 4. **Power on** - Twirly will automatically start an access point for WiFi setup
 5. **Connect to "pi pico" WiFi** and configure your network credentials
-6. **Access** the web interface at `http://twirly.local` once connected
+6. **Access** the web interface at the IP address shown in the console
 
 ## Key Features
 
 - **Microstepping Control**: Smooth motion with 1-32 microstepping
 - **Web Interface**: Mobile-friendly with dark mode
 - **Timelapse Mode**: Automated rotation for photography
-- **Network Access**: WiFi with mDNS (`twirly.local`) or AP fallback
+- **Network Access**: WiFi with automatic IP discovery or AP fallback
 
 ## Documentation
 
