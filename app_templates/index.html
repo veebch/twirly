@@ -973,16 +973,18 @@ b, strong {
           
           const progress = await response.json();
           
+          // Debug output to browser console
+          console.log('Progress data:', progress);
+          
           // Control LED based on any command execution
-          setLEDState(progress.command_executing);
+          setLEDState(progress.command_executing || progress.running);
           
           if (progress.running) {
-            // Only update if the step has changed to avoid spam
-            if (progress.current_step !== lastProgressStep) {
-              lastProgressStep = progress.current_step;
-              addFeedback(`Timelapse progress: Step ${progress.current_step} of ${progress.total_steps} (${progress.percentage}%)`, 'executing');
-            }
-          } else if (!progress.command_executing) {
+            // Always update to ensure visibility (remove step change check temporarily)
+            lastProgressStep = progress.current_step;
+            addFeedback(`Timelapse progress: Step ${progress.current_step} of ${progress.total_steps} (${progress.percentage}%)`, 'executing');
+            console.log(`Web progress update: Step ${progress.current_step}/${progress.total_steps}`);
+          } else if (!progress.command_executing && !progress.running) {
             // Timelapse completed - re-enable button and show completion
             const timelapseBtn = document.getElementById('timelapse-btn');
             if (timelapseBtn.disabled) {
