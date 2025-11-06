@@ -950,11 +950,31 @@ b, strong {
     // Progress polling for timelapse and command execution
     let progressInterval = null;
     let lastProgressStep = 0;
+    let pollingActive = false;
     
+    function stopProgressPolling() {
+      console.log('DEBUG: Stopping progress polling');
+      if (progressInterval) {
+        clearInterval(progressInterval);
+        progressInterval = null;
+      }
+      pollingActive = false;
+      console.log('DEBUG: Progress polling stopped');
+    }
+
     function startProgressPolling() {
-      console.log('DEBUG: startProgressPolling called!');
-      alert('startProgressPolling called!'); // Immediate visual feedback
-      if (progressInterval) clearInterval(progressInterval);
+      console.log('DEBUG: startProgressPolling called! Active:', pollingActive);
+      
+      // Prevent duplicate polling
+      if (pollingActive) {
+        console.log('DEBUG: Polling already active - skipping');
+        return;
+      }
+      
+      // Force cleanup of any existing polling to prevent duplicates
+      stopProgressPolling();
+      
+      pollingActive = true;
       lastProgressStep = 0; // Reset tracking
       
       // Add safety timeout to force cleanup after reasonable time
@@ -962,8 +982,7 @@ b, strong {
         if (progressInterval) {
           console.log('Progress polling timeout - forcing cleanup');
           setLEDState(false);
-          clearInterval(progressInterval);
-          progressInterval = null;
+          stopProgressPolling();
           const timelapseBtn = document.getElementById('timelapse-btn');
           if (timelapseBtn.disabled) {
             timelapseBtn.disabled = false;
@@ -973,8 +992,9 @@ b, strong {
         }
       }, 120000); // 2 minute safety timeout
       
+      console.log('DEBUG: Creating new polling interval');
       progressInterval = setInterval(async () => {
-        console.log('DEBUG: Progress polling interval triggered - making /progress request');
+        console.log('DEBUG: Polling tick - ID:', progressInterval, 'Time:', new Date().toLocaleTimeString());
         try {
           // Add timeout to prevent hanging requests
           const controller = new AbortController();
@@ -1016,8 +1036,7 @@ b, strong {
             }
             
             // Stop polling if no commands are running
-            clearInterval(progressInterval);
-            progressInterval = null;
+            stopProgressPolling();
             lastProgressStep = 0;
           }
         } catch (error) {
@@ -1029,8 +1048,7 @@ b, strong {
             // If button is enabled but we have polling errors, assume completion
             setLEDState(false);
             if (progressInterval) {
-              clearInterval(progressInterval);
-              progressInterval = null;
+              stopProgressPolling();
               lastProgressStep = 0;
             }
           }
@@ -1040,10 +1058,20 @@ b, strong {
     
     // Start polling immediately when page loads to catch any ongoing commands
     window.addEventListener('load', () => {
-      // Add a small delay to ensure page is fully loaded
-      setTimeout(() => {
-        startProgressPolling();
-      }, 1000);
+      console.log('DEBUG: Page loaded - checking for ongoing timelapse');
+      // Check if there's already a timelapse running before starting polling
+      fetch('/progress')
+        .then(response => response.json())
+        .then(data => {
+          console.log('DEBUG: Initial progress check:', data);
+          if (data.timelapse_running) {
+            console.log('DEBUG: Timelapse detected on page load - starting polling');
+            startProgressPolling();
+          } else {
+            console.log('DEBUG: No timelapse running on page load');
+          }
+        })
+        .catch(error => console.log('DEBUG: Initial progress check failed:', error));
     });
     
     // Command handlers with feedback
