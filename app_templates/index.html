@@ -1023,13 +1023,13 @@ b, strong {
           // Control LED based on any command execution
           setLEDState(progress.command_executing || progress.running);
           
-          if (progress.running) {
-            // Only update when step actually changes to prevent duplicates
-            if (progress.current_step > lastProgressStep) {
+          if (progress.running || progress.command_executing) {
+            // Update on any step change OR if timelapse is running
+            if (progress.current_step !== lastProgressStep && progress.total_steps > 0) {
               lastProgressStep = progress.current_step;
               addFeedback(`Timelapse progress: Step ${progress.current_step} of ${progress.total_steps} (${progress.percentage}%)`, 'executing');
-              console.log(`Web progress update: Step ${progress.current_step}/${progress.total_steps}`);
             }
+            // Keep polling while running - don't stop early
           } else if (!progress.command_executing && !progress.running) {
             // Timelapse completed - re-enable button and show completion
             const timelapseBtn = document.getElementById('timelapse-btn');
