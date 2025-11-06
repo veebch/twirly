@@ -335,7 +335,15 @@ def application_mode():
     def timelapse_worker(angle, steps, pause):
         """Worker function that runs timelapse in background thread"""
         global timelapse_running, timelapse_current_step, timelapse_total_steps, command_executing
+        
+        # Initialize all variables that might be referenced in exception handlers
+        current_step = 0
+        steps_per_movement = 0
+        base_speed = 50
+        
         try:
+            print(f"DEBUG: Starting timelapse worker - angle={angle}, steps={steps}, pause={pause}")
+            
             # Calculate steps per movement accounting for gear ratio
             steps_per_rotation = int(200 * current_microsteps * GEAR_RATIO)  # Full turntable rotation in microsteps (uses 3.0:1 gear reduction)
             steps_per_movement = int((angle / 360.0) * steps_per_rotation / steps)
@@ -402,9 +410,12 @@ def application_mode():
             print(f"Timelapse completed: {steps} steps, {angle}° rotation")
             
         except Exception as e:
-            print(f"Timelapse error: {str(e)}")
+            print(f"Timelapse error at step {current_step}: {type(e).__name__}: {str(e)}")
+            import sys
+            sys.print_exception(e)  # Print full traceback for debugging
         finally:
             # Always clean up state
+            print("DEBUG: Cleaning up timelapse state")
             timelapse_running = False
             command_executing = False
 
