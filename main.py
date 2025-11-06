@@ -17,7 +17,7 @@ WIFI_FILE = "wifi.json"
 WIFI_MAX_ATTEMPTS = 3
 
 # Global microstepping configuration
-current_microsteps = 16  # Now use 16 microstepping for smoother motion!
+current_microsteps = 32  # Maximum 32x microstepping for ultra-smooth, quiet operation!
 
 # Gear ratio configuration (motor gear teeth : turntable gear teeth)
 # Motor gear: 27 teeth, Turntable gear: 81 teeth -> motor must turn 3 times per turntable rotation
