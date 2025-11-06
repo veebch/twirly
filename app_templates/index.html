@@ -1090,6 +1090,7 @@ b, strong {
     
       // LONG-RUNNING COMMAND: Different from executeCommand - don't mark as completed immediately
       timelapseBtn.onclick = async function() { 
+        alert('🚀 TIMELAPSE HANDLER STARTED!');
         try {
           // Disable button and change text
           this.disabled = true;
