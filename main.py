@@ -511,6 +511,7 @@ def application_mode():
     def app_get_progress(request):
         """Get timelapse progress and command execution status"""
         try:
+            print(f"DEBUG: /progress endpoint called - running={timelapse_running}, step={timelapse_current_step}/{timelapse_total_steps}, executing={command_executing}")
             progress = {
                 "running": timelapse_running,
                 "current_step": timelapse_current_step,
@@ -518,9 +519,11 @@ def application_mode():
                 "percentage": int((timelapse_current_step / timelapse_total_steps * 100)) if timelapse_total_steps > 0 else 0,
                 "command_executing": command_executing
             }
-            print(f"DEBUG: Progress - running={timelapse_running}, step={timelapse_current_step}/{timelapse_total_steps}, executing={command_executing}")
-            return json.dumps(progress)
+            response_json = json.dumps(progress)
+            print(f"DEBUG: Progress response: {response_json}")
+            return response_json
         except Exception as e:
+            print(f"DEBUG: Progress error: {e}")
             return f"Error getting progress: {e}"
             
     def app_debug_mdns(request):

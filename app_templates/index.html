@@ -972,25 +972,29 @@ b, strong {
       }, 120000); // 2 minute safety timeout
       
       progressInterval = setInterval(async () => {
+        console.log('DEBUG: Progress polling interval triggered');
         try {
           // Add timeout to prevent hanging requests
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second timeout
           
+          console.log('DEBUG: Fetching /progress...');
           const response = await fetch('/progress', { 
             signal: controller.signal,
             cache: 'no-cache' 
           });
           clearTimeout(timeoutId);
           
+          console.log('DEBUG: Progress response status:', response.status);
           if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
           }
           
-          const progress = await response.json();
+          const progressText = await response.text();
+          console.log('DEBUG: Raw progress response:', progressText);
           
-          // Debug output to browser console
-          console.log('Progress data:', progress);
+          const progress = JSON.parse(progressText);
+          console.log('DEBUG: Parsed progress data:', progress);
           
           // Control LED based on any command execution
           setLEDState(progress.command_executing || progress.running);
@@ -1062,7 +1066,7 @@ b, strong {
         const result = await response.text();
         
         if (response.ok) {
-          addFeedback(result, 'completed');
+          addFeedback(result, 'executing');
           // Don't re-enable button here - let progress polling handle it when timelapse completes
         } else {
           addFeedback(`Failed to start timelapse (HTTP ${response.status})`, 'error');
