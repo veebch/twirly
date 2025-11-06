@@ -1100,10 +1100,15 @@ b, strong {
           const steps = document.getElementById('steps-input').value || '5';  
           const pause = document.getElementById('pause-input').value || '1';
           
-          // Start progress polling FIRST
-          if (!progressInterval) {
-            startProgressPolling();
+          // Force restart progress polling to ensure it's active for timelapse
+          console.log('DEBUG: Ensuring fresh progress polling for timelapse');
+          if (progressInterval) {
+            console.log('DEBUG: Stopping existing polling');
+            clearInterval(progressInterval);
+            progressInterval = null;
           }
+          console.log('DEBUG: Starting fresh progress polling');
+          startProgressPolling();
           
           // Start LED
           setLEDState(true);
