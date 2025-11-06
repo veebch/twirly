@@ -692,14 +692,12 @@ try:
             if is_connected_to_wifi():
                 print(f"Connected to wifi, IP address {ip_address}")
                 # Add small delay to let CYW43 stabilize
-                import utime
                 utime.sleep(3)
                 break
             else:
                 wifi_current_attempt += 1
                 # Add delay between connection attempts for CYW43 stability
                 if wifi_current_attempt < WIFI_MAX_ATTEMPTS:
-                    import utime
                     utime.sleep(5)
 
         if is_connected_to_wifi():
