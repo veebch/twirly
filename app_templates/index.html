@@ -790,8 +790,7 @@ b, strong {
     </div>
 
   <script>
-    // MINIMAL TEST - this should show immediately when page loads
-    alert('🚀 JAVASCRIPT WORKS!');
+    // JavaScript initialization
     
     // Dark mode toggle functionality
     function toggleDarkMode() {
@@ -997,7 +996,7 @@ b, strong {
       
       console.log('DEBUG: Creating new polling interval');
       progressInterval = setInterval(async () => {
-        console.log('🔄 POLLING TICK:', new Date().toLocaleTimeString(), '- Making /progress request');
+  
         try {
           // Add timeout to prevent hanging requests
           const controller = new AbortController();
@@ -1019,16 +1018,18 @@ b, strong {
           console.log('DEBUG: Raw progress response:', progressText);
           
           const progress = JSON.parse(progressText);
-          console.log('✅ PROGRESS DATA:', progress);
+
           
           // Control LED based on any command execution
           setLEDState(progress.command_executing || progress.running);
           
           if (progress.running) {
-            // Always update to ensure visibility (remove step change check temporarily)
-            lastProgressStep = progress.current_step;
-            addFeedback(`Timelapse progress: Step ${progress.current_step} of ${progress.total_steps} (${progress.percentage}%)`, 'executing');
-            console.log(`Web progress update: Step ${progress.current_step}/${progress.total_steps}`);
+            // Only update when step actually changes to prevent duplicates
+            if (progress.current_step > lastProgressStep) {
+              lastProgressStep = progress.current_step;
+              addFeedback(`Timelapse progress: Step ${progress.current_step} of ${progress.total_steps} (${progress.percentage}%)`, 'executing');
+              console.log(`Web progress update: Step ${progress.current_step}/${progress.total_steps}`);
+            }
           } else if (!progress.command_executing && !progress.running) {
             // Timelapse completed - re-enable button and show completion
             const timelapseBtn = document.getElementById('timelapse-btn');
@@ -1079,29 +1080,58 @@ b, strong {
 
     // Setup button handlers after DOM is loaded  
     window.addEventListener('load', function() {
-      console.log('🚀 BUTTON SETUP STARTING');
-      alert('BUTTON SETUP STARTING!'); // Should show immediately on page load
-      
-      // Command handlers with feedback
-      console.log('DEBUG: Setting up timelapse button handler');
+      // Setup timelapse button handler
       const timelapseBtn = document.getElementById('timelapse-btn');
-      console.log('DEBUG: Timelapse button element:', timelapseBtn);
       
       if (!timelapseBtn) {
-        alert('ERROR: Could not find timelapse-btn element!');
-        console.error('FATAL: timelapse-btn element not found');
+        console.error('ERROR: Could not find timelapse-btn element');
         return;
       }
-      
-      alert('TIMELAPSE BUTTON FOUND! About to attach handler');
     
-      // SIMPLE TEST: Use same executeCommand as other buttons
+      // LONG-RUNNING COMMAND: Different from executeCommand - don't mark as completed immediately
       timelapseBtn.onclick = async function() { 
-        alert('🎯 TIMELAPSE CLICKED!');
-        const angle = document.getElementById('angle-input').value || '10';
-        const steps = document.getElementById('steps-input').value || '5';  
-        const pause = document.getElementById('pause-input').value || '1';
-        await executeCommand(`/timelapse?angle=${angle}&steps=${steps}&pause=${pause}`, 'Timelapse');
+        try {
+          // Disable button and change text
+          this.disabled = true;
+          this.textContent = 'Running Timelapse...';
+          
+          // Get parameters
+          const angle = document.getElementById('angle-input').value || '10';
+          const steps = document.getElementById('steps-input').value || '5';  
+          const pause = document.getElementById('pause-input').value || '1';
+          
+          // Start progress polling FIRST
+          if (!progressInterval) {
+            startProgressPolling();
+          }
+          
+          // Start LED
+          setLEDState(true);
+          
+          // Send request but DON'T mark as completed
+          addFeedback(`Starting timelapse: ${angle}° in ${steps} steps, ${pause}s pause`, 'executing');
+          
+          const response = await fetch(`/timelapse?angle=${angle}&steps=${steps}&pause=${pause}`);
+          const result = await response.text();
+          
+          if (response.ok) {
+            // Show it started but keep in executing state - let progress polling handle completion
+            addFeedback(`Timelapse initiated: ${result}`, 'executing');
+          } else {
+            // Only reset on error
+            addFeedback(`Failed to start timelapse (HTTP ${response.status})`, 'error');
+            this.disabled = false;
+            this.textContent = 'Start Timelapse';
+            setLEDState(false);
+          }
+          
+        } catch (error) {
+          // Reset on error
+          addFeedback(`Failed to start timelapse: ${error.message}`, 'error');
+          this.disabled = false;
+          this.textContent = 'Start Timelapse';
+          setLEDState(false);
+        }
       };
     
     document.getElementById('stop-btn').onclick = async function() { 
@@ -1124,8 +1154,7 @@ b, strong {
         await executeCommand('/ccw_a_bit', 'Counter-clockwise nudge');
       };
       
-      console.log('✅ ALL BUTTON HANDLERS SET UP COMPLETE');
-      alert('✅ ALL BUTTON HANDLERS READY!');
+
     }); // End of button handler setup function
     
     // Initialize with system status and add periodic status updates
