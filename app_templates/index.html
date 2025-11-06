@@ -1078,9 +1078,10 @@ b, strong {
         .catch(error => console.log('DEBUG: Initial progress check failed:', error));
     });
 
-    // Setup button handlers after DOM is loaded
+    // Setup button handlers after DOM is loaded  
     window.addEventListener('load', function() {
-      console.log('DEBUG: Setting up button handlers after DOM load');
+      console.log('🚀 BUTTON SETUP STARTING');
+      alert('BUTTON SETUP STARTING!'); // Should show immediately on page load
       
       // Command handlers with feedback
       console.log('DEBUG: Setting up timelapse button handler');
@@ -1092,10 +1093,13 @@ b, strong {
         console.error('FATAL: timelapse-btn element not found');
         return;
       }
+      
+      alert('TIMELAPSE BUTTON FOUND! About to attach handler');
     
-    // Proper timelapse handler - different from other commands because it's long-running
-    timelapseBtn.onclick = async function() { 
-      console.log('DEBUG: Timelapse button clicked');
+      // Proper timelapse handler - different from other commands because it's long-running
+      timelapseBtn.onclick = async function() { 
+        alert('🎯 TIMELAPSE BUTTON CLICKED!'); // Immediate visual feedback
+        console.log('DEBUG: Timelapse button clicked');
       
       try {
         // Disable button and change text
@@ -1160,10 +1164,12 @@ b, strong {
       await executeCommand('/ccw_360', 'Counter-clockwise 360°');
     };
     
-    document.getElementById('butt-left').onclick = async function() { 
-      await executeCommand('/ccw_a_bit', 'Counter-clockwise nudge');
-    };
-    
+      document.getElementById('butt-left').onclick = async function() { 
+        await executeCommand('/ccw_a_bit', 'Counter-clockwise nudge');
+      };
+      
+      console.log('✅ ALL BUTTON HANDLERS SET UP COMPLETE');
+      alert('✅ ALL BUTTON HANDLERS READY!');
     }); // End of button handler setup function
     
     // Initialize with system status and add periodic status updates
