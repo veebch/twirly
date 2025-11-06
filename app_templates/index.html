@@ -955,6 +955,22 @@ b, strong {
       if (progressInterval) clearInterval(progressInterval);
       lastProgressStep = 0; // Reset tracking
       
+      // Add safety timeout to force cleanup after reasonable time
+      setTimeout(() => {
+        if (progressInterval) {
+          console.log('Progress polling timeout - forcing cleanup');
+          setLEDState(false);
+          clearInterval(progressInterval);
+          progressInterval = null;
+          const timelapseBtn = document.getElementById('timelapse-btn');
+          if (timelapseBtn.disabled) {
+            timelapseBtn.disabled = false;
+            timelapseBtn.textContent = 'Start Timelapse';
+            addFeedback('Timelapse completed (timeout)', 'completed');
+          }
+        }
+      }, 120000); // 2 minute safety timeout
+      
       progressInterval = setInterval(async () => {
         try {
           // Add timeout to prevent hanging requests
@@ -1001,6 +1017,17 @@ b, strong {
         } catch (error) {
           console.log('Progress polling error:', error);
           // Don't stop polling on error - server might be temporarily busy
+          // But add fallback LED control
+          const timelapseBtn = document.getElementById('timelapse-btn');
+          if (!timelapseBtn.disabled) {
+            // If button is enabled but we have polling errors, assume completion
+            setLEDState(false);
+            if (progressInterval) {
+              clearInterval(progressInterval);
+              progressInterval = null;
+              lastProgressStep = 0;
+            }
+          }
         }
       }, 1000); // Poll every 1 second for better responsiveness
     }

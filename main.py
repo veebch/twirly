@@ -402,16 +402,21 @@ def application_mode():
         except Exception as e:
             print(f"Timelapse error at step {current_step}: {str(e)}")
         finally:
-            # Ensure all flags are cleared
+            # Ensure all flags are cleared with more robust cleanup
+            print("Starting timelapse cleanup...")
             timelapse_running = False
             command_executing = False
             timelapse_current_step = 0
             timelapse_total_steps = 0
-            print("Timelapse cleanup complete - all flags cleared")
+            print("All timelapse flags cleared")
             
-            # Small delay to ensure web interface sees the status change
-            for i in range(10000):
+            # Longer delay to ensure web interface has time to poll and see the changes
+            for i in range(50000):  # Increased delay
                 pass
+            
+            # Force garbage collection
+            gc.collect()
+            print("Timelapse cleanup complete")
 
     def app_timelapse(request):
         global timelapse_running, timelapse_current_step, timelapse_total_steps, command_executing
