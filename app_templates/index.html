@@ -998,7 +998,7 @@ b, strong {
       
       console.log('DEBUG: Creating new polling interval');
       progressInterval = setInterval(async () => {
-        console.log('DEBUG: Polling tick - ID:', progressInterval, 'Time:', new Date().toLocaleTimeString());
+        console.log('🔄 POLLING TICK:', new Date().toLocaleTimeString(), '- Making /progress request');
         try {
           // Add timeout to prevent hanging requests
           const controller = new AbortController();
@@ -1020,7 +1020,7 @@ b, strong {
           console.log('DEBUG: Raw progress response:', progressText);
           
           const progress = JSON.parse(progressText);
-          console.log('DEBUG: Parsed progress data:', progress);
+          console.log('✅ PROGRESS DATA:', progress);
           
           // Control LED based on any command execution
           setLEDState(progress.command_executing || progress.running);
@@ -1109,7 +1109,9 @@ b, strong {
         
         // Start LED and progress polling BEFORE making the request
         setLEDState(true);
+        console.log('DEBUG: About to start progress polling from timelapse button');
         startProgressPolling();
+        console.log('DEBUG: Progress polling started, interval ID:', progressInterval);
         
         // Add feedback showing it's starting (not completed)
         addFeedback(`Starting timelapse: ${angle}° in ${steps} steps, ${pause}s pause`, 'executing');
