@@ -1088,9 +1088,13 @@ b, strong {
         return;
       }
     
-      // LONG-RUNNING COMMAND: Different from executeCommand - don't mark as completed immediately
-      timelapseBtn.onclick = async function() { 
-        alert('🚀 TIMELAPSE HANDLER STARTED!');
+      // FORCE OVERRIDE: Remove any existing handlers and set new one
+      timelapseBtn.onclick = null;  // Clear existing handler
+      timelapseBtn.removeEventListener('click', executeCommand); // Remove any event listeners
+      
+      // Set the new handler
+      timelapseBtn.addEventListener('click', async function() { 
+        alert('🚀 NEW HANDLER WORKS!');
         try {
           // Disable button and change text
           this.disabled = true;
@@ -1138,7 +1142,7 @@ b, strong {
           this.textContent = 'Start Timelapse';
           setLEDState(false);
         }
-      };
+      }); // End of addEventListener
     
     document.getElementById('stop-btn').onclick = async function() { 
       await executeCommand('/stop', 'Stop');
