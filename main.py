@@ -370,8 +370,23 @@ def application_mode():
                 timelapse_current_step = current_step
                 print(f"Step {current_step} of {steps}")
                 
-                # Use the existing action function which handles everything properly
-                action(steps_per_movement, current_microsteps, base_speed, use_ramping=True)
+                # Direct motor control to avoid command_executing flag conflicts
+                try:
+                    print(f"DEBUG: Timelapse step {current_step} - {steps_per_movement} microsteps at {base_speed}Hz")
+                    mot.steps(steps_per_movement, current_microsteps, base_speed)
+                    
+                    # Wait for completion
+                    timeout_count = 0
+                    max_timeout = 100
+                    while mot.get_progress() > 0 and timeout_count < max_timeout:
+                        # Use simple loop for timing to avoid any scoping issues
+                        for i in range(5000):
+                            pass
+                        timeout_count += 1
+                        
+                    print(f"DEBUG: Step {current_step} movement completed")
+                except Exception as e:
+                    print(f"Movement error in step {current_step}: {e}")
                 
                 # Pause between steps (except for last step)
                 if current_step < steps and timelapse_running:
@@ -498,6 +513,7 @@ def application_mode():
                 "percentage": int((timelapse_current_step / timelapse_total_steps * 100)) if timelapse_total_steps > 0 else 0,
                 "command_executing": command_executing
             }
+            print(f"DEBUG: Progress - running={timelapse_running}, step={timelapse_current_step}/{timelapse_total_steps}, executing={command_executing}")
             return json.dumps(progress)
         except Exception as e:
             return f"Error getting progress: {e}"
