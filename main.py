@@ -357,15 +357,46 @@ def application_mode():
             
             # Execute timelapse sequence
             for step in range(steps):
+                # Check if we should stop (e.g., stop button pressed)
+                if not timelapse_running:
+                    print("Timelapse stopped by user")
+                    break
+                    
                 current_step = step + 1
                 timelapse_current_step = current_step
                 print(f"Step {current_step} of {steps}")
                 
-                # Execute movement with ramping for smoothness
-                action(steps_per_movement, current_microsteps, base_speed, use_ramping=True)
+                # Direct motor control without using action() to avoid flag conflicts
+                try:
+                    print(f"Moving: {steps_per_movement} microsteps at {base_speed}Hz")
+                    mot.steps(steps_per_movement, current_microsteps, base_speed)
+                    
+                    # Wait for completion with longer timeout for 32x microstepping
+                    timeout_count = 0
+                    max_timeout = 200  # 10 seconds at 50ms intervals (increased for 32x)
+                    while mot.get_progress() > 0 and timeout_count < max_timeout:
+                        utime.sleep_ms(50)
+                        timeout_count += 1
+                        
+                        # Check for stop during movement
+                        if not timelapse_running:
+                            mot.disable()
+                            print("Movement stopped during execution")
+                            break
+                            
+                    if timeout_count >= max_timeout:
+                        print(f"WARNING: Movement {current_step} timed out, continuing...")
+                        mot.disable()
+                        utime.sleep_ms(100)
+                        mot.enable()
+                        
+                except Exception as movement_error:
+                    print(f"Movement error in step {current_step}: {movement_error}")
+                    # Continue with next step instead of failing entire timelapse
                 
                 # Pause between steps (except for last step)
-                if current_step < steps:
+                if current_step < steps and timelapse_running:
+                    print(f"Pausing {pause}s...")
                     utime.sleep(pause)
                     
             print(f"Timelapse completed: {steps} steps, {angle}° rotation")
@@ -408,9 +439,16 @@ def application_mode():
             return f"Failed to start timelapse: {str(e)}"
 
     def app_stop(request):
+        global timelapse_running, command_executing
         try:
+            # Stop any running timelapse
+            timelapse_running = False
+            command_executing = False
+            
+            # Emergency stop motor
             mot.stop()
-            return "Emergency stop executed - motor disabled"
+            print("Emergency stop: all operations halted")
+            return "Emergency stop executed - motor disabled, timelapse stopped"
         except KeyboardInterrupt:
             print("Interrupted from Keyboard")
             return "Stop command interrupted"
