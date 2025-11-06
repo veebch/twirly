@@ -790,9 +790,8 @@ b, strong {
     </div>
 
   <script>
-    // JavaScript test - this should show immediately when page loads
-    console.log('SCRIPT LOADED: JavaScript is working');
-    alert('JavaScript loaded!');
+    // MINIMAL TEST - this should show immediately when page loads
+    alert('🚀 JAVASCRIPT WORKS!');
     
     // Dark mode toggle functionality
     function toggleDarkMode() {
@@ -1096,57 +1095,14 @@ b, strong {
       
       alert('TIMELAPSE BUTTON FOUND! About to attach handler');
     
-      // Proper timelapse handler - different from other commands because it's long-running
+      // SIMPLE TEST: Use same executeCommand as other buttons
       timelapseBtn.onclick = async function() { 
-        alert('🎯 TIMELAPSE BUTTON CLICKED!'); // Immediate visual feedback
-        console.log('DEBUG: Timelapse button clicked');
-      
-      try {
-        // Disable button and change text
-        this.disabled = true;
-        this.textContent = 'Running Timelapse...';
-        
-        // Get timelapse parameters
-        const angle = document.getElementById('angle-input').value;
-        const steps = document.getElementById('steps-input').value;
-        const pause = document.getElementById('pause-input').value;
-        
-        // Start LED and progress polling BEFORE making the request
-        setLEDState(true);
-        console.log('DEBUG: About to start progress polling from timelapse button');
-        startProgressPolling();
-        console.log('DEBUG: Progress polling started, interval ID:', progressInterval);
-        
-        // Add feedback showing it's starting (not completed)
-        addFeedback(`Starting timelapse: ${angle}° in ${steps} steps, ${pause}s pause`, 'executing');
-        
-        // Send timelapse request
-        const response = await fetch(`/timelapse?angle=${angle}&steps=${steps}&pause=${pause}`);
-        const result = await response.text();
-        
-        if (response.ok) {
-          // Don't mark as completed - let progress polling handle completion
-          addFeedback(`Timelapse initiated: ${result}`, 'executing');
-        } else {
-          // Only on error do we reset immediately
-          addFeedback(`Failed to start timelapse (HTTP ${response.status})`, 'error');
-          this.disabled = false;
-          this.textContent = 'Start Timelapse';
-          setLEDState(false);
-          stopProgressPolling();
-        }
-        
-      } catch (error) {
-        console.error('Timelapse error:', error);
-        addFeedback(`Failed to start timelapse: ${error.message}`, 'error');
-        this.disabled = false;
-        this.textContent = 'Start Timelapse';
-        setLEDState(false);
-        stopProgressPolling();
-      }
-    };
-      
-
+        alert('🎯 TIMELAPSE CLICKED!');
+        const angle = document.getElementById('angle-input').value || '10';
+        const steps = document.getElementById('steps-input').value || '5';  
+        const pause = document.getElementById('pause-input').value || '1';
+        await executeCommand(`/timelapse?angle=${angle}&steps=${steps}&pause=${pause}`, 'Timelapse');
+      };
     
     document.getElementById('stop-btn').onclick = async function() { 
       await executeCommand('/stop', 'Stop');
