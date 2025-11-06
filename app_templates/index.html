@@ -1076,34 +1076,50 @@ b, strong {
     
     // Command handlers with feedback
     document.getElementById('timelapse-btn').onclick = async function() { 
+      alert('BUTTON CLICKED!'); // Immediate visual feedback
       console.log('DEBUG: Timelapse button clicked!');
-      this.disabled = true;
-      this.textContent = 'Running Timelapse...';
-      console.log('DEBUG: Button text set to Running Timelapse...');
       
-      // Get timelapse parameters
-      const angle = document.getElementById('angle-input').value;
-      const steps = document.getElementById('steps-input').value;
-      const pause = document.getElementById('pause-input').value;
-      console.log('DEBUG: Parameters:', angle, steps, pause);
-      
-      // Start progress polling
-      console.log('DEBUG: About to start progress polling');
-      startProgressPolling();
-      console.log('DEBUG: Progress polling started');
+      try {
+        this.disabled = true;
+        this.textContent = 'Running Timelapse...';
+        console.log('DEBUG: Button text set to Running Timelapse...');
+        alert('Button text should be changed now!');
+        
+        // Get timelapse parameters
+        const angle = document.getElementById('angle-input').value;
+        const steps = document.getElementById('steps-input').value;
+        const pause = document.getElementById('pause-input').value;
+        console.log('DEBUG: Parameters:', angle, steps, pause);
+        
+        // Start progress polling
+        console.log('DEBUG: About to start progress polling');
+        startProgressPolling();
+        console.log('DEBUG: Progress polling started');
+      } catch (error) {
+        console.error('ERROR in button click handler:', error);
+        alert('ERROR: ' + error.message);
+        return; // Don't continue if there's an error
+      }
       
       try {
         // Start timelapse without waiting for completion
+        console.log('DEBUG: Adding feedback message');
         addFeedback(`Starting timelapse: ${angle}° in ${steps} steps, ${pause}s pause`, 'executing');
+        console.log('DEBUG: Feedback message added');
         
         // Send timelapse request
+        console.log('DEBUG: About to send timelapse request');
         const response = await fetch(`/timelapse?angle=${angle}&steps=${steps}&pause=${pause}`);
+        console.log('DEBUG: Timelapse request sent, status:', response.status);
         const result = await response.text();
+        console.log('DEBUG: Timelapse response:', result);
         
         if (response.ok) {
           addFeedback(result, 'executing');
+          console.log('DEBUG: Timelapse request successful');
           // Don't re-enable button here - let progress polling handle it when timelapse completes
         } else {
+          console.log('DEBUG: Timelapse request failed');
           addFeedback(`Failed to start timelapse (HTTP ${response.status})`, 'error');
           this.disabled = false;
           this.textContent = 'Start Timelapse';
@@ -1113,6 +1129,8 @@ b, strong {
           }
         }
       } catch (error) {
+        console.error('DEBUG: Timelapse request error:', error);
+        alert('TIMELAPSE ERROR: ' + error.message);
         addFeedback(`Failed to start timelapse: ${error.message}`, 'error');
         this.disabled = false;
         this.textContent = 'Start Timelapse';
