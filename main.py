@@ -336,88 +336,62 @@ def application_mode():
         """Worker function that runs timelapse in background thread"""
         global timelapse_running, timelapse_current_step, timelapse_total_steps, command_executing
         
-        # Initialize all variables that might be referenced in exception handlers
         current_step = 0
-        steps_per_movement = 0
-        base_speed = 50
         
         try:
-            print(f"DEBUG: Starting timelapse worker - angle={angle}, steps={steps}, pause={pause}")
+            print(f"Starting timelapse: {angle}° in {steps} steps, {pause}s pause")
             
             # Calculate steps per movement accounting for gear ratio
-            steps_per_rotation = int(200 * current_microsteps * GEAR_RATIO)  # Full turntable rotation in microsteps (uses 3.0:1 gear reduction)
+            steps_per_rotation = int(200 * current_microsteps * GEAR_RATIO)
             steps_per_movement = int((angle / 360.0) * steps_per_rotation / steps)
             
             # Ensure minimum movement for very small angles
             if steps_per_movement == 0:
-                steps_per_movement = 1  # Minimum 1 microstep
-                print("Warning: Angle too small, using minimum 1 microstep per movement")
+                steps_per_movement = 1
+                print("Warning: Using minimum 1 microstep per movement")
             
             # Handle negative angles for direction
-            direction = 1 if angle >= 0 else -1
-            steps_per_movement = abs(steps_per_movement) * direction
+            if angle < 0:
+                steps_per_movement = -abs(steps_per_movement)
+            else:
+                steps_per_movement = abs(steps_per_movement)
             
-            # Adaptive speed based on microstepping resolution
-            base_speed = 100 * (current_microsteps // 8) if current_microsteps >= 8 else 50
+            # Speed calculation
+            base_speed = 400 if current_microsteps >= 32 else 200
             
-            print(f"Starting timelapse: {angle}° in {steps} steps, {pause}s pause")
-            print(f"Steps per movement: {steps_per_movement}, Speed: {base_speed}, Microsteps: {current_microsteps}")
+            print(f"Movement: {steps_per_movement} microsteps at {base_speed}Hz per step")
             
             # Execute timelapse sequence
             for step in range(steps):
-                # Check if we should stop (e.g., stop button pressed)
                 if not timelapse_running:
-                    print("Timelapse stopped by user")
                     break
                     
                 current_step = step + 1
                 timelapse_current_step = current_step
                 print(f"Step {current_step} of {steps}")
                 
-                # Direct motor control without using action() to avoid flag conflicts
-                try:
-                    print(f"Moving: {steps_per_movement} microsteps at {base_speed}Hz")
-                    mot.steps(steps_per_movement, current_microsteps, base_speed)
-                    
-                    # Wait for completion with longer timeout for 32x microstepping
-                    timeout_count = 0
-                    max_timeout = 200  # 10 seconds at 50ms intervals (increased for 32x)
-                    while mot.get_progress() > 0 and timeout_count < max_timeout:
-                        utime.sleep_ms(50)
-                        timeout_count += 1
-                        
-                        # Check for stop during movement
-                        if not timelapse_running:
-                            mot.disable()
-                            print("Movement stopped during execution")
-                            break
-                            
-                    if timeout_count >= max_timeout:
-                        print(f"WARNING: Movement {current_step} timed out, continuing...")
-                        mot.disable()
-                        utime.sleep_ms(100)
-                        mot.enable()
-                        
-                except Exception as movement_error:
-                    print(f"Movement error in step {current_step}: {movement_error}")
-                    # Continue with next step instead of failing entire timelapse
+                # Use the existing action function which handles everything properly
+                action(steps_per_movement, current_microsteps, base_speed, use_ramping=True)
                 
                 # Pause between steps (except for last step)
                 if current_step < steps and timelapse_running:
                     print(f"Pausing {pause}s...")
-                    utime.sleep(pause)
+                    # Simple delay loop to avoid any scoping issues
+                    pause_ms = int(pause * 1000)
+                    start_time = machine.ticks_ms()
+                    while machine.ticks_diff(machine.ticks_ms(), start_time) < pause_ms:
+                        if not timelapse_running:
+                            break
+                        machine.idle()  # Yield to other tasks
                     
-            print(f"Timelapse completed: {steps} steps, {angle}° rotation")
+            print(f"Timelapse completed: {steps} steps")
             
         except Exception as e:
-            print(f"Timelapse error at step {current_step}: {type(e).__name__}: {str(e)}")
-            import sys
-            sys.print_exception(e)  # Print full traceback for debugging
+            print(f"Timelapse error at step {current_step}: {str(e)}")
         finally:
-            # Always clean up state
-            print("DEBUG: Cleaning up timelapse state")
             timelapse_running = False
             command_executing = False
+            print("Timelapse cleanup complete")
 
     def app_timelapse(request):
         global timelapse_running, timelapse_current_step, timelapse_total_steps, command_executing
