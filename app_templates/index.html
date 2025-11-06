@@ -790,6 +790,10 @@ b, strong {
     </div>
 
   <script>
+    // JavaScript test - this should show immediately when page loads
+    console.log('SCRIPT LOADED: JavaScript is working');
+    alert('JavaScript loaded!');
+    
     // Dark mode toggle functionality
     function toggleDarkMode() {
       const body = document.body;
@@ -1073,9 +1077,23 @@ b, strong {
         })
         .catch(error => console.log('DEBUG: Initial progress check failed:', error));
     });
+
+    // Setup button handlers after DOM is loaded
+    window.addEventListener('load', function() {
+      console.log('DEBUG: Setting up button handlers after DOM load');
+      
+      // Command handlers with feedback
+      console.log('DEBUG: Setting up timelapse button handler');
+      const timelapseBtn = document.getElementById('timelapse-btn');
+      console.log('DEBUG: Timelapse button element:', timelapseBtn);
+      
+      if (!timelapseBtn) {
+        alert('ERROR: Could not find timelapse-btn element!');
+        console.error('FATAL: timelapse-btn element not found');
+        return;
+      }
     
-    // Command handlers with feedback
-    document.getElementById('timelapse-btn').onclick = async function() { 
+    timelapseBtn.onclick = async function() { 
       alert('BUTTON CLICKED!'); // Immediate visual feedback
       console.log('DEBUG: Timelapse button clicked!');
       
@@ -1160,6 +1178,8 @@ b, strong {
     document.getElementById('butt-left').onclick = async function() { 
       await executeCommand('/ccw_a_bit', 'Counter-clockwise nudge');
     };
+    
+    }); // End of button handler setup function
     
     // Initialize with system status and add periodic status updates
     window.addEventListener('load', function() {
