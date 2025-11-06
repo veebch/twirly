@@ -1093,13 +1093,51 @@ b, strong {
         return;
       }
     
-    // First test: Simple handler like other buttons
+    // Proper timelapse handler - different from other commands because it's long-running
     timelapseBtn.onclick = async function() { 
-      alert('TIMELAPSE BUTTON WORKS!');
-      console.log('DEBUG: Timelapse button clicked - simple test');
+      console.log('DEBUG: Timelapse button clicked');
       
-      // Test using the same executeCommand function as other buttons
-      await executeCommand('/timelapse?angle=10&steps=5&pause=1', 'Test Timelapse');
+      try {
+        // Disable button and change text
+        this.disabled = true;
+        this.textContent = 'Running Timelapse...';
+        
+        // Get timelapse parameters
+        const angle = document.getElementById('angle-input').value;
+        const steps = document.getElementById('steps-input').value;
+        const pause = document.getElementById('pause-input').value;
+        
+        // Start LED and progress polling BEFORE making the request
+        setLEDState(true);
+        startProgressPolling();
+        
+        // Add feedback showing it's starting (not completed)
+        addFeedback(`Starting timelapse: ${angle}° in ${steps} steps, ${pause}s pause`, 'executing');
+        
+        // Send timelapse request
+        const response = await fetch(`/timelapse?angle=${angle}&steps=${steps}&pause=${pause}`);
+        const result = await response.text();
+        
+        if (response.ok) {
+          // Don't mark as completed - let progress polling handle completion
+          addFeedback(`Timelapse initiated: ${result}`, 'executing');
+        } else {
+          // Only on error do we reset immediately
+          addFeedback(`Failed to start timelapse (HTTP ${response.status})`, 'error');
+          this.disabled = false;
+          this.textContent = 'Start Timelapse';
+          setLEDState(false);
+          stopProgressPolling();
+        }
+        
+      } catch (error) {
+        console.error('Timelapse error:', error);
+        addFeedback(`Failed to start timelapse: ${error.message}`, 'error');
+        this.disabled = false;
+        this.textContent = 'Start Timelapse';
+        setLEDState(false);
+        stopProgressPolling();
+      }
     };
       
 
