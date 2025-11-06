@@ -952,6 +952,8 @@ b, strong {
     let lastProgressStep = 0;
     
     function startProgressPolling() {
+      console.log('DEBUG: startProgressPolling called!');
+      alert('startProgressPolling called!'); // Immediate visual feedback
       if (progressInterval) clearInterval(progressInterval);
       lastProgressStep = 0; // Reset tracking
       
@@ -972,7 +974,7 @@ b, strong {
       }, 120000); // 2 minute safety timeout
       
       progressInterval = setInterval(async () => {
-        console.log('DEBUG: Progress polling interval triggered');
+        console.log('DEBUG: Progress polling interval triggered - making /progress request');
         try {
           // Add timeout to prevent hanging requests
           const controller = new AbortController();
@@ -1046,16 +1048,21 @@ b, strong {
     
     // Command handlers with feedback
     document.getElementById('timelapse-btn').onclick = async function() { 
+      console.log('DEBUG: Timelapse button clicked!');
       this.disabled = true;
       this.textContent = 'Running Timelapse...';
+      console.log('DEBUG: Button text set to Running Timelapse...');
       
       // Get timelapse parameters
       const angle = document.getElementById('angle-input').value;
       const steps = document.getElementById('steps-input').value;
       const pause = document.getElementById('pause-input').value;
+      console.log('DEBUG: Parameters:', angle, steps, pause);
       
       // Start progress polling
+      console.log('DEBUG: About to start progress polling');
       startProgressPolling();
+      console.log('DEBUG: Progress polling started');
       
       try {
         // Start timelapse without waiting for completion
