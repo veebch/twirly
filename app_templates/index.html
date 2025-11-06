@@ -1220,7 +1220,7 @@ b, strong {
       }
     });
     
-    // Add visual feedback for button presses
+    // Add visual feedback for button presses AND special handling for timelapse
     document.querySelectorAll('.button, .control-button').forEach(element => {
       element.addEventListener('mousedown', function() {
         this.style.transform = (this.style.transform || '') + ' scale(0.95)';
@@ -1233,6 +1233,20 @@ b, strong {
       element.addEventListener('mouseleave', function() {
         this.style.transform = this.style.transform.replace(' scale(0.95)', '');
       });
+      
+      // Special handling for timelapse button - ALWAYS start fresh progress polling
+      if (element.id === 'timelapse-btn') {
+        element.addEventListener('click', function() {
+          console.log('🎯 TIMELAPSE CLICK INTERCEPTED - Starting progress polling');
+          // Force fresh progress polling for timelapse
+          if (progressInterval) {
+            clearInterval(progressInterval);
+            progressInterval = null;
+          }
+          startProgressPolling();
+          console.log('✅ Progress polling started for timelapse');
+        }, true); // Use capture phase to run first
+      }
     });
   </script>
 
