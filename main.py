@@ -308,12 +308,16 @@ def application_mode():
     def app_cw_nudge(request):
         try:
             print("CW nudge button pressed")
-            # Simple nudge like original version
-            action(6, 1, 50, use_ramping=False)  # 6 steps, full step mode, 50Hz
-            return "OK"
+            # Small nudge movement with microsteps (clockwise) - no ramping for precision
+            full_steps = 6
+            speed = 100 * (current_microsteps // 8) if current_microsteps >= 8 else 50
+            action(full_steps * current_microsteps, current_microsteps, max(speed, 50), use_ramping=False)
+            return f"CW nudge completed ({current_microsteps}x microsteps)"
+        except KeyboardInterrupt:
+            print("Interrupted from Keyboard")
+            return "CW nudge interrupted"
         except Exception as e:
-            print(f"CW nudge error: {e}")
-            return "ERROR"
+            return f"CW nudge error: {e}"
 
     def app_ccw_nudge(request):
         try:
@@ -336,11 +340,20 @@ def application_mode():
             steps_per_rotation = int(200 * current_microsteps * GEAR_RATIO)  # Full turntable rotation in microsteps (uses 3.0:1 gear reduction)
             steps_per_movement = int((angle / 360.0) * steps_per_rotation / steps)
             
+            # Ensure minimum movement for very small angles
+            if steps_per_movement == 0:
+                steps_per_movement = 1  # Minimum 1 microstep
+                print("Warning: Angle too small, using minimum 1 microstep per movement")
+            
+            # Handle negative angles for direction
+            direction = 1 if angle >= 0 else -1
+            steps_per_movement = abs(steps_per_movement) * direction
+            
             # Adaptive speed based on microstepping resolution
             base_speed = 100 * (current_microsteps // 8) if current_microsteps >= 8 else 50
             
             print(f"Starting timelapse: {angle}° in {steps} steps, {pause}s pause")
-            print(f"Steps per movement: {steps_per_movement}, Speed: {base_speed}")
+            print(f"Steps per movement: {steps_per_movement}, Speed: {base_speed}, Microsteps: {current_microsteps}")
             
             # Execute timelapse sequence
             for step in range(steps):
