@@ -376,12 +376,11 @@ def application_mode():
                 # Pause between steps (except for last step)
                 if current_step < steps and timelapse_running:
                     print(f"Pausing {pause}s...")
-                    # Break pause into small chunks so we can check for stop
-                    pause_chunks = int(pause * 10)  # 0.1s chunks
-                    for i in range(pause_chunks):
+                    # Simple busy wait loop - no function calls that might have scoping issues
+                    pause_loops = int(pause * 500000)  # Approximate timing
+                    for wait_count in range(pause_loops):
                         if not timelapse_running:
                             break
-                        utime.sleep(0.1)
                     
             print(f"Timelapse completed: {steps} steps")
             
