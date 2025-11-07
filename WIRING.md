@@ -20,7 +20,7 @@ This guide provides detailed wiring instructions for connecting the Raspberry Pi
 
 ![Assembled Components](images/guts.jpg)
 
-*Example of the assembled system showing the Raspberry Pi Pico W, DRV8825 driver, USB-C PD trigger, and step-down converter.*
+*Example of the assembled system showing the Raspberry Pi Pico W, DRV8825 driver, USB-C PD trigger, and step-down converter. NB. Microstepping not connected in this image*
 
 ## Pin Connections
 
