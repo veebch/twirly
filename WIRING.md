@@ -106,7 +106,7 @@ The DRV8825 has a built-in current limiting feature that must be properly config
 
 Add capacitors near the DRV8825 to filter power supply noise:
 
-- **470µF capacitor**: Connect across 20V PD trigger output (VMOT to GND)
+- **100µF capacitor**: Connect across 20V PD trigger output (VMOT to GND)
 - **100µF capacitor**: Connect across 5V step-down converter output (VDD to GND)
 
 These capacitors smooth voltage fluctuations and protect against voltage spikes from the USB-C PD trigger and step-down converter.
