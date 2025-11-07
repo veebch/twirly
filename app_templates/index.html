@@ -747,8 +747,9 @@ b, strong {
     <input type="number" id="steps-input" value="160" min="1" max="1000">
   </div>
   <div class="param-row">
-    <label for="pause-input">Pause (seconds):</label>
+    <label for="pause-input">Step Duration (seconds):</label>
     <input type="number" id="pause-input" value="3" min="0.1" max="60" step="0.1">
+    <small style="display: block; color: #666; font-size: 11px; margin-top: 2px;">Total time per step (includes movement + pause)</small>
   </div>
 </div>
 
@@ -1119,7 +1120,7 @@ b, strong {
           setLEDState(true);
           
           // Send request but DON'T mark as completed
-          addFeedback(`Starting timelapse: ${angle}° in ${steps} steps, ${pause}s pause`, 'executing');
+          addFeedback(`Starting timelapse: ${angle}° in ${steps} steps, ${pause}s per step`, 'executing');
           
           const response = await fetch(`/timelapse?angle=${angle}&steps=${steps}&pause=${pause}`);
           const result = await response.text();
