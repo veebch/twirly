@@ -277,7 +277,12 @@ def application_mode():
                     utime.sleep_ms(20)
 
     def app_cw_360(request):
+        global command_executing, timelapse_running
         try:
+            # Check if another command is already running
+            if command_executing or timelapse_running:
+                return "Error: Another command is already executing"
+            
             # 360 degree turntable rotation accounting for gear ratio
             # Calculate steps: 200 full steps * gear ratio for actual 360° turntable rotation
             full_steps = int(200 * GEAR_RATIO)  # Account for 3.0:1 gear reduction
@@ -292,7 +297,12 @@ def application_mode():
             return f"360° CW rotation failed: {str(e)}"
 
     def app_ccw_360(request):
+        global command_executing, timelapse_running
         try:
+            # Check if another command is already running
+            if command_executing or timelapse_running:
+                return "Error: Another command is already executing"
+            
             # 360 degree turntable rotation accounting for gear ratio (counter-clockwise)
             full_steps = -int(200 * GEAR_RATIO)  # Account for 3.0:1 gear reduction
             # Slow full-circle speed by 5x for smoother rotation
@@ -306,7 +316,12 @@ def application_mode():
             return f"360° CCW rotation failed: {str(e)}"
 
     def app_cw_nudge(request):
+        global command_executing, timelapse_running
         try:
+            # Check if another command is already running
+            if command_executing or timelapse_running:
+                return "Error: Another command is already executing"
+            
             print("CW nudge button pressed")
             # Small nudge movement with microsteps (clockwise) - no ramping for precision
             full_steps = 6
@@ -320,7 +335,12 @@ def application_mode():
             return f"CW nudge error: {e}"
 
     def app_ccw_nudge(request):
+        global command_executing, timelapse_running
         try:
+            # Check if another command is already running
+            if command_executing or timelapse_running:
+                return "Error: Another command is already executing"
+            
             # Small nudge movement with microsteps (counter-clockwise) - no ramping for precision
             full_steps = -6
             speed = 100 * (current_microsteps // 8) if current_microsteps >= 8 else 50
@@ -370,6 +390,10 @@ def application_mode():
                 timelapse_current_step = current_step
                 print(f"Step {current_step} of {steps}")
                 
+                # Start timing for total step duration (movement + pause)
+                import time
+                step_start = time.ticks_ms()
+                
                 # Direct motor control to avoid command_executing flag conflicts
                 try:
                     print(f"DEBUG: Timelapse step {current_step} - {steps_per_movement} microsteps at {base_speed}Hz")
@@ -388,14 +412,20 @@ def application_mode():
                 except Exception as e:
                     print(f"Movement error in step {current_step}: {e}")
                 
-                # Pause between steps (except for last step)
+                # Wait for total step duration (pause includes movement time)
                 if current_step < steps and timelapse_running:
-                    print(f"Pausing {pause}s...")
-                    # Simple busy wait loop - no function calls that might have scoping issues
-                    pause_loops = int(pause * 500000)  # Approximate timing
-                    for wait_count in range(pause_loops):
-                        if not timelapse_running:
-                            break
+                    elapsed_ms = time.ticks_diff(time.ticks_ms(), step_start)
+                    remaining_ms = (pause * 1000) - elapsed_ms
+                    
+                    if remaining_ms > 0:
+                        print(f"Step took {elapsed_ms}ms, waiting {remaining_ms}ms more for {pause}s total")
+                        wait_start = time.ticks_ms()
+                        while time.ticks_diff(time.ticks_ms(), wait_start) < remaining_ms:
+                            if not timelapse_running:
+                                break
+                            time.sleep_ms(100)  # Small sleep to prevent busy waiting
+                    else:
+                        print(f"Step took {elapsed_ms}ms (longer than {pause}s duration), continuing immediately")
                     
             print(f"Timelapse completed: {steps} steps")
             
