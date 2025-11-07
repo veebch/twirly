@@ -53,7 +53,7 @@ Connect your 4-wire bipolar stepper motor to the DRV8825 output terminals:
 - **2B, 2A**: One motor coil
 - **1A, 1B**: Other motor coil
 
-**Important**: All four motor wires must be connected for proper operation.
+**Important**: All four motor wires must be connected for proper operation. If your motor runs, but is jerky and not in a single direction, this is likely the issue.
 
 ## Microstepping Configuration
 
