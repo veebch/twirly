@@ -11,7 +11,7 @@ This guide provides detailed wiring instructions for connecting the Raspberry Pi
 - NEMA stepper motor (4-wire bipolar)
 - 20V PD trigger (USB-C) for motor power supply
 - Step-down converter (20V to 5V) for logic power
-- 470µF capacitor (for 20V supply)
+- 100µF capacitor (for 20V supply)
 - 100µF capacitor (for 5V supply)
 - Breadboard or prototype board
 - Jumper wires
