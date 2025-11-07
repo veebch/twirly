@@ -30,7 +30,7 @@ This guide provides detailed wiring instructions for connecting the Raspberry Pi
 |------------|-------------|----------|
 | GP2 | STEP | Step pulse signal |
 | GP3 | DIR | Direction control |
-| GP4 | ENABLE | Motor enable (active low) |
+| GND | ENABLE | Motor enable (active low) |
 | GP6 | M0 | Microstepping bit 0 |
 | GP7 | M1 | Microstepping bit 1 |
 | GP8 | M2 | Microstepping bit 2 |
