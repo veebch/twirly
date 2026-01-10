@@ -35,6 +35,7 @@ This guide provides detailed wiring instructions for connecting the Raspberry Pi
 | GP7 | M1 | Microstepping bit 1 |
 | GP8 | M2 | Microstepping bit 2 |
 | GND | GND | Common ground |
+| VSYS | SLEEP | Sleep (Could be placed on a GPIO pin set to high) |
 
 ### Power Supply Connections
 
