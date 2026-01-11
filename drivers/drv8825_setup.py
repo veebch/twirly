@@ -5,9 +5,9 @@
 
 import sys
 from machine import Pin
-from encoder_portable import Encoder
+from .encoder_portable import Encoder
 from .drv8825 import DRV8825
-from switch import Switch
+from .switch import Switch
 
 
 def setup_stepper():
