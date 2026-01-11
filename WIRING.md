@@ -28,13 +28,24 @@ This guide provides detailed wiring instructions for connecting the Raspberry Pi
 
 | Pico W Pin | DRV8825 Pin | Function |
 |------------|-------------|----------|
-| GP2 | STEP | Step pulse signal |
-| GP3 | DIR | Direction control |
-| GP4 | ENABLE | Motor enable (active low) |
-| GP6 | M0 | Microstepping bit 0 |
-| GP7 | M1 | Microstepping bit 1 |
-| GP8 | M2 | Microstepping bit 2 |
+| GP7 | STEP | Step pulse signal |
+| GP6 | DIR | Direction control |
+| GP8 | SLEEP | Sleep control (motor enable) |
+| GP9 | RESET | Reset control |
+| GP12 | M0 | Microstepping bit 0 |
+| GP11 | M1 | Microstepping bit 1 |
+| GP10 | M2 | Microstepping bit 2 |
 | GND | GND | Common ground |
+
+### Additional Control Pins (Optional)
+
+| Pico W Pin | Component | Function |
+|------------|-----------|----------|
+| GP2 | Button/Switch | User input button |
+| GP14 | End Switch 1 | Position limit switch |
+| GP15 | End Switch 2 | Position limit switch |
+| GP0 | Rotary Encoder A | Manual control input |
+| GP1 | Rotary Encoder B | Manual control input |
 
 ### Power Supply Connections
 
