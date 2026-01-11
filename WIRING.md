@@ -11,7 +11,7 @@ This guide provides detailed wiring instructions for connecting the Raspberry Pi
 - NEMA stepper motor (4-wire bipolar)
 - 20V PD trigger (USB-C) for motor power supply
 - Step-down converter (20V to 5V) for logic power
-- 470µF capacitor (for 20V supply)
+- 100µF capacitor (for 20V supply)
 - 100µF capacitor (for 5V supply)
 - Breadboard or prototype board
 - Jumper wires
@@ -20,7 +20,7 @@ This guide provides detailed wiring instructions for connecting the Raspberry Pi
 
 ![Assembled Components](images/guts.jpg)
 
-*Example of the assembled system showing the Raspberry Pi Pico W, DRV8825 driver, USB-C PD trigger, and step-down converter.*
+*Example of the assembled system showing the Raspberry Pi Pico W, DRV8825 driver, USB-C PD trigger, and step-down converter. NB. Microstepping not connected in this image*
 
 ## Pin Connections
 
@@ -64,7 +64,7 @@ Connect your 4-wire bipolar stepper motor to the DRV8825 output terminals:
 - **2B, 2A**: One motor coil
 - **1A, 1B**: Other motor coil
 
-**Important**: All four motor wires must be connected for proper operation.
+**Important**: All four motor wires must be connected for proper operation. If your motor runs, but is jerky and not in a single direction, this is likely the issue. If your motor runs, but is jerky and not in a single direction, this is likely the issue.
 
 ## Microstepping Configuration
 
@@ -117,7 +117,7 @@ The DRV8825 has a built-in current limiting feature that must be properly config
 
 Add capacitors near the DRV8825 to filter power supply noise:
 
-- **470µF capacitor**: Connect across 20V PD trigger output (VMOT to GND)
+- **100µF capacitor**: Connect across 20V PD trigger output (VMOT to GND)
 - **100µF capacitor**: Connect across 5V step-down converter output (VDD to GND)
 
 These capacitors smooth voltage fluctuations and protect against voltage spikes from the USB-C PD trigger and step-down converter.

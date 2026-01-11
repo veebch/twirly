@@ -8,9 +8,7 @@ A webpage-controlled turntable system using Raspberry Pi Pico W and DRV8825 step
 
 ## Demo Video
 
-[![Twirly Demo Video](https://img.youtube.com/vi/peo0DxWtorY/0.jpg)](https://www.youtube.com/watch?v=peo0DxWtorY)
-
-*Click to watch the full demonstration*
+*Click [here](https://www.youtube.com/watch?v=peo0DxWtorY) to watch the full demonstration*
 
 ## Web Interface
 
@@ -44,6 +42,9 @@ The mobile-friendly web interface provides complete control over the turntable w
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+
+
 
 
 
