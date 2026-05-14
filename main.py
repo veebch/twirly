@@ -205,10 +205,11 @@ def application_mode():
             # Use proper microstepping - this is the key fix!
             mot.steps(steps, microsteps, speed)
             
-            # Wait for completion with timeout
+            # Wait for completion with timeout.
+            # get_progress() is signed position, so compare against target steps.
             timeout_count = 0
             max_timeout = 100  # 5 seconds at 50ms intervals
-            while mot.get_progress() > 0 and timeout_count < max_timeout:
+            while mot.get_progress() != steps and timeout_count < max_timeout:
                 utime.sleep_ms(50)
                 timeout_count += 1
                 
@@ -399,10 +400,10 @@ def application_mode():
                     print(f"DEBUG: Timelapse step {current_step} - {steps_per_movement} microsteps at {base_speed}Hz")
                     mot.steps(steps_per_movement, current_microsteps, base_speed)
                     
-                    # Wait for completion
+                    # Wait for completion; progress is signed, so wait for target.
                     timeout_count = 0
                     max_timeout = 100
-                    while mot.get_progress() > 0 and timeout_count < max_timeout:
+                    while mot.get_progress() != steps_per_movement and timeout_count < max_timeout:
                         # Use simple loop for timing to avoid any scoping issues
                         for i in range(5000):
                             pass
