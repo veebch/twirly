@@ -26,6 +26,8 @@ This guide provides detailed wiring instructions for connecting the Raspberry Pi
 
 ### Pico W to DRV8825
 
+Google the pinout of the DRV8825
+
 | Pico W Pin | DRV8825 Pin | Function |
 |------------|-------------|----------|
 | GP7 | STEP | Step pulse signal |
@@ -58,7 +60,7 @@ This guide provides detailed wiring instructions for connecting the Raspberry Pi
 
 **Power Supply Chain**: USB-C PD Trigger (20V) → Step-down Converter → 5V Logic Supply
 
-### Motor Connections
+### Motor Connections 
 
 Connect your 4-wire bipolar stepper motor to the DRV8825 output terminals:
 - **2B, 2A**: One motor coil
